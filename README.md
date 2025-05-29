@@ -1,70 +1,241 @@
-# Getting Started with Create React App
+# @gambito-corp/mbs-library
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Una librería de componentes React moderna y reutilizable diseñada para aplicaciones de flashcards y sistemas educativos.
 
-## Available Scripts
+[![npm version](https://badge.fury.io/js/%40gambito-corp%2Fmbs-library.svg)](https://badge.fury.io/js/%40gambito-corp%2Fmbs-library)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-In the project directory, you can run:
+## 🚀 Instalación
 
-### `npm start`
+````npm install @gambito-corp/mbs-library````
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📋 Requisitos
 
-### `npm test`
+- React >= 16.8.0
+- React DOM >= 16.8.0
+- Tailwind CSS (recomendado para estilos óptimos)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🎯 Uso Básico
 
-### `npm run build`
+``` Javascript
+import React from 'react';
+import { Button, Card, Alert, Badge } from '@gambito-corp/mbs-library';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function App() {
+    return (
+        <div>
+            <Card>
+                <h2>Mi Aplicación</h2>
+                <Alert type="success" message="¡Componentes cargados correctamente!" />
+                <Badge variant="primary">Nuevo</Badge>
+                <Button variant="primary" onClick={() => alert('¡Hola!')}>
+                    Mi Boton
+                </Button>
+            </Card>
+        </div>
+    );
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+export default App;
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## 📦 Componentes Disponibles
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 🔹 Atoms (Componentes Básicos)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Alert
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Componente versátil para mostrar mensajes informativos, de estado, errores y notificaciones al usuario.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 📝 Props
 
-## Learn More
+| Prop | Tipo | Default | Descripción |
+|------|------|---------|-------------|
+| `type` | `'error' \| 'success' \| 'warning' \| 'info'` | `'info'` | Tipo de alerta que determina el color y el icono |
+| `message` | `string` | - | Mensaje principal a mostrar |
+| `title` | `string` | - | Título opcional para la alerta |
+| `dismissible` | `boolean` | `false` | Si la alerta puede ser cerrada por el usuario |
+| `onDismiss` | `function` | - | Función callback ejecutada al cerrar la alerta |
+| `icon` | `boolean` | `true` | Si mostrar el icono correspondiente al tipo |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Tamaño de la alerta |
+| `variant` | `'filled' \| 'outlined' \| 'solid'` | `'filled'` | Variante visual de la alerta |
+| `className` | `string` | `''` | Clases CSS adicionales |
+| `children` | `ReactNode` | - | Contenido personalizado (alternativa a message) |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 🎨 Variantes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Tipos Disponibles
+- **`error`**: Para errores y situaciones críticas (rojo)
+- **`success`**: Para confirmaciones y éxitos (verde)
+- **`warning`**: Para advertencias y precauciones (amarillo)
+- **`info`**: Para información general (azul)
 
-### Code Splitting
+#### Estilos Disponibles
+- **`filled`**: Fondo de color con borde
+- **`outlined`**: Solo borde, fondo transparente
+- **`solid`**: Fondo sólido con texto blanco
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### Tamaños Disponibles
+- **`small`**: Compacto para espacios reducidos
+- **`medium`**: Tamaño estándar
+- **`large`**: Más prominente para mensajes importantes
 
-### Analyzing the Bundle Size
+### 💡 Ejemplos de Uso
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Alerta Básica
+``<Alert type="info" message="Esta es una información importante para el usuario" />``
 
-### Making a Progressive Web App
+#### Alerta de Error con Título
+``<Alert type="error" title="Error de Validación" message="Por favor, revisa los campos marcados en rojo" />``
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### Alerta Dismissible
+```
+<Alert
+    type="warning"
+    message="Esta acción no se puede deshacer"
+    dismissible={true}
+    onDismiss={() => console.log('Alerta cerrada')}
+/>
+```
+#### Alerta con Contenido Personalizado
+```
+    <Alert 
+        type="success" 
+        dismissible 
+        onDismiss={handleClose}> 
+        <div> 
+            <strong>
+                ¡Operación exitosa!
+            </strong>
+            <p>
+                Los datos se guardaron correctamente en la base de datos.
+            </p> 
+            <button 
+                className="mt-2 text-sm underline"> 
+                Ver detalles 
+            </button> 
+        </div> 
+    </Alert> 
+```
+#### Diferentes Variantes
+{/* Variante filled (default) */}
+````
+<Alert type="info" message="Información con fondo de color" />
+````
+{/* Variante outlined */}
+````aiignore
+<Alert
+type="success"
+variant="outlined"
+message="Éxito con solo borde"
+/>
+````
 
-### Advanced Configuration
+{/* Variante solid */}
+````aiignore
+<Alert
+type="error"
+variant="solid"
+message="Error con fondo sólido"
+/>
+````
+#### Diferentes Tamaños
+{/* Tamaño pequeño */}
+````aiignore
+<Alert
+type="warning"
+size="small"
+message="Advertencia compacta"
+/>
+````
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+{/* Tamaño mediano (default) */}
+````aiignore
+<Alert
+type="info"
+size="medium"
+message="Información estándar"
+/>
+````
 
-### Deployment
+{/* Tamaño grande */}
+````aiignore
+<Alert
+type="success"
+size="large"
+title="Operación Completada"
+message="El proceso se ejecutó exitosamente"
+/>
+````
+#### Sin Icono
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+````
+<Alert
+    type="info"
+    icon={false}
+    message="Alerta sin icono para un diseño más limpio"
+/>
+````
+#### 🔧 Personalización con CSS
+Puedes personalizar el componente usando clases de Tailwind CSS:
 
-### `npm run build` fails to minify
+````aiignore
+<Alert 
+    type="info"
+    message="Alerta personalizada"
+    className="shadow-xl border-2 border-dashed"
+/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+````
+
+### ♿ Accesibilidad
+El componente Alert incluye características de accesibilidad:
+
+role="alert": Identifica el elemento como una alerta para lectores de pantalla
+
+aria-label: En el botón de cierre para usuarios de tecnologías asistivas
+
+Contraste de colores: Cumple con las pautas WCAG para legibilidad
+
+Navegación por teclado: El botón de cierre es accesible via teclado
+
+### 🎯 Casos de Uso Comunes
+Validación de Formularios
+````aiignore
+<Alert 
+    type="error"
+    title="Errores de Validación"
+    message="Por favor, corrige los campos marcados antes de continuar"
+/>
+
+````
+Confirmación de Acciones
+````aiignore
+<Alert 
+    type="success"
+    message="Usuario creado exitosamente"
+    dismissible
+    onDismiss={() => setShowAlert(false)}
+/>
+
+````
+Advertencias del Sistema
+````aiignore
+<Alert 
+    type="warning"
+    title="Mantenimiento Programado"
+    message="El sistema estará en mantenimiento el 15 de junio de 2:00 AM a 4:00 AM"
+/>
+
+````
+Información Contextual
+````aiignore
+<Alert 
+    type="info"
+    variant="outlined"
+    size="small"
+    message="Tip: Usa Ctrl+S para guardar rápidamente"
+/>
+
+````
