@@ -85,7 +85,7 @@ const DesignSystemViewer = () => {
     const currentComponent = componentsData[activeCategory]?.components[activeComponent];
     const currentVariant = currentComponent?.variants?.[selectedVariant];
 
-    const filteredComponents = Object.keys(categories[activeCategory].components).filter(
+    const _filteredComponents = Object.keys(categories[activeCategory].components).filter(
         component => component.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
