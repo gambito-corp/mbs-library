@@ -186,6 +186,7 @@ export const ContainerConfig = {
                 children: 'Contenido centrado'
             }
         },
+
         {
             name: 'Contenedor fluido',
             description: 'Contenedor que ocupa todo el ancho',
