@@ -186,20 +186,19 @@ export const ContainerConfig = {
                 children: 'Contenido centrado'
             }
         },
-
         {
             name: 'Contenedor fluido',
             description: 'Contenedor que ocupa todo el ancho',
             code: `<Container 
   fluid={true} 
-  background="gray" 
+  background="gray-100" 
   padding="medium"
 >
   <p>Contenedor fluido de ancho completo</p>
 </Container>`,
             props: {
                 fluid: true,
-                background: 'gray',
+                background: 'gray-100',
                 padding: 'medium',
                 children: 'Contenedor fluido'
             }
