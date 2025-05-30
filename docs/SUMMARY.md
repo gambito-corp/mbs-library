@@ -3,7 +3,7 @@
 ## Introducción
 * [Inicio](../README.md)
 
-## Primeros Pasos
+[//]: # (## Primeros Pasos)
 * [Instalación](getting-started/installation.md)
 * [Inicio Rápido](getting-started/quick-start.md)
 * [Requisitos](getting-started/requirements.md)
@@ -11,14 +11,14 @@
 ## Componentes
 
 ### Átomos
-* [Introducción a Átomos](components/atoms/README.md)
-* [Alert](components/atoms/alert.md)
+* [Introducción a Átomos](./atoms/README.md)
 
 ### Moléculas
-* [Introducción a Moléculas](components/molecules/README.md)
+* [Introducción a Moléculas](./molecules/README.md)
+* [Alert](./molecules/alert.md)
 
 ### Organismos
-* [Introducción a Organismos](components/organisms/README.md)
+* [Introducción a Organismos](./organisms/README.md)
 
 ## Guías
 * [Tematización](guides/theming.md)
@@ -28,6 +28,3 @@
 ## Ejemplos
 * [Uso Básico](examples/basic-usage.md)
 * [Patrones Avanzados](examples/advanced-patterns.md)
-
-## API Reference
-* [Referencia de Props](api/props-reference.md)

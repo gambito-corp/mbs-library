@@ -1,5 +1,5 @@
 import Animated from './Animated.jsx';
-import { ANIMATED_CATEGORIES, ENTRANCE_ANIMATIONS, ATTENTION_ANIMATIONS } from './Animated.constants.js';
+import { ANIMATED_CATEGORIES, ENTRANCE_ANIMATIONS } from './Animated.constants.js';
 
 export const AnimatedConfig = {
     component: Animated,

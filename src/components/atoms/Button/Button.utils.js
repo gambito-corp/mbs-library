@@ -1,4 +1,4 @@
-import { BUTTON_VARIANTS, BUTTON_SIZES, SPECIAL_CLASSES } from './Button.constants.js';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from './Button.constants.js';
 
 /**
  * Genera las clases CSS para el componente Button

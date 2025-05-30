@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ANIMATED_TYPES, ANIMATED_VARIANTS, ANIMATED_CATEGORIES } from './Animated.constants.js';
+import { ANIMATED_CATEGORIES } from './Animated.constants.js';
 import { getAnimatedClasses, triggerAnimation } from './Animated.utils.js';
 import './Animated.css';
 
@@ -24,7 +24,6 @@ const Animated = ({
                       ...props
                   }) => {
     const [isAnimating, setIsAnimating] = useState(false);
-    const [animationClass, setAnimationClass] = useState('');
 
     // Generar clases CSS usando utilidades
     const animatedClasses = getAnimatedClasses({
@@ -49,7 +48,7 @@ const Animated = ({
     // Trigger automático al montar
     useEffect(() => {
         if (trigger === 'mount') {
-            triggerAnimation(setIsAnimating, setAnimationClass, animation, category);
+            triggerAnimation(setIsAnimating, animation, category);
         }
     }, [trigger, animation, category]);
 
@@ -60,9 +59,6 @@ const Animated = ({
 
     const handleAnimationEnd = (e) => {
         setIsAnimating(false);
-        if (!repeat) {
-            setAnimationClass('');
-        }
         onAnimationEnd?.(e);
     };
 
@@ -72,7 +68,7 @@ const Animated = ({
 
     // Función para triggear manualmente
     const playAnimation = () => {
-        triggerAnimation(setIsAnimating, setAnimationClass, animation, category);
+        triggerAnimation(setIsAnimating, animation, category);
     };
 
     // Exponer función para uso externo

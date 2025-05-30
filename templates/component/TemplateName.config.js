@@ -1,5 +1,5 @@
 import TemplateName from './TemplateName.jsx';
-import { TEMPLATENAME_TYPES, TEMPLATENAME_VARIANTS, TEMPLATENAME_SIZES } from './TemplateName.constants.js';
+import { TEMPLATENAME_VARIANTS, TEMPLATENAME_SIZES } from './TemplateName.constants.js';
 
 export const TemplateNameConfig = {
     component: TemplateName,

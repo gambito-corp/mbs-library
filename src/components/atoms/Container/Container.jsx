@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CONTAINER_TYPES, CONTAINER_VARIANTS, CONTAINER_SIZES } from './Container.constants.js';
+import { CONTAINER_VARIANTS, CONTAINER_SIZES } from './Container.constants.js';
 import { getContainerClasses } from './Container.utils.js';
 import './Container.css';
 

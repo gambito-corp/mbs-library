@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BUTTON_VARIANTS, BUTTON_SIZES, BUTTON_TYPES } from './Button.constants.js';
+import { BUTTON_VARIANTS, BUTTON_SIZES } from './Button.constants.js';
 import { getButtonClasses } from './Button.utils.js';
 import Icon from '../Icon/Icon.jsx';
 import Text from '../Text/Text.jsx';
