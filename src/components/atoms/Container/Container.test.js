@@ -96,12 +96,19 @@ describe('Container Component', () => {
   });
 
   test('applies background classes correctly', () => {
-    const { rerender } = render(<Container background="white">Content</Container>);
-    expect(screen.getByTestId('Container')).toHaveClass('bg-white');
+    const backgroundTests = [
+      { background: 'white', expectedClass: 'bg-white' },
+      { background: 'primary', expectedClass: 'bg-blue-500' },
+      { background: 'gray', expectedClass: 'bg-gray-100' },
+      { background: 'transparent', expectedClass: 'bg-transparent' }
+    ];
 
-    rerender(<Container background="primary">Content</Container>);
-    expect(screen.getByTestId('Container')).toHaveClass('bg-blue-500');
+    backgroundTests.forEach(({ background, expectedClass }) => {
+      const { rerender } = render(<Container background={background}>Content</Container>);
+      expect(screen.getByTestId('Container')).toHaveClass(expectedClass);
+    });
   });
+
 
   test('handles complex combinations of props', () => {
     render(

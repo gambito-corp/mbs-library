@@ -85,11 +85,6 @@ const DesignSystemViewer = () => {
     const currentComponent = componentsData[activeCategory]?.components[activeComponent];
     const currentVariant = currentComponent?.variants?.[selectedVariant];
 
-    const _filteredComponents = Object.keys(categories[activeCategory].components).filter(
-        component => component.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-
     const themeClasses = isDarkMode
         ? 'bg-gray-900 text-white'
         : 'bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100';
