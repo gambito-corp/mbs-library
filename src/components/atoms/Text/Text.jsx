@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { TEXT_VARIANTS, TEXT_SIZES } from './Text.constants.js';
 import { getTextClasses } from './Text.utils.js';
@@ -7,7 +7,7 @@ import './Text.css';
 const Text = ({
                   children,
                   text,
-                  animated = false, // ✅ NUEVA PROP - animación opcional
+                  animated = false,
                   animationType = 'typewriter',
                   speed = 50,
                   onComplete,
@@ -19,7 +19,6 @@ const Text = ({
                   pauseOnHover = false,
                   variant = 'default',
                   size = 'medium',
-                  textColor,
                   as = 'span',
                   htmlStyles = false,
                   ...props
@@ -35,46 +34,10 @@ const Text = ({
     const safeContent = String(content);
 
     // Generar clases CSS usando utilidades
-    const textClasses = getTextClasses({ variant, size, className, animated, textColor });
+    const textClasses = getTextClasses({ variant, size, className, animated });
 
-    // ✅ LÓGICA DE ANIMACIÓN SOLO SI animated=true
-    useEffect(() => {
-        if (!animated) return;
-
-        if (!isPaused && currentIndex < safeContent.length) {
-            timeoutRef.current = setTimeout(() => {
-                if (htmlStyles) {
-                    const partialHTML = buildPartialHTML(safeContent, currentIndex + 1);
-                    setDisplayedText(partialHTML);
-                } else {
-                    setDisplayedText(prev => prev + safeContent[currentIndex]);
-                }
-                setCurrentIndex(prev => prev + 1);
-            }, speed);
-
-            return () => clearTimeout(timeoutRef.current);
-        } else if (currentIndex >= safeContent.length && onComplete) {
-            onComplete();
-
-            if (loop) {
-                setTimeout(() => {
-                    setDisplayedText('');
-                    setCurrentIndex(0);
-                }, 1000);
-            }
-        }
-    }, [animated, currentIndex, safeContent, speed, isPaused, onComplete, loop, htmlStyles]);
-
-    // Reset cuando cambia el contenido
-    useEffect(() => {
-        if (animated) {
-            setDisplayedText('');
-            setCurrentIndex(0);
-        }
-    }, [safeContent, animated]);
-
-    // ✅ FUNCIÓN PARA HTML PARCIAL
-    const buildPartialHTML = (originalHTML, targetLength) => {
+    // ✅ FUNCIÓN MEMOIZADA CON useCallback
+    const buildPartialHTML = useCallback((originalHTML, targetLength) => {
         if (!htmlStyles) return originalHTML.substring(0, targetLength);
 
         const tempDiv = document.createElement('div');
@@ -117,7 +80,43 @@ const Text = ({
         }
 
         return result.innerHTML;
-    };
+    }, [htmlStyles]);
+
+    // ✅ LÓGICA DE ANIMACIÓN CON DEPENDENCIA CORREGIDA
+    useEffect(() => {
+        if (!animated) return;
+
+        if (!isPaused && currentIndex < safeContent.length) {
+            timeoutRef.current = setTimeout(() => {
+                if (htmlStyles) {
+                    const partialHTML = buildPartialHTML(safeContent, currentIndex + 1);
+                    setDisplayedText(partialHTML);
+                } else {
+                    setDisplayedText(prev => prev + safeContent[currentIndex]);
+                }
+                setCurrentIndex(prev => prev + 1);
+            }, speed);
+
+            return () => clearTimeout(timeoutRef.current);
+        } else if (currentIndex >= safeContent.length && onComplete) {
+            onComplete();
+
+            if (loop) {
+                setTimeout(() => {
+                    setDisplayedText('');
+                    setCurrentIndex(0);
+                }, 1000);
+            }
+        }
+    }, [animated, currentIndex, safeContent, speed, isPaused, onComplete, loop, htmlStyles, buildPartialHTML]);
+
+    // Reset cuando cambia el contenido
+    useEffect(() => {
+        if (animated) {
+            setDisplayedText('');
+            setCurrentIndex(0);
+        }
+    }, [safeContent, animated]);
 
     // Handlers para interacción
     const handleMouseEnter = () => {

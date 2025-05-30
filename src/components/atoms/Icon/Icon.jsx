@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ICON_SIZES, ICON_VARIANTS } from './Icon.constants.js';
-import { getIconClasses, isValidIconType, renderCustomIcon } from './Icon.utils.js';
+import { getIconClasses, renderCustomIcon } from './Icon.utils.js';
 import './Icon.css';
 
 const Icon = ({

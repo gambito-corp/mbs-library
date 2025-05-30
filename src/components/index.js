@@ -1,6 +1,5 @@
 // ✅ ATOMS UNIFICADOS
 export { default as Alert } from './atoms/Alert';
-export { default as AnimatedText } from './atoms/AnimatedText';
 export { default as Badge } from './atoms/Badge';
 export { default as Box } from './atoms/Box';
 export { default as Button } from './atoms/Button';

@@ -8,7 +8,8 @@ import autoprefixer from 'autoprefixer';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-export default {
+// ✅ CORRECTO - Asignar a variable primero
+const rollupConfig = {
     input: 'src/components/index.js',
     output: [
         {
@@ -75,3 +76,6 @@ export default {
         '@fortawesome/react-fontawesome'
     ]
 };
+
+// ✅ CORRECTO - Exportar la variable
+export default rollupConfig;

@@ -12,8 +12,8 @@ import { ENTRANCE_ANIMATIONS, EXIT_ANIMATIONS, ATTENTION_ANIMATIONS } from './An
 export const getAnimatedClasses = ({ animation, category, className, isAnimating }) => {
     const baseClasses = 'animated-element';
 
-    // Obtener la clase de animación según la categoría
-    let animationClass = '';
+    // ✅ CORREGIDO: Sin inicialización redundante
+    let animationClass;
     switch (category) {
         case 'entrances':
             animationClass = ENTRANCE_ANIMATIONS[animation] || ENTRANCE_ANIMATIONS.fadeIn;
@@ -41,10 +41,8 @@ export const getAnimatedClasses = ({ animation, category, className, isAnimating
 /**
  * Función simplificada para triggear animación
  * @param {Function} setIsAnimating - Función para establecer estado de animación
- * @param {string} animation - Nombre de la animación
- * @param {string} category - Categoría de la animación
  */
-export const triggerAnimation = (setIsAnimating, animation, category) => {
+export const triggerAnimation = (setIsAnimating) => {
     setIsAnimating(true);
     // La lógica de clases se maneja en getAnimatedClasses
 };

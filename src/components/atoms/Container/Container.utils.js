@@ -14,7 +14,6 @@ import {
  */
 export const getContainerClasses = ({
                                         variant = 'default',
-                                        size = 'medium',
                                         maxWidth = 'full',
                                         padding = 'medium',
                                         margin = 'none',

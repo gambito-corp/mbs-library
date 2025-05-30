@@ -6,7 +6,6 @@ const LiveComponentEditor = ({
                                  variantName,
                                  initialCode,
                                  scope,
-                                 isDarkMode,
                                  isEditorVisible,
                                  setIsEditorVisible
                              }) => {

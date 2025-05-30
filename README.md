@@ -54,9 +54,9 @@ function App() {
 - [Button](./docs/atoms/button.md) - Botones interactivos con múltiples variantes
 
 ### Guías
-- [Getting Started](./getting-started.md) - Guía de inicio completa
-- [Atomic Design](./guides/atomic-design.md) - Metodología y estructura
-- [Integration Examples](./examples/integration-examples.md) - Ejemplos prácticos
+- [Getting Started](./docs/getting-started.md) - Guía de inicio completa
+- [Atomic Design](./docs/guides/atomic-design.md) - Metodología y estructura
+- [Integration Examples](./docs/examples/integration-examples.md) - Ejemplos prácticos
 
 ## 🎨 Design System Studio
 
