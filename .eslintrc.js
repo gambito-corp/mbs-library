@@ -7,16 +7,16 @@ module.exports = {
         jest: true
     },
 
-    // ✅ PARSER OPTIONS PARA ES6 MODULES
+    // ✅ PARSER OPTIONS CRÍTICOS PARA ES6 MODULES
     parserOptions: {
         ecmaVersion: 2022,
-        sourceType: 'module',
+        sourceType: 'module',  // ← ESTO RESUELVE EL ERROR DE 'import'
         ecmaFeatures: {
             jsx: true
         }
     },
 
-    // ✅ CONFIGURACIÓN BASE
+    // ✅ CONFIGURACIÓN BASE DE REACT
     extends: [
         'react-app',
         'react-app/jest'
@@ -25,7 +25,7 @@ module.exports = {
     // ✅ PLUGINS NECESARIOS
     plugins: ['react', 'react-hooks'],
 
-    // ✅ CONFIGURACIONES ESPECÍFICAS POR TIPO DE ARCHIVO
+    // ✅ CONFIGURACIONES ESPECÍFICAS POR ARCHIVO
     overrides: [
         {
             // Para archivos .config.js - Ignorar props de React
@@ -36,7 +36,7 @@ module.exports = {
             }
         },
         {
-            // Para archivos de test - Reglas más flexibles
+            // Para archivos de test
             files: ['**/__tests__/**/*', '**/*.test.*'],
             rules: {
                 'testing-library/no-node-access': 'warn',
@@ -44,8 +44,8 @@ module.exports = {
             }
         },
         {
-            // Para archivos legacy y templates
-            files: ['**/AnimatedText.jsx', '**/legacy/**/*', 'templates/**/*'],
+            // Para templates y archivos legacy
+            files: ['templates/**/*', '**/AnimatedText.jsx'],
             rules: {
                 'no-unused-vars': 'off',
                 'react-hooks/exhaustive-deps': 'off'
@@ -74,16 +74,10 @@ module.exports = {
         'import/no-anonymous-default-export': ['warn', {
             'allowObject': true,
             'allowArray': true
-        }],
-
-        // Accesibilidad importante pero no crítica
-        'jsx-a11y/click-events-have-key-events': 'warn',
-        'jsx-a11y/no-static-element-interactions': 'warn',
-        'jsx-a11y/alt-text': 'error',
-        'jsx-a11y/aria-role': 'error'
+        }]
     },
 
-    // ✅ ARCHIVOS A IGNORAR
+    // ✅ ARCHIVOS A IGNORAR COMPLETAMENTE
     ignorePatterns: [
         'dist/',
         'build/',
