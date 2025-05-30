@@ -9,15 +9,23 @@ import { TEXT_VARIANTS, TEXT_SIZES, STYLE_CONFIG } from './Text.constants.js';
  * @param {boolean} params.animated - Si el texto está animado
  * @returns {string} Clases CSS combinadas
  */
-export const getTextClasses = ({ variant = 'default', size = 'medium', className = '', animated = false, textColor  }) => {
+export const getTextClasses = ({
+                                   variant = 'default',
+                                   size = 'medium',
+                                   className = '',
+                                   animated = false,
+                                   textColor
+                               }) => {
     const baseClasses = 'text-component transition-all duration-200';
-    // Usar color personalizado si está disponible
+
+    // ✅ Usar color personalizado si está disponible
     let variantClasses;
     if (textColor) {
         variantClasses = getTextColorClasses(textColor);
     } else {
         variantClasses = STYLE_CONFIG[variant] || STYLE_CONFIG.default;
     }
+
     const sizeClasses = `${TEXT_SIZES[size]?.fontSize || 'text-base'} ${TEXT_SIZES[size]?.lineHeight || 'leading-6'}`;
     const animatedClasses = animated ? 'text-animated' : '';
 
@@ -26,7 +34,6 @@ export const getTextClasses = ({ variant = 'default', size = 'medium', className
         .join(' ')
         .trim();
 };
-
 /**
  * Valida si una variante de texto es válida
  * @param {string} variant - Variante a validar
@@ -212,9 +219,15 @@ export const detectLanguage = (text) => {
 
     return detectedLang;
 };
+/**
+ * Genera clases de color de texto personalizadas
+ * @param {string} color - Color Tailwind (ej: 'blue', 'red', 'green')
+ * @returns {string} Clases de color de texto
+ */
 export const getTextColorClasses = (color) => {
     if (!color) return '';
 
+    // ✅ MAPEO ESTÁTICO - Tailwind puede detectar estas clases
     const textColors = {
         // Colores básicos
         blue: 'text-blue-500',
@@ -239,8 +252,21 @@ export const getTextColorClasses = (color) => {
         'gray-600': 'text-gray-600',
         'gray-700': 'text-gray-700',
         'gray-800': 'text-gray-800',
-        'gray-900': 'text-gray-900'
+        'gray-900': 'text-gray-900',
+
+        // Colores adicionales para mayor compatibilidad
+        'blue-400': 'text-blue-400',
+        'blue-700': 'text-blue-700',
+        'red-400': 'text-red-400',
+        'red-700': 'text-red-700',
+        'green-400': 'text-green-400',
+        'green-700': 'text-green-700',
+        'purple-400': 'text-purple-400',
+        'purple-700': 'text-purple-700',
+        'orange-400': 'text-orange-400',
+        'orange-700': 'text-orange-700'
     };
 
-    return textColors[color] || `text-${color}`;
+    // ✅ Retornar clase mapeada o fallback
+    return textColors[color] || 'text-gray-900';
 };

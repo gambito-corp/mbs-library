@@ -202,18 +202,34 @@ export const IconConfig = {
                 name: 'check-circle',
                 variant: 'success'
             }
-        }, {
+        },
+        {
             name: 'Iconos con colores Tailwind',
-            description: 'Iconos usando colores Tailwind',
-            code: `<div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+            description: 'Iconos usando colores Tailwind personalizados',
+            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
   <Icon name="heart" textColor="red" size="large" />
   <Icon name="star" textColor="yellow" size="large" />
   <Icon name="check" textColor="green" size="large" />
-  <Icon name="info" textColor="blue" size="large" />
+  <Icon name="info-circle" textColor="blue" size="large" />
+  <Icon name="warning" textColor="orange" size="large" />
 </div>`,
             props: {
                 name: 'heart',
                 textColor: 'red',
+                size: 'large'
+            }
+        },
+        {
+            name: 'Tonos específicos',
+            description: 'Iconos con tonos específicos de colores',
+            code: `<div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+  <Icon name="heart" textColor="red-400" size="large" />
+  <Icon name="heart" textColor="red-600" size="large" />
+  <Icon name="heart" textColor="red-700" size="large" />
+</div>`,
+            props: {
+                name: 'heart',
+                textColor: 'red-600',
                 size: 'large'
             }
         }

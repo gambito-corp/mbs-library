@@ -277,6 +277,6 @@ export const TextConfig = {
                 variant: 'bold',
                 children: 'Título Índigo'
             }
-        }
+        },
     ]
 };

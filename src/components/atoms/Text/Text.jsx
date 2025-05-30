@@ -19,6 +19,7 @@ const Text = ({
                   pauseOnHover = false,
                   variant = 'default',
                   size = 'medium',
+                  textColor,
                   as = 'span',
                   htmlStyles = false,
                   ...props
@@ -33,8 +34,13 @@ const Text = ({
     const content = text || children || "";
     const safeContent = String(content);
 
-    // Generar clases CSS usando utilidades
-    const textClasses = getTextClasses({ variant, size, className, animated });
+    const textClasses = getTextClasses({
+        variant,
+        size,
+        className,
+        animated,
+        textColor
+    });
 
     // ✅ FUNCIÓN MEMOIZADA CON useCallback
     const buildPartialHTML = useCallback((originalHTML, targetLength) => {

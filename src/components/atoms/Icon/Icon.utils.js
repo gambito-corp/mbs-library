@@ -10,15 +10,25 @@ import { ICON_SIZES, ICON_VARIANTS } from './Icon.constants.js';
  * @param {boolean} params.loading - Si el icono está en estado de carga
  * @returns {string} Clases CSS combinadas
  */
-export const getIconClasses = ({ size = 'medium', variant = 'default', className = '', disabled = false, loading = false,  textColor }) => {
+export const getIconClasses = ({
+                                   size = 'medium',
+                                   variant = 'default',
+                                   className = '',
+                                   disabled = false,
+                                   loading = false,
+                                   textColor // ✅ NUEVA PROP
+                               }) => {
     const baseClasses = 'icon-component inline-flex items-center justify-center transition-all duration-200';
     const sizeClasses = ICON_SIZES[size]?.className || 'icon-md';
+
+    // ✅ Usar color personalizado si está disponible
     let variantClasses;
     if (textColor) {
         variantClasses = getIconCustomColorClasses(textColor);
     } else {
         variantClasses = `icon-${variant}`;
     }
+
     const stateClasses = [
         disabled && 'icon-disabled',
         loading && 'icon-loading'
@@ -29,6 +39,7 @@ export const getIconClasses = ({ size = 'medium', variant = 'default', className
         .join(' ')
         .trim();
 };
+
 
 /**
  * Valida si un tipo de icono es válido
@@ -246,7 +257,9 @@ export const decodeSVG = (base64String) => {
 export const getIconCustomColorClasses = (color) => {
     if (!color) return '';
 
+    // ✅ MAPEO ESTÁTICO - Tailwind puede detectar estas clases
     const iconColors = {
+        // Colores básicos
         blue: 'text-blue-500',
         red: 'text-red-500',
         green: 'text-green-500',
@@ -269,9 +282,16 @@ export const getIconCustomColorClasses = (color) => {
         'gray-600': 'text-gray-600',
         'gray-700': 'text-gray-700',
         'gray-800': 'text-gray-800',
-        'gray-900': 'text-gray-900'
+        'gray-900': 'text-gray-900',
+
+        // Colores adicionales
+        'blue-400': 'text-blue-400',
+        'blue-700': 'text-blue-700',
+        'red-400': 'text-red-400',
+        'red-700': 'text-red-700',
+        'green-400': 'text-green-400',
+        'green-700': 'text-green-700'
     };
 
-    return iconColors[color] || `text-${color}`;
+    return iconColors[color] || 'text-gray-500';
 };
-
