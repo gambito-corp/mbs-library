@@ -1,108 +1,94 @@
-import React, { useState } from 'react';
-import Alert from './atoms/Alert';
+import { useState, useEffect } from 'react';
+import * as React from 'react';
+import { LiveProvider, LiveEditor, LivePreview, LiveError } from 'react-live';
+
+// Importaciones de componentes
+import Alert from './molecules/Alert/Alert.jsx';
+import Text from './atoms/Text/Text.jsx';
+import Container from './atoms/Container/Container.jsx';
+import Animated from './atoms/Animated/Animated.jsx';
+import Icon from './atoms/Icon/Icon.jsx';
+import Button from './atoms/Button/Button.jsx';
+import { AlertConfig } from './molecules/Alert/Alert.config.js';
+import { TextConfig } from './atoms/Text/Text.config.js';
+import { ContainerConfig } from './atoms/Container/Container.config.js';
+import { AnimatedConfig } from './atoms/Animated/Animated.config.js';
+import { IconConfig } from './atoms/Icon/Icon.config.js';
+import { ButtonConfig } from "./atoms/Button/Button.config.js";
+
 
 const DesignSystemViewer = () => {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [activeCategory, setActiveCategory] = useState('atoms');
     const [activeComponent, setActiveComponent] = useState('Alert');
+    const [selectedVariant, setSelectedVariant] = useState(0);
+    const [isEditorVisible, setIsEditorVisible] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isDarkMode, setIsDarkMode] = useState(false);
 
-    const categories = {
+    // Configuración de componentes
+    const componentsData = {
         atoms: {
             name: 'Átomos',
-            description: 'Elementos básicos e indivisibles del diseño',
             icon: '⚛️',
             color: 'from-blue-500 to-cyan-500',
             components: {
-                Alert: {
-                    component: Alert,
-                    description: 'Componente para mostrar mensajes informativos al usuario',
-                    examples: [
-                        {
-                            name: 'Error básico',
-                            description: 'Alerta de error simple con mensaje',
-                            props: { type: 'error', message: 'Este es un mensaje de error' }
-                        },
-                        {
-                            name: 'Éxito con título',
-                            description: 'Alerta de éxito con título y mensaje descriptivo',
-                            props: {
-                                type: 'success',
-                                title: 'Operación exitosa',
-                                message: 'Los datos se guardaron correctamente'
-                            }
-                        },
-                        {
-                            name: 'Warning dismissible',
-                            description: 'Alerta de advertencia que se puede cerrar',
-                            props: {
-                                type: 'warning',
-                                message: 'Esta acción no se puede deshacer',
-                                dismissible: true,
-                                onDismiss: () => console.log('Alert cerrado')
-                            }
-                        },
-                        {
-                            name: 'Info outlined grande',
-                            description: 'Alerta informativa con variante outlined y tamaño grande',
-                            props: {
-                                type: 'info',
-                                variant: 'outlined',
-                                size: 'large',
-                                message: 'Información importante para el usuario'
-                            }
-                        },
-                        {
-                            name: 'Error sólido pequeño',
-                            description: 'Alerta de error con estilo sólido y tamaño pequeño',
-                            props: {
-                                type: 'error',
-                                variant: 'solid',
-                                size: 'small',
-                                message: 'Error crítico del sistema'
-                            }
-                        }
-                    ]
-                }
+                Text: TextConfig,
+                Container: ContainerConfig,
+                Animated: AnimatedConfig,
+                Icon: IconConfig,
+                Button: ButtonConfig,
             }
         },
         molecules: {
             name: 'Moléculas',
-            description: 'Combinación de átomos que forman componentes funcionales',
             icon: '🧬',
             color: 'from-green-500 to-emerald-500',
-            components: {}
+            components: {
+                Alert: AlertConfig,
+
+            }
         },
         organisms: {
             name: 'Organismos',
-            description: 'Secciones complejas de la interfaz',
             icon: '🦠',
             color: 'from-purple-500 to-pink-500',
             components: {}
         }
     };
 
-    const renderComponent = (componentData, example) => {
-        const Component = componentData.component;
-        return <Component key={example.name} {...example.props} />;
+    const categories = componentsData;
+    const componentScope = {
+        React,
+        useState: React.useState,
+        useEffect: React.useEffect,
+        useRef: React.useRef,
+        Animated,
+        Text,
+        Container,
+        Icon,
+        Button,
+        Alert,
+
+        PropTypes: require('prop-types')
     };
 
-    const renderCodeExample = (example) => {
-        const propsString = Object.entries(example.props)
-            .map(([key, value]) => {
-                if (typeof value === 'string') return `  ${key}="${value}"`;
-                if (typeof value === 'boolean') return value ? `  ${key}` : `  ${key}={false}`;
-                if (typeof value === 'function') return `  ${key}={handleFunction}`;
-                return `  ${key}={${JSON.stringify(value)}}`;
-            })
-            .join('\n');
+    // ✅ RESETEAR VARIANTE CUANDO CAMBIA COMPONENTE
+    useEffect(() => {
 
-        return `<${activeComponent}${propsString ? '\n' + propsString + '\n' : ''}/>`;
-    };
+    }, [activeComponent, selectedVariant]);
+
+    // ✅ DEBUG PARA VER CAMBIOS
+    useEffect(() => {
+    }, [activeComponent, selectedVariant]);
+
+    const currentComponent = componentsData[activeCategory]?.components[activeComponent];
+    const currentVariant = currentComponent?.variants?.[selectedVariant];
 
     const filteredComponents = Object.keys(categories[activeCategory].components).filter(
         component => component.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
 
     const themeClasses = isDarkMode
         ? 'bg-gray-900 text-white'
@@ -110,20 +96,28 @@ const DesignSystemViewer = () => {
 
     return (
         <div className={`min-h-screen transition-all duration-300 ${themeClasses}`}>
-            {/* Header mejorado */}
+            {/* Header */}
             <header className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white/80 backdrop-blur-lg'} shadow-xl border-b sticky top-0 z-50 transition-all duration-300`}>
                 <div className="max-w-7xl mx-auto px-6 py-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
+                            <button
+                                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                                className={`p-2 rounded-lg transition-colors ${
+                                    isDarkMode ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-200 hover:bg-gray-300'
+                                }`}
+                            >
+                                {sidebarCollapsed ? '☰' : '✕'}
+                            </button>
                             <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <span className="text-white font-bold text-xl">DS</span>
                             </div>
                             <div>
-                                <h1 className={`text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent`}>
-                                    Design System Library
+                                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    Design System Studio
                                 </h1>
                                 <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-1 font-medium`}>
-                                    Librería de componentes estandarizada siguiendo Atomic Design
+                                    Librería de componentes con editor en vivo
                                 </p>
                             </div>
                         </div>
@@ -161,177 +155,303 @@ const DesignSystemViewer = () => {
                 </div>
             </header>
 
-            <div className="max-w-7xl mx-auto px-6 py-8">
-                <div className="grid grid-cols-12 gap-8">
-                    {/* Sidebar mejorado */}
-                    <div className="col-span-3">
-                        <div className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white/70 backdrop-blur-sm border-gray-200'} rounded-2xl shadow-xl border sticky top-32`}>
-                            <div className="p-6">
-                                <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
-                                    Categorías
-                                </h3>
+            <div className="flex">
+                {/* Sidebar */}
+                <aside className={`${sidebarCollapsed ? 'w-16' : 'w-80'} ${
+                    isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white/70 backdrop-blur-sm border-gray-200'
+                } border-r transition-all duration-300 min-h-screen`}>
+                    <div className="p-4">
+                        {!sidebarCollapsed && (
+                            <h2 className="text-lg font-semibold mb-4">Componentes</h2>
+                        )}
 
-                                <nav className="space-y-3">
-                                    {Object.entries(categories).map(([key, category]) => (
-                                        <div key={key}>
-                                            <button
-                                                onClick={() => setActiveCategory(key)}
-                                                className={`w-full text-left p-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
-                                                    activeCategory === key
-                                                        ? `bg-gradient-to-r ${category.color} text-white shadow-lg`
-                                                        : isDarkMode
-                                                            ? 'text-gray-300 hover:bg-gray-700'
-                                                            : 'text-gray-700 hover:bg-gray-100'
-                                                }`}
-                                            >
-                                                <div className="flex items-center space-x-3">
-                                                    <span className="text-2xl">{category.icon}</span>
-                                                    <div>
-                                                        <div className="font-bold">{category.name}</div>
-                                                        <div className={`text-sm ${activeCategory === key ? 'text-white/80' : isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                            {Object.keys(category.components).length} componentes
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </button>
-
-                                            {activeCategory === key && filteredComponents.length > 0 && (
-                                                <div className="mt-3 ml-4 space-y-2">
-                                                    {filteredComponents.map(componentName => (
-                                                        <button
-                                                            key={componentName}
-                                                            onClick={() => setActiveComponent(componentName)}
-                                                            className={`block w-full text-left px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                                                                activeComponent === componentName
-                                                                    ? isDarkMode
-                                                                        ? 'bg-blue-600 text-white'
-                                                                        : 'bg-blue-50 text-blue-700 border border-blue-200'
-                                                                    : isDarkMode
-                                                                        ? 'text-gray-400 hover:bg-gray-700 hover:text-white'
-                                                                        : 'text-gray-600 hover:bg-gray-50'
-                                                            }`}
-                                                        >
-                                                            {componentName}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </nav>
-                            </div>
-                        </div>
+                        <nav className="space-y-3">
+                            {Object.entries(categories).map(([key, category]) => (
+                                <SidebarCategory
+                                    key={key}
+                                    categoryKey={key}
+                                    category={category}
+                                    collapsed={sidebarCollapsed}
+                                    activeCategory={activeCategory}
+                                    activeComponent={activeComponent}
+                                    onCategorySelect={setActiveCategory}
+                                    onComponentSelect={setActiveComponent}
+                                    isDarkMode={isDarkMode}
+                                />
+                            ))}
+                        </nav>
                     </div>
+                </aside>
 
-                    {/* Main Content mejorado */}
-                    <div className="col-span-9">
-                        <div className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white/70 backdrop-blur-sm border-gray-200'} rounded-2xl shadow-xl border`}>
-                            {/* Component Header mejorado */}
-                            <div className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} px-8 py-6`}>
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <span className={`px-3 py-1 bg-gradient-to-r ${categories[activeCategory].color} text-white text-sm font-bold rounded-full shadow-lg`}>
-                                            {categories[activeCategory].icon} {categories[activeCategory].name}
-                                        </span>
-                                        <div>
-                                            <h2 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                {activeComponent}
-                                            </h2>
-                                            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-1`}>
-                                                {categories[activeCategory].components[activeComponent]?.description || categories[activeCategory].description}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                                        <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                            {categories[activeCategory].components[activeComponent]?.examples?.length || 0} ejemplos
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Examples mejorados */}
-                            <div className="p-8">
-                                {categories[activeCategory].components[activeComponent] ? (
-                                    <div className="space-y-8">
-                                        {categories[activeCategory].components[activeComponent].examples.map((example, index) => (
-                                            <div key={index} className={`border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300`}>
-                                                {/* Example Header mejorado */}
-                                                <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gradient-to-r from-gray-50 to-gray-100'} px-6 py-4 border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                                                    <div className="flex items-center justify-between">
-                                                        <div>
-                                                            <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                                {example.name}
-                                                            </h3>
-                                                            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-1`}>
-                                                                {example.description}
-                                                            </p>
-                                                        </div>
-                                                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ${isDarkMode ? 'bg-gray-600 text-gray-200' : 'bg-blue-100 text-blue-700'}`}>
-                                                            Ejemplo {index + 1}
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                {/* Preview mejorado */}
-                                                <div className={`p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                                                    <div className="flex items-center justify-center min-h-[100px]">
-                                                        {renderComponent(
-                                                            categories[activeCategory].components[activeComponent],
-                                                            example
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                {/* Code mejorado */}
-                                                <div className="bg-gray-900 text-gray-100 p-6">
-                                                    <div className="flex items-center justify-between mb-4">
-                                                        <span className="text-sm font-semibold text-gray-300">Código JSX</span>
-                                                        <button
-                                                            onClick={() => navigator.clipboard.writeText(renderCodeExample(example))}
-                                                            className="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded text-xs font-medium transition-colors duration-200"
-                                                        >
-                                                            📋 Copiar
-                                                        </button>
-                                                    </div>
-                                                    <pre className="text-sm overflow-x-auto bg-gray-800 p-4 rounded-lg">
-                                                        <code className="language-jsx">{renderCodeExample(example)}</code>
-                                                    </pre>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-16">
-                                        <div className="text-6xl mb-4">🚧</div>
-                                        <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
-                                            En construcción
-                                        </h3>
-                                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                            No hay componentes disponibles en esta categoría todavía
+                {/* Main Content */}
+                <main className="flex-1 p-6">
+                    {currentComponent ? (
+                        <div className="space-y-6">
+                            {/* Component Header */}
+                            <div className={`${
+                                isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white/70 backdrop-blur-sm border-gray-200'
+                            } rounded-xl p-6 border`}>
+                                <div className="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h2 className="text-3xl font-bold">{currentComponent.name}</h2>
+                                        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>
+                                            {currentComponent.description}
                                         </p>
+                                    </div>
+                                    <span className="text-4xl">
+                                        {categories[activeCategory].icon}
+                                    </span>
+                                </div>
+
+                                {/* Variant Selector */}
+                                {currentComponent.variants && currentComponent.variants.length > 0 && (
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium mb-2">
+                                            Variantes disponibles: ({currentComponent.variants.length})
+                                        </label>
+                                        <select
+                                            value={selectedVariant}
+                                            onChange={(e) => {
+                                                const newVariant = Number(e.target.value);
+                                                setSelectedVariant(newVariant);
+                                            }}
+                                            className={`w-full px-3 py-2 rounded-lg border ${
+                                                isDarkMode
+                                                    ? 'bg-gray-700 border-gray-600 text-white'
+                                                    : 'bg-white border-gray-300 text-gray-900'
+                                            } focus:ring-2 focus:ring-blue-500 transition-all duration-200`}
+                                        >
+                                            {currentComponent.variants.map((variant, index) => (
+                                                <option key={index} value={index}>
+                                                    {variant.name} {index === selectedVariant ? '✓' : ''}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        {/* Debug info */}
+                                        <div className="mt-2 text-xs text-gray-500">
+                                            Variante actual: {selectedVariant} - {currentVariant?.name}
+                                        </div>
                                     </div>
                                 )}
                             </div>
+
+                            {/* Live Editor con Key para forzar re-render */}
+                            {currentVariant && (
+                                <LiveComponentEditor
+                                    key={`${activeComponent}-${selectedVariant}`}
+                                    componentName={currentComponent.name}
+                                    variantName={currentVariant.name}
+                                    initialCode={currentVariant.code}
+                                    scope={componentScope}
+                                    isDarkMode={isDarkMode}
+                                    isEditorVisible={isEditorVisible}
+                                    setIsEditorVisible={setIsEditorVisible}
+                                />
+                            )}
                         </div>
+                    ) : (
+                        <div className="text-center py-16">
+                            <div className="text-6xl mb-4">🎨</div>
+                            <h3 className="text-xl font-bold mb-2">Selecciona un componente</h3>
+                            <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                                Elige un componente del sidebar para comenzar
+                            </p>
+                        </div>
+                    )}
+                </main>
+            </div>
+        </div>
+    );
+};
+
+// ✅ COMPONENTE SIDEBAR CATEGORY
+const SidebarCategory = ({
+                             categoryKey,
+                             category,
+                             collapsed,
+                             activeCategory,
+                             activeComponent,
+                             onCategorySelect,
+                             onComponentSelect,
+                             isDarkMode
+                         }) => {
+    const [isOpen, setIsOpen] = useState(activeCategory === categoryKey);
+    const isActive = activeCategory === categoryKey;
+
+    const handleCategoryClick = () => {
+        if (!collapsed) {
+            setIsOpen(!isOpen);
+        }
+        onCategorySelect(categoryKey);
+    };
+
+    const buttonClasses = `w-full text-left p-3 rounded-lg font-semibold transition-all duration-200 ${
+        isActive
+            ? isDarkMode
+                ? 'bg-blue-600 text-white'
+                : 'bg-blue-100 text-blue-700 border border-blue-200'
+            : isDarkMode
+                ? 'text-gray-300 hover:bg-gray-700'
+                : 'text-gray-700 hover:bg-gray-100'
+    }`;
+
+    return (
+        <div className="mb-2">
+            <button onClick={handleCategoryClick} className={buttonClasses}>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                        <span className="text-xl">{category.icon}</span>
+                        {!collapsed && <span>{category.name}</span>}
+                    </div>
+                    {!collapsed && (
+                        <span className={`transform transition-transform ${isOpen ? 'rotate-90' : ''}`}>
+                            ▶
+                        </span>
+                    )}
+                </div>
+            </button>
+
+            {!collapsed && isOpen && (
+                <div className="mt-2 ml-4 space-y-1">
+                    {Object.entries(category.components).map(([componentKey, component]) => (
+                        <button
+                            key={componentKey}
+                            onClick={() => onComponentSelect(componentKey)}
+                            className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                                activeComponent === componentKey
+                                    ? isDarkMode
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-blue-50 text-blue-600'
+                                    : isDarkMode
+                                        ? 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                                        : 'text-gray-600 hover:bg-gray-50'
+                            }`}
+                        >
+                            {component.name}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+// ✅ COMPONENTE LIVE EDITOR
+const LiveComponentEditor = ({
+                                 componentName,
+                                 variantName,
+                                 initialCode,
+                                 scope,
+                                 isDarkMode,
+                                 isEditorVisible,
+                                 setIsEditorVisible
+                             }) => {
+    const [code, setCode] = useState(initialCode);
+
+    // Actualizar código cuando cambie la variante
+    useState(() => {
+        setCode(initialCode);
+    }, [initialCode]);
+    // ✅ ACTUALIZAR CÓDIGO AUTOMÁTICAMENTE
+    useEffect(() => {
+        setCode(initialCode);
+    }, [initialCode, variantName]); // ✅ Dependencias correctas
+
+    const headerClasses = isDarkMode
+        ? 'bg-gray-700 border-gray-600'
+        : 'bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200';
+
+    const previewClasses = isDarkMode
+        ? 'bg-gray-800'
+        : 'bg-white';
+
+    return (
+        <div className={`border rounded-xl overflow-hidden shadow-lg ${
+            isDarkMode ? 'border-gray-600' : 'border-gray-200'
+        }`}>
+            {/* Header del Editor */}
+            <div className={`${headerClasses} px-6 py-4 border-b`}>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                        <span className="text-2xl">⚡</span>
+                        <div>
+                            <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                Editor en Vivo - {componentName}
+                            </h3>
+                            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                {variantName} - Edita el código y ve los cambios en tiempo real
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={() => setIsEditorVisible(!isEditorVisible)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                                isEditorVisible
+                                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                    : isDarkMode
+                                        ? 'bg-gray-600 text-gray-200 hover:bg-gray-500'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                        >
+                            {isEditorVisible ? '👁️ Ocultar Editor' : '✏️ Mostrar Editor'}
+                        </button>
+                        <button
+                            onClick={() => setCode(initialCode)}
+                            className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+                                isDarkMode
+                                    ? 'bg-gray-600 text-white hover:bg-gray-500'
+                                    : 'bg-gray-600 text-white hover:bg-gray-700'
+                            }`}
+                        >
+                            🔄 Reset
+                        </button>
+                        <button
+                            onClick={() => navigator.clipboard.writeText(code)}
+                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                        >
+                            📋 Copiar
+                        </button>
                     </div>
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white/50 border-gray-200'} border-t mt-16`}>
-                <div className="max-w-7xl mx-auto px-6 py-8">
-                    <div className="text-center">
-                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            Construido con ❤️ usando React y Tailwind CSS
-                        </p>
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'} mt-2`}>
-                            Design System Library v1.0.0
-                        </p>
-                    </div>
+            <LiveProvider code={code} scope={scope} noInline={false}>
+                {/* Preview siempre visible */}
+                <div className={`p-8 ${previewClasses} min-h-[120px] flex items-center justify-center`}>
+                    <LivePreview />
                 </div>
-            </footer>
+
+                {/* Editor colapsable */}
+                {isEditorVisible && (
+                    <div className={`border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                        <div className="bg-gray-900 text-gray-100">
+                            <div className="px-6 py-3 bg-gray-800 border-b border-gray-700">
+                                <span className="text-sm font-semibold text-gray-300">
+                                    Editor JSX - Edita en tiempo real
+                                </span>
+                            </div>
+                            <div className="p-4">
+                                <LiveEditor
+                                    onChange={setCode}
+                                    className="font-mono text-sm leading-6"
+                                    style={{
+                                        fontFamily: 'Fira Code, Monaco, Consolas, monospace',
+                                        fontSize: '14px',
+                                        lineHeight: '1.6',
+                                        background: 'transparent',
+                                        outline: 'none'
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Errores */}
+                <LiveError className="bg-red-50 border-t border-red-200 p-4 text-red-800 text-sm font-mono" />
+            </LiveProvider>
         </div>
     );
 };

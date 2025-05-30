@@ -1,68 +1,109 @@
+// src/utils/fontawesome.js
 import { library } from '@fortawesome/fontawesome-svg-core';
+
+// Importar iconos sólidos
 import {
-    faCheck,
-    faExclamationTriangle,
-    faInfoCircle,
-    faTimes,
-    faSearch,
-    faCopy,
-    faMoon,
-    faSun,
-    faChevronDown,
-    faChevronUp,
-    faCode,
-    faEye,
-    faCog,
+    faHeart,
     faHome,
     faUser,
-    faEnvelope,
-    faPhone,
-    faHeart,
-    faShare,
-    faDownload,
-    faUpload,
+    faSearch,
+    faCheckCircle,
+    faExclamationTriangle,
+    faTimesCircle,
+    faInfoCircle,
+    faSpinner,
+    faStar,
+    faArrowLeft,
+    faArrowRight,
+    faArrowUp,
+    faArrowDown,
+    faBars,
+    faTimes,
     faEdit,
     faTrash,
-    faPlus,
-    faMinus
+    faSave,
+    faCopy,
+    faCheck,
+    faEnvelope,
+    faPhone,
+    faComment,
+    faBell,
+    faFile,
+    faFolder,
+    faDownload,
+    faUpload,
+    faCog,
+    faUsers,
+    faFilter,
+    faSort,
+    faQuestion,
+    faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons';
 
+// Importar iconos regulares
 import {
-    faHeart as faHeartRegular,
-    faUser as faUserRegular,
-    faEnvelope as faEnvelopeRegular
+    faHeart as farHeart,
+    faUser as farUser,
+    faCheckCircle as farCheckCircle
 } from '@fortawesome/free-regular-svg-icons';
 
-// Agregar iconos a la librería
+// Importar iconos de marcas
+import {
+    faGithub,
+    faFacebook,
+    faTwitter,
+    faInstagram,
+    faLinkedin
+} from '@fortawesome/free-brands-svg-icons';
+
+// Registrar todos los iconos en la librería
 library.add(
-    // Solid icons
-    faCheck,
-    faExclamationTriangle,
-    faInfoCircle,
-    faTimes,
-    faSearch,
-    faCopy,
-    faMoon,
-    faSun,
-    faChevronDown,
-    faChevronUp,
-    faCode,
-    faEye,
-    faCog,
+    // Sólidos
+    faHeart,
     faHome,
     faUser,
-    faEnvelope,
-    faPhone,
-    faHeart,
-    faShare,
-    faDownload,
-    faUpload,
+    faSearch,
+    faCheckCircle,
+    faExclamationTriangle,
+    faTimesCircle,
+    faInfoCircle,
+    faSpinner,
+    faStar,
+    faArrowLeft,
+    faArrowRight,
+    faArrowUp,
+    faArrowDown,
+    faBars,
+    faTimes,
     faEdit,
     faTrash,
-    faPlus,
-    faMinus,
-    // Regular icons
-    faHeartRegular,
-    faUserRegular,
-    faEnvelopeRegular
+    faSave,
+    faCopy,
+    faCheck,
+    faEnvelope,
+    faPhone,
+    faComment,
+    faBell,
+    faFile,
+    faFolder,
+    faDownload,
+    faUpload,
+    faCog,
+    faUsers,
+    faFilter,
+    faSort,
+    faQuestion,
+    faQuestionCircle,
+
+    // Regulares
+    farHeart,
+    farUser,
+    farCheckCircle,
+
+    // Marcas
+    faGithub,
+    faFacebook,
+    faTwitter,
+    faInstagram,
+    faLinkedin
 );

@@ -1,0 +1,58 @@
+/* Estilos base para el componente Container */
+.container-component {
+    /* Los estilos principales están en Tailwind, aquí solo refinamientos */
+    box-sizing: border-box;
+}
+
+/* Transiciones suaves para cambios de estado */
+.container-component {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Estilos para variantes especiales */
+.container-component.hero-variant {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Efectos de hover para contenedores interactivos */
+.container-component.card-variant:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .container-component {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .container-component {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+    }
+}
+
+/* Accesibilidad */
+.container-component:focus-within {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .container-component.card-variant {
+        background-color: #1f2937;
+        border-color: #374151;
+    }
+
+    .container-component.panel-variant {
+        background-color: #111827;
+        border-color: #374151;
+    }
+}

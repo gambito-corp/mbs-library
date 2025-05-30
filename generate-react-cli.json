@@ -1,0 +1,81 @@
+{
+  "usesTypeScript": false,
+  "usesStyledComponents": false,
+  "usesCssModule": false,
+  "cssPreprocessor": "css",
+  "testLibrary": "Testing Library",
+  "component": {
+    "default": {
+      "customTemplates": {
+        "component": "templates/component/TemplateName.jsx",
+        "lazy": "templates/component/TemplateName.lazy.jsx",
+        "story": "templates/component/TemplateName.stories.jsx",
+        "config": "templates/component/TemplateName.config.js",
+        "constants": "templates/component/TemplateName.constants.js",
+        "utils": "templates/component/TemplateName.utils.js"
+      },
+      "path": "src/components",
+      "withStyle": true,
+      "withTest": true,
+      "withStory": false,
+      "withLazy": true,
+      "withConfig": true,
+      "withConstants": true,
+      "withUtils": true
+    },
+    "atom": {
+      "customTemplates": {
+        "component": "templates/component/TemplateName.jsx",
+        "lazy": "templates/component/TemplateName.lazy.jsx",
+        "story": "templates/component/TemplateName.stories.jsx",
+        "config": "templates/component/TemplateName.config.js",
+        "constants": "templates/component/TemplateName.constants.js",
+        "utils": "templates/component/TemplateName.utils.js"
+      },
+      "path": "src/components/atoms",
+      "withStyle": true,
+      "withTest": true,
+      "withStory": false,
+      "withLazy": true,
+      "withConfig": true,
+      "withConstants": true,
+      "withUtils": true
+    },
+    "molecule": {
+      "customTemplates": {
+        "component": "templates/component/TemplateName.jsx",
+        "lazy": "templates/component/TemplateName.lazy.jsx",
+        "story": "templates/component/TemplateName.stories.jsx",
+        "config": "templates/component/TemplateName.config.js",
+        "constants": "templates/component/TemplateName.constants.js",
+        "utils": "templates/component/TemplateName.utils.js"
+      },
+      "path": "src/components/molecules",
+      "withStyle": true,
+      "withTest": true,
+      "withStory": false,
+      "withLazy": true,
+      "withConfig": true,
+      "withConstants": true,
+      "withUtils": true
+    },
+    "organism": {
+      "customTemplates": {
+        "component": "templates/component/TemplateName.jsx",
+        "lazy": "templates/component/TemplateName.lazy.jsx",
+        "story": "templates/component/TemplateName.stories.jsx",
+        "config": "templates/component/TemplateName.config.js",
+        "constants": "templates/component/TemplateName.constants.js",
+        "utils": "templates/component/TemplateName.utils.js"
+      },
+      "path": "src/components/organisms",
+      "withStyle": true,
+      "withTest": true,
+      "withStory": false,
+      "withLazy": true,
+      "withConfig": true,
+      "withConstants": true,
+      "withUtils": true
+    }
+  }
+}

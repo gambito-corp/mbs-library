@@ -1,0 +1,355 @@
+/* ===== ESTILOS BASE PARA EL COMPONENTE TEXT ===== */
+
+.text-component {
+    /* Estilos base para todos los textos */
+    line-height: 1.5;
+    font-family: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    transition: all 0.2s ease-in-out;
+}
+
+/* ===== VARIANTES DE TEXTO ===== */
+
+/* Variante por defecto */
+.text-default {
+    color: #374151;
+}
+
+/* Variante destacada */
+.text-highlight {
+    background-color: #fef3c7;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    color: #92400e;
+    font-weight: 500;
+}
+
+/* Variante degradado */
+.text-gradient {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+    font-weight: 600;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Variante neón */
+.text-neon {
+    color: #00ffff;
+    text-shadow:
+            0 0 5px currentColor,
+            0 0 10px currentColor,
+            0 0 15px currentColor,
+            0 0 20px currentColor;
+    animation: neonPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes neonPulse {
+    from {
+        text-shadow:
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor,
+                0 0 20px currentColor;
+    }
+    to {
+        text-shadow:
+                0 0 2px currentColor,
+                0 0 5px currentColor,
+                0 0 8px currentColor,
+                0 0 12px currentColor;
+    }
+}
+
+/* Variante retro */
+.text-retro {
+    font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
+    background-color: #000;
+    color: #00ff00;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #00ff00;
+    box-shadow:
+            inset 0 0 10px rgba(0, 255, 0, 0.1),
+            0 0 20px rgba(0, 255, 0, 0.2);
+    text-shadow: 0 0 5px #00ff00;
+}
+
+/* Variante silenciada */
+.text-muted {
+    color: #6b7280;
+    opacity: 0.8;
+}
+
+/* Variante negrita */
+.text-bold {
+    font-weight: 700;
+    color: #111827;
+}
+
+/* Variante cursiva */
+.text-italic {
+    font-style: italic;
+    color: #4b5563;
+}
+
+/* ===== TAMAÑOS DE TEXTO ===== */
+
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+/* ===== ESTILOS PARA TEXTO ANIMADO ===== */
+
+.text-animated {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cursor de texto animado */
+.text-cursor {
+    display: inline-block;
+    animation: cursorBlink 1s infinite;
+    font-weight: normal;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Efecto de máquina de escribir */
+.text-typewriter {
+    border-right: 2px solid currentColor;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3.5s steps(40, end), cursorBlink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* ===== ELEMENTOS HTML ESPECÍFICOS ===== */
+
+/* Estilos para encabezados */
+.text-component.heading {
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+.text-component.h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.text-component.h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.text-component.h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.text-component.h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.text-component.h5 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.text-component.h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Estilos para párrafos */
+.text-component.paragraph {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+/* Estilos para labels */
+.text-component.label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #374151;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* ===== ESTADOS INTERACTIVOS ===== */
+
+.text-component.interactive {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.text-component.interactive:hover {
+    transform: translateY(-1px);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.text-component.interactive:active {
+    transform: translateY(0);
+}
+
+/* ===== MODO OSCURO ===== */
+
+@media (prefers-color-scheme: dark) {
+    .text-default {
+        color: #f3f4f6;
+    }
+
+    .text-muted {
+        color: #9ca3af;
+    }
+
+    .text-bold {
+        color: #ffffff;
+    }
+
+    .text-italic {
+        color: #d1d5db;
+    }
+
+    .text-component.label {
+        color: #e5e7eb;
+    }
+
+    .text-highlight {
+        background-color: #fbbf24;
+        color: #92400e;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 640px) {
+    .text-3xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+
+    .text-component.h1 {
+        font-size: 1.875rem;
+    }
+
+    .text-component.h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+
+@media (prefers-reduced-motion: reduce) {
+    .text-gradient {
+        animation: none;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .text-neon {
+        animation: none;
+    }
+
+    .text-cursor {
+        animation: none;
+        opacity: 1;
+    }
+
+    .text-typewriter {
+        animation: none;
+        border-right: none;
+        white-space: normal;
+        overflow: visible;
+        width: auto;
+    }
+}
+
+/* ===== SELECCIÓN DE TEXTO ===== */
+
+.text-component::selection {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.text-component::-moz-selection {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+    .text-gradient,
+    .text-neon,
+    .text-retro {
+        color: #000 !important;
+        background: none !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        -webkit-text-fill-color: initial !important;
+    }
+
+    .text-cursor {
+        display: none;
+    }
+}
