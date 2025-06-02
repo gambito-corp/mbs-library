@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/mbs-library/static/css/main.b6586e1f.css",
+    "main.js": "/mbs-library/static/js/main.7f292427.js",
+    "index.html": "/mbs-library/index.html",
+    "main.b6586e1f.css.map": "/mbs-library/static/css/main.b6586e1f.css.map",
+    "main.7f292427.js.map": "/mbs-library/static/js/main.7f292427.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b6586e1f.css",
+    "static/js/main.7f292427.js"
+  ]
+}
