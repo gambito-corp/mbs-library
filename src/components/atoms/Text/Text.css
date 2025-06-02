@@ -1,355 +1,568 @@
-/* ===== ESTILOS BASE PARA EL COMPONENTE TEXT ===== */
-
-.text-component {
-    /* Estilos base para todos los textos */
-    line-height: 1.5;
-    font-family: inherit;
-    color: inherit;
+/* ===== MODO CLARO POR DEFECTO ===== */
+.text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    transition: all 0.2s ease-in-out;
+    line-height: 1.5;
+    transition: color 0.2s ease-in-out;
+    font-size: 1rem;        /* 16px */
+    line-height: 1.5rem;    /* 24px */
+
+    color: #1f2937;
 }
-
-/* ===== VARIANTES DE TEXTO ===== */
-
-/* Variante por defecto */
-.text-default {
+.text--bold {
+    font-weight: 700;
+    color: #111827;
+}
+.text--bolder {
+    font-weight: 900; /* Máximo peso */
+    color: #000000;   /* Negro puro para máximo contraste */
+    letter-spacing: -0.025em; /* Espaciado más ajustado */
+}
+.text--tiny {
+    font-size: 0.625rem;    /* 10px - Muy pequeño */
+    line-height: 0.875rem;  /* 14px */
+    font-weight: 400;
+    color: #6b7280;         /* Gris para menos prominencia */
+    letter-spacing: 0.025em; /* Espaciado más amplio para legibilidad */
+}
+.text--light {
+    font-weight: 300;       /* Peso ligero */
+    color: #4b5563;         /* Gris medio */
+    letter-spacing: 0.025em; /* Espaciado amplio */
+}
+.text--cursiva {
+    font-style: italic;
+    font-weight: 400;
     color: #374151;
+    letter-spacing: 0.01em; /* Espaciado ligeramente amplio */
+}
+.text--subrayado {
+    text-decoration: underline;
+    text-decoration-color: #3b82f6; /* Azul para el subrayado */
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px; /* Separación del texto */
+    color: #1f2937;
+    transition: text-decoration-color 0.2s ease-in-out;
+}
+.text--subrayado:hover {
+    text-decoration-color: #1d4ed8; /* Azul más oscuro al hover */
+}
+.text--muted {
+    color: #6b7280; /* Gris medio */
+    opacity: 0.8;
+    font-weight: 400;
 }
 
-/* Variante destacada */
-.text-highlight {
-    background-color: #fef3c7;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    color: #92400e;
-    font-weight: 500;
+/* ===== COMBINACIONES ESPECIALES ===== */
+
+/* Subrayado con negrita */
+.text--subrayado.text--bold {
+    font-weight: 700;
+    text-decoration-thickness: 2px; /* Subrayado más grueso */
 }
 
-/* Variante degradado */
-.text-gradient {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+/* Subrayado con bolder */
+.text--subrayado.text--bolder {
+    font-weight: 900;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #1d4ed8; /* Azul más intenso */
+}
+
+/* Muted con tamaños pequeños */
+.text--muted.text--xs,
+.text--muted.text--small {
+    color: #9ca3af; /* Gris más claro en tamaños pequeños */
+    opacity: 0.9;
+}
+
+/* Muted con tiny */
+.text--muted.text--tiny {
+    color: #9ca3af;
+    opacity: 0.7; /* Más transparente */
+}
+
+/* Subrayado con cursiva */
+.text--subrayado.text--cursiva {
+    font-style: italic;
+    text-decoration-color: #8b5cf6; /* Púrpura para cursiva subrayada */
+}
+
+/* ===== MODIFIERS: Tamaños ===== */
+
+/* text--xs: Extra pequeño */
+.text--xs {
+    font-size: 0.75rem;     /* 12px */
+    line-height: 1rem;      /* 16px */
+}
+
+/* text--small: Pequeño */
+.text--small {
+    font-size: 0.875rem;    /* 14px */
+    line-height: 1.25rem;   /* 20px */
+}
+
+/* text--large: Grande */
+.text--large {
+    font-size: 1.125rem;    /* 18px */
+    line-height: 1.75rem;   /* 28px */
+}
+
+/* text--xlarge: Extra grande */
+.text--xlarge {
+    font-size: 1.25rem;     /* 20px */
+    line-height: 1.75rem;   /* 28px */
+    font-weight: 500;       /* Un poco más pesado */
+}
+
+/* text--2xl: 2X Grande */
+.text--2xl {
+    font-size: 1.5rem;      /* 24px */
+    line-height: 2rem;      /* 32px */
+    font-weight: 600;       /* Más pesado para títulos */
+}
+
+/* ===== COMBINACIONES DE MODIFIERS ===== */
+
+/* Texto extra pequeño y negrita */
+.text--xs.text--bold {
+    font-weight: 600; /* Un poco menos pesado en tamaño pequeño */
+}
+
+/* Texto grande y negrita */
+.text--large.text--bold,
+.text--xlarge.text--bold,
+.text--2xl.text--bold {
+    font-weight: 700;
+}
+
+/* ===== MODIFIERS: Colores ===== */
+
+/* text--color-primary: Azul primario */
+.text--color-primary {
+    color: #3b82f6 !important;
+}
+
+/* text--color-secondary: Gris secundario */
+.text--color-secondary {
+    color: #6b7280 !important;
+}
+
+/* text--color-success: Verde éxito */
+.text--color-success {
+    color: #10b981 !important;
+}
+
+/* text--color-warning: Amarillo advertencia */
+.text--color-warning {
+    color: #f59e0b !important;
+}
+
+/* text--color-error: Rojo error */
+.text--color-error {
+    color: #ef4444 !important;
+}
+
+/* text--color-info: Azul información */
+.text--color-info {
+    color: #06b6d4 !important;
+}
+
+/* text--color-white: Blanco */
+.text--color-white {
+    color: #ffffff !important;
+}
+
+/* text--color-black: Negro */
+.text--color-black {
+    color: #000000 !important;
+}
+
+/* ===== COMBINACIONES: Color + Subrayado ===== */
+.text--subrayado.text--color-primary {
+    text-decoration-color: #3b82f6;
+}
+
+.text--subrayado.text--color-success {
+    text-decoration-color: #10b981;
+}
+
+.text--subrayado.text--color-error {
+    text-decoration-color: #ef4444;
+}
+
+.text--subrayado.text--color-warning {
+    text-decoration-color: #f59e0b;
+}
+
+/* ===== NUEVOS EFECTOS ESPECIALES ===== */
+
+/* text--gradient: Degradado estático */
+.text--gradient {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600; /* Un poco más grueso para mejor visibilidad */
+    display: inline-block; /* ✅ CRÍTICO para que funcione */
+    position: relative;
+}
+
+/* text--gradient-animated: Degradado animado */
+.text--gradient-animated {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShift 3s ease infinite;
     font-weight: 600;
+    display: inline-block; /* ✅ CRÍTICO para que funcione */
+    position: relative;
 }
 
+/* ✅ ANIMACIÓN PARA DEGRADADO */
 @keyframes gradientShift {
-    0% { background-position: 0 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-/* Variante neón */
-.text-neon {
-    color: #00ffff;
-    text-shadow:
-            0 0 5px currentColor,
-            0 0 10px currentColor,
-            0 0 15px currentColor,
-            0 0 20px currentColor;
+/* ===== COMBINACIONES CON EFECTOS ESPECIALES ===== */
+
+/* Degradado con tamaños grandes */
+.text--gradient.text--large,
+.text--gradient.text--xlarge,
+.text--gradient.text--2xl,
+.text--gradient-animated.text--large,
+.text--gradient-animated.text--xlarge,
+.text--gradient-animated.text--2xl {
+    font-weight: 700; /* Más grueso en tamaños grandes */
+    letter-spacing: -0.025em; /* Espaciado más ajustado */
+}
+
+/* Degradado con negrita */
+.text--gradient.text--bold,
+.text--gradient-animated.text--bold {
+    font-weight: 800; /* Extra grueso */
+}
+
+/* Degradado con bolder */
+.text--gradient.text--bolder,
+.text--gradient-animated.text--bolder {
+    font-weight: 900; /* Máximo peso */
+    letter-spacing: -0.05em;
+}
+
+
+/* ===== MODO OSCURO ===== */
+.dark .text {
+    color: #f9fafb;
+}
+
+.dark .text--bold {
+    color: #ffffff;
+}
+.dark .text--bolder {
+    color: #ffffff;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5); /* Sutil resplandor */
+}
+
+.dark .text--tiny {
+    color: #9ca3af; /* Gris claro */
+}
+
+.dark .text--light {
+    color: #d1d5db; /* Gris muy claro */
+    font-weight: 200; /* Aún más ligero en modo oscuro */
+}
+
+.dark .text--cursiva {
+    color: #e5e7eb; /* Gris casi blanco */
+}
+.dark .text--subrayado {
+    color: #f9fafb;
+    text-decoration-color: #60a5fa; /* Azul más claro en modo oscuro */
+}
+
+.dark .text--subrayado:hover {
+    text-decoration-color: #3b82f6; /* Azul estándar al hover */
+}
+
+.dark .text--subrayado.text--cursiva {
+    text-decoration-color: #a78bfa; /* Púrpura más claro en modo oscuro */
+}
+
+.dark .text--muted {
+    color: #9ca3af; /* Gris claro */
+    opacity: 0.9;
+}
+
+
+/* ===== MODO OSCURO: Colores ajustados ===== */
+.dark .text--color-primary {
+    color: #60a5fa !important; /* Azul más claro */
+}
+
+.dark .text--color-secondary {
+    color: #9ca3af !important; /* Gris más claro */
+}
+
+.dark .text--color-success {
+    color: #34d399 !important; /* Verde más claro */
+}
+
+.dark .text--color-warning {
+    color: #fbbf24 !important; /* Amarillo más claro */
+}
+
+.dark .text--color-error {
+    color: #f87171 !important; /* Rojo más claro */
+}
+
+.dark .text--color-info {
+    color: #22d3ee !important; /* Cian más claro */
+}
+
+.dark .text--color-white {
+    color: #ffffff !important; /* Sin cambio */
+}
+
+.dark .text--color-black {
+    color: #1f2937 !important; /* Gris oscuro en modo oscuro */
+}
+
+.dark .text--gradient {
+    /* En modo oscuro, usar colores más brillantes */
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+}
+
+.dark .text--gradient-animated {
+    /* En modo oscuro, usar colores más brillantes */
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6, #60a5fa);
+    background-size: 300% 300%;
+}
+
+/* ===== FALLBACK PARA NAVEGADORES SIN SOPORTE ===== */
+@supports not (background-clip: text) {
+    .text--gradient,
+    .text--gradient-animated {
+        color: #3b82f6; /* Fallback a azul sólido */
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
+}
+
+/* ===== ACCESIBILIDAD: Reducir animación ===== */
+@media (prefers-reduced-motion: reduce) {
+    .text--gradient-animated {
+        animation: none;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        background-size: 100% 100%;
+    }
+}
+
+/* ===== PRINT STYLES: Efectos especiales ===== */
+@media print {
+    .text--gradient,
+    .text--gradient-animated {
+        color: #000000 !important;
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        animation: none !important;
+    }
+}
+
+/* ===== NUEVO EFECTO: Neón ===== */
+
+/* text--neon: Efecto neón base (se personaliza con JavaScript) */
+.text--neon {
+    font-weight: 500;
+    display: inline-block;
     animation: neonPulse 2s ease-in-out infinite alternate;
+    position: relative;
+}
+
+/* ✅ ANIMACIÓN NEÓN PULSANTE */
+@keyframes neonPulse {
+    from {
+        filter: brightness(1) saturate(1);
+        transform: scale(1);
+    }
+    to {
+        filter: brightness(1.2) saturate(1.3);
+        transform: scale(1.02);
+    }
+}
+
+/* ===== COMBINACIONES CON NEÓN ===== */
+
+/* Neón con tamaños grandes */
+.text--neon.text--large,
+.text--neon.text--xlarge,
+.text--neon.text--2xl {
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* Neón con negrita */
+.text--neon.text--bold {
+    font-weight: 700;
+}
+
+/* Neón con bolder */
+.text--neon.text--bolder {
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+/* ===== MODO OSCURO: Neón más brillante ===== */
+.dark .text--neon {
+    filter: brightness(1.3) saturate(1.5);
+}
+
+/* ===== ACCESIBILIDAD: Reducir animación neón ===== */
+@media (prefers-reduced-motion: reduce) {
+    .text--neon {
+        animation: none;
+        filter: none;
+        transform: none;
+    }
+}
+
+/* ===== PRINT STYLES: Neón ===== */
+@media print {
+    .text--neon {
+        color: #000000 !important;
+        text-shadow: none !important;
+        animation: none !important;
+        filter: none !important;
+    }
 }
 
 @keyframes neonPulse {
     from {
-        text-shadow:
-                0 0 5px currentColor,
-                0 0 10px currentColor,
-                0 0 15px currentColor,
-                0 0 20px currentColor;
+        filter: brightness(1) saturate(1);
+        transform: scale(1);
     }
     to {
-        text-shadow:
-                0 0 2px currentColor,
-                0 0 5px currentColor,
-                0 0 8px currentColor,
-                0 0 12px currentColor;
+        filter: brightness(1.2) saturate(1.3);
+        transform: scale(1.02);
     }
 }
 
-/* Variante retro */
-.text-retro {
-    font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
-    background-color: #000;
-    color: #00ff00;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    border: 1px solid #00ff00;
-    box-shadow:
-            inset 0 0 10px rgba(0, 255, 0, 0.1),
-            0 0 20px rgba(0, 255, 0, 0.2);
-    text-shadow: 0 0 5px #00ff00;
+/* ===== CLASE NEÓN BASE ===== */
+.text--neon {
+    font-weight: 600 !important;
+    display: inline-block !important;
+    animation: neonPulse 2s ease-in-out infinite alternate !important;
 }
 
-/* Variante silenciada */
-.text-muted {
-    color: #6b7280;
-    opacity: 0.8;
-}
+/* ===== NUEVO EFECTO: Typewriter ===== */
 
-/* Variante negrita */
-.text-bold {
-    font-weight: 700;
-    color: #111827;
-}
-
-/* Variante cursiva */
-.text-italic {
-    font-style: italic;
-    color: #4b5563;
-}
-
-/* ===== TAMAÑOS DE TEXTO ===== */
-
-.text-xs {
-    font-size: 0.75rem;
-    line-height: 1rem;
-}
-
-.text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-}
-
-.text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
-}
-
-.text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-}
-
-.text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-}
-
-.text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
-}
-
-.text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-}
-
-/* ===== ESTILOS PARA TEXTO ANIMADO ===== */
-
-.text-animated {
-    position: relative;
-    overflow: hidden;
-}
-
-/* Cursor de texto animado */
-.text-cursor {
+/* text--typewriter: Efecto máquina de escribir */
+.typewriter-cursor {
     display: inline-block;
-    animation: cursorBlink 1s infinite;
+    animation: typewriterBlink 1s infinite;
+    margin-left: 2px;
     font-weight: normal;
+    color: currentColor;
 }
 
-@keyframes cursorBlink {
+.typewriter-cursor {
+    display: inline-block;
+    animation: typewriterBlink 1s infinite;
+    margin-left: 2px;
+    font-weight: normal;
+    color: currentColor;
+    animation-fill-mode: both;
+    animation-timing-function: step-end;
+}
+
+@keyframes typewriterBlink {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
 }
 
-/* Efecto de máquina de escribir */
-.text-typewriter {
-    border-right: 2px solid currentColor;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: typing 3.5s steps(40, end), cursorBlink 0.75s step-end infinite;
+/* ===== VARIACIONES DE CURSOR ===== */
+
+/* Cursor clásico (|) */
+.typewriter-cursor.classic {
+    animation: typewriterBlink 1s infinite;
 }
 
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+/* Cursor bloque (█) */
+.typewriter-cursor.block {
+    background-color: currentColor;
+    color: transparent;
+    animation: typewriterBlink 1s infinite;
 }
 
-/* ===== ELEMENTOS HTML ESPECÍFICOS ===== */
-
-/* Estilos para encabezados */
-.text-component.heading {
-    font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
+/* Cursor subrayado (_) */
+.typewriter-cursor.underscore {
+    border-bottom: 2px solid currentColor;
+    animation: typewriterBlink 1s infinite;
 }
 
-.text-component.h1 {
-    font-size: 2.25rem;
-    font-weight: 800;
-    line-height: 1.1;
-}
+/* ===== COMBINACIONES TYPEWRITER ===== */
 
-.text-component.h2 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.text-component.h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.text-component.h4 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-.text-component.h5 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-.text-component.h6 {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.5;
-}
-
-/* Estilos para párrafos */
-.text-component.paragraph {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-/* Estilos para labels */
-.text-component.label {
+/* Typewriter con tamaños */
+.text--typewriter.text--large,
+.text--typewriter.text--xlarge,
+.text--typewriter.text--2xl {
     font-weight: 500;
-    font-size: 0.875rem;
-    color: #374151;
-    display: block;
-    margin-bottom: 0.25rem;
+    letter-spacing: 0.025em;
 }
 
-/* ===== ESTADOS INTERACTIVOS ===== */
-
-.text-component.interactive {
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+/* Typewriter con negrita */
+.text--typewriter.text--bold {
+    font-weight: 700;
 }
 
-.text-component.interactive:hover {
-    transform: translateY(-1px);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Typewriter con colores */
+.text--typewriter.text--color-primary {
+    color: #3b82f6;
 }
 
-.text-component.interactive:active {
-    transform: translateY(0);
+.text--typewriter.text--color-success {
+    color: #10b981;
 }
 
-/* ===== MODO OSCURO ===== */
-
-@media (prefers-color-scheme: dark) {
-    .text-default {
-        color: #f3f4f6;
-    }
-
-    .text-muted {
-        color: #9ca3af;
-    }
-
-    .text-bold {
-        color: #ffffff;
-    }
-
-    .text-italic {
-        color: #d1d5db;
-    }
-
-    .text-component.label {
-        color: #e5e7eb;
-    }
-
-    .text-highlight {
-        background-color: #fbbf24;
-        color: #92400e;
-    }
+.text--typewriter.text--color-error {
+    color: #ef4444;
 }
 
-/* ===== RESPONSIVE ===== */
-
-@media (max-width: 640px) {
-    .text-3xl {
-        font-size: 1.5rem;
-        line-height: 2rem;
-    }
-
-    .text-component.h1 {
-        font-size: 1.875rem;
-    }
-
-    .text-component.h2 {
-        font-size: 1.5rem;
-    }
+/* ===== MODO OSCURO: Typewriter ===== */
+.dark .text--typewriter {
+    color: #f9fafb;
 }
 
-/* ===== ACCESIBILIDAD ===== */
+.dark .typewriter-cursor {
+    color: #f9fafb;
+}
 
+/* ===== ACCESIBILIDAD: Reducir animación typewriter ===== */
 @media (prefers-reduced-motion: reduce) {
-    .text-gradient {
-        animation: none;
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .text-neon {
-        animation: none;
-    }
-
-    .text-cursor {
+    .typewriter-cursor {
         animation: none;
         opacity: 1;
     }
-
-    .text-typewriter {
-        animation: none;
-        border-right: none;
-        white-space: normal;
-        overflow: visible;
-        width: auto;
-    }
 }
 
-/* ===== SELECCIÓN DE TEXTO ===== */
-
-.text-component::selection {
-    background-color: #3b82f6;
-    color: white;
-}
-
-.text-component::-moz-selection {
-    background-color: #3b82f6;
-    color: white;
-}
-
-/* ===== PRINT STYLES ===== */
-
+/* ===== PRINT STYLES: Typewriter ===== */
 @media print {
-    .text-gradient,
-    .text-neon,
-    .text-retro {
-        color: #000 !important;
-        background: none !important;
-        text-shadow: none !important;
-        box-shadow: none !important;
-        border: none !important;
-        -webkit-text-fill-color: initial !important;
+    .text--typewriter {
+        font-family: monospace;
     }
 
-    .text-cursor {
+    .typewriter-cursor {
         display: none;
     }
 }

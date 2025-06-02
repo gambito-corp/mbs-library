@@ -1,21 +1,27 @@
-import { useState, useEffect } from 'react';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import {useTheme} from "../../hooks/useTheme";
 import { LiveProvider, LiveEditor, LivePreview, LiveError } from 'react-live';
 
-// Importaciones de componentes
-import Alert from './molecules/Alert/Alert.jsx';
-import Text from './atoms/Text/Text.jsx';
-import Container from './atoms/Container/Container.jsx';
-import Animated from './atoms/Animated/Animated.jsx';
-import Icon from './atoms/Icon/Icon.jsx';
-import Button from './atoms/Button/Button.jsx';
-import { AlertConfig } from './molecules/Alert/Alert.config.js';
-import { TextConfig } from './atoms/Text/Text.config.js';
-import { ContainerConfig } from './atoms/Container/Container.config.js';
-import { AnimatedConfig } from './atoms/Animated/Animated.config.js';
-import { IconConfig } from './atoms/Icon/Icon.config.js';
-import { ButtonConfig } from "./atoms/Button/Button.config.js";
 
+// Importaciones de componentes
+import Alert from '../../../../mbs-library/src/components/molecules/Alert/Alert.jsx';
+import Text from '../../../../mbs-library/src/components/atoms/Text/Text.jsx';
+import Container from '../../../../mbs-library/src/components/atoms/Container/Container.jsx';
+import Animated from '../../../../mbs-library/src/components/atoms/Animated/Animated.jsx';
+import Icon from '../../../../mbs-library/src/components/atoms/Icon/Icon.jsx';
+import Button from '../../../../mbs-library/src/components/atoms/Button/Button.jsx';
+import Input from '../../../../mbs-library/src/components/atoms/Input/Input.jsx';
+import TextArea from '../../../../mbs-library/src/components/atoms/TextArea/TextArea.jsx';
+import Badge from "../../../../mbs-library/src/components/atoms/Badge/Badge.jsx";
+import { AlertConfig } from '../../../../mbs-library/src/components/molecules/Alert/Alert.config';
+import { TextConfig } from '../../../../mbs-library/src/components/atoms/Text/Text.config.js';
+import { ContainerConfig } from '../../../../mbs-library/src/components/atoms/Container/Container.config.js';
+import { AnimatedConfig } from '../../../../mbs-library/src/components/atoms/Animated/Animated.config.js';
+import { IconConfig } from '../../../../mbs-library/src/components/atoms/Icon/Icon.config.js';
+import { ButtonConfig } from "../../../../mbs-library/src/components/atoms/Button/Button.config.js";
+import { InputConfig } from "../../../../mbs-library/src/components/atoms/Input/Input.config.js";
+import { TextAreaConfig } from '../../../../mbs-library/src/components/atoms/TextArea/TextArea.config.js';
+import { BadgeConfig } from "../../../../mbs-library/src/components/atoms/Badge/Badge.config.js";
 
 const DesignSystemViewer = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -25,7 +31,7 @@ const DesignSystemViewer = () => {
     const [selectedVariant, setSelectedVariant] = useState(0);
     const [isEditorVisible, setIsEditorVisible] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-
+    const { theme, toggleTheme } = useTheme();
     // Configuración de componentes
     const componentsData = {
         atoms: {
@@ -38,6 +44,9 @@ const DesignSystemViewer = () => {
                 Animated: AnimatedConfig,
                 Icon: IconConfig,
                 Button: ButtonConfig,
+                Input: InputConfig,
+                TextArea: TextAreaConfig,
+                Badge: BadgeConfig,
             }
         },
         molecules: {
@@ -56,7 +65,6 @@ const DesignSystemViewer = () => {
             components: {}
         }
     };
-
     const categories = componentsData;
     const componentScope = {
         React,
@@ -68,6 +76,9 @@ const DesignSystemViewer = () => {
         Container,
         Icon,
         Button,
+        Input,
+        TextArea,
+        Badge,
         Alert,
 
         PropTypes: require('prop-types')
@@ -82,12 +93,23 @@ const DesignSystemViewer = () => {
     useEffect(() => {
     }, [activeComponent, selectedVariant]);
 
+    useEffect(() => {
+        setIsDarkMode(theme === 'dark');
+    }, [theme]);
+
+    useEffect(() => {
+        if ((isDarkMode && theme !== 'dark') || (!isDarkMode && theme !== 'light')) {
+            toggleTheme();
+        }
+    }, [isDarkMode, theme, toggleTheme]);
+
     const currentComponent = componentsData[activeCategory]?.components[activeComponent];
     const currentVariant = currentComponent?.variants?.[selectedVariant];
 
     const themeClasses = isDarkMode
         ? 'bg-gray-900 text-white'
         : 'bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100';
+
 
     return (
         <div className={`min-h-screen transition-all duration-300 ${themeClasses}`}>
@@ -135,16 +157,18 @@ const DesignSystemViewer = () => {
                             </div>
 
                             {/* Toggle Dark Mode */}
-                            <button
-                                onClick={() => setIsDarkMode(!isDarkMode)}
-                                className={`p-2 rounded-lg transition-all duration-200 ${
-                                    isDarkMode
-                                        ? 'bg-gray-700 text-yellow-400 hover:bg-gray-600'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                }`}
-                            >
-                                {isDarkMode ? '☀️' : '🌙'}
-                            </button>
+                            <div className={isDarkMode ? 'dark' : 'light'}>
+                                <button
+                                    onClick={() => setIsDarkMode(!isDarkMode)}
+                                    className={`p-2 rounded-lg transition-all duration-200 ${
+                                        isDarkMode
+                                            ? 'bg-gray-700 text-yellow-400 hover:bg-gray-600'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    {isDarkMode ? '☀️' : '🌙'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -225,7 +249,7 @@ const DesignSystemViewer = () => {
 
                                         {/* Debug info */}
                                         <div className="mt-2 text-xs text-gray-500">
-                                            Variante actual: {selectedVariant} - {currentVariant?.name}
+                                            Variante actual: {selectedVariant + 1} - {currentVariant?.name}
                                         </div>
                                     </div>
                                 )}

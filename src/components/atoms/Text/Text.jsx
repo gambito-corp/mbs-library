@@ -1,175 +1,265 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { TEXT_VARIANTS, TEXT_SIZES } from './Text.constants.js';
-import { getTextClasses } from './Text.utils.js';
+import { getTextBEMClasses } from './Text.utils.js';
+import { TEXT_VARIANTS, TEXT_SIZES, TEXT_COLORS, TEXT_GRADIENTS, TEXT_NEON_COLORS } from './Text.constants.js';
 import './Text.css';
 
 const Text = ({
                   children,
-                  text,
-                  animated = false,
-                  animationType = 'typewriter',
-                  speed = 50,
-                  onComplete,
-                  className = '',
-                  cursorChar = '|',
-                  showCursor = true,
-                  autoStart = true,
-                  loop = false,
-                  pauseOnHover = false,
                   variant = 'default',
                   size = 'medium',
-                  textColor,
                   as = 'span',
-                  htmlStyles = false,
+                  color,
+                  gradientFrom,
+                  gradientTo,
+                  gradientType = 'blue-purple',
+                  neonColor = 'cyan',
+                  typewriterSpeed = 80,
+                  typewriterLoop = false,
+                  typewriterPause = 300,
+                  htmlContent = false,
+                  className = '',
                   ...props
               }) => {
-    // Estados para animación (solo si animated=true)
+    const Component = as;
+    const bemClasses = getTextBEMClasses({ variant, size, color, className });
+
     const [displayedText, setDisplayedText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-    const timeoutRef = useRef(null);
+    const [isCompleted, setIsCompleted] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
-    // Determinar el contenido a mostrar
-    const content = text || children || "";
-    const safeContent = String(content);
+    const intervalRef = useRef(null);
+    const loopTimeoutRef = useRef(null);
+    const mountedRef = useRef(true);
 
-    const textClasses = getTextClasses({
-        variant,
-        size,
-        className,
-        animated,
-        textColor
-    });
+    // Contenido a mostrar
+    const content = children || '';
+    const textToType = String(content);
 
-    // ✅ FUNCIÓN MEMOIZADA CON useCallback
-    const buildPartialHTML = useCallback((originalHTML, targetLength) => {
-        if (!htmlStyles) return originalHTML.substring(0, targetLength);
+    useEffect(() => {
+        mountedRef.current = true;
 
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = originalHTML;
-
-        let currentLength = 0;
-        const result = document.createElement('div');
-
-        const processNode = (node, container) => {
-            if (currentLength >= targetLength) return false;
-
-            if (node.nodeType === Node.TEXT_NODE) {
-                const textContent = node.textContent;
-                const remainingLength = targetLength - currentLength;
-
-                if (textContent.length <= remainingLength) {
-                    container.appendChild(node.cloneNode(true));
-                    currentLength += textContent.length;
-                } else {
-                    const partialText = textContent.substring(0, remainingLength);
-                    const textNode = document.createTextNode(partialText);
-                    container.appendChild(textNode);
-                    currentLength += partialText.length;
-                    return false;
-                }
-            } else if (node.nodeType === Node.ELEMENT_NODE) {
-                const clonedElement = node.cloneNode(false);
-                container.appendChild(clonedElement);
-
-                for (let child of node.childNodes) {
-                    if (!processNode(child, clonedElement)) break;
-                }
-            }
-
-            return true;
-        };
-
-        for (let child of tempDiv.childNodes) {
-            if (!processNode(child, result)) break;
+        if (variant !== 'typewriter') {
+            clearAllTimers();
+            setDisplayedText(textToType);
+            return;
         }
 
-        return result.innerHTML;
-    }, [htmlStyles]);
+        startTypewriter();
 
-    // ✅ LÓGICA DE ANIMACIÓN CON DEPENDENCIA CORREGIDA
+        return () => {
+            mountedRef.current = false;
+            clearAllTimers();
+        };
+    }, [variant, textToType, typewriterSpeed, typewriterLoop, typewriterPause, htmlContent]);
     useEffect(() => {
-        if (!animated) return;
+        return () => {
+            mountedRef.current = false;
+            clearAllTimers();
+        };
+    }, []);
 
-        if (!isPaused && currentIndex < safeContent.length) {
-            timeoutRef.current = setTimeout(() => {
-                if (htmlStyles) {
-                    const partialHTML = buildPartialHTML(safeContent, currentIndex + 1);
+    const getCustomGradientStyle = () => {
+        if (variant === 'gradient' || variant === 'gradient-animated') {
+            let fromColor, toColor;
+
+            if (gradientFrom && gradientTo) {
+                fromColor = gradientFrom;
+                toColor = gradientTo;
+            } else if (TEXT_GRADIENTS[gradientType]) {
+                fromColor = TEXT_GRADIENTS[gradientType].from;
+                toColor = TEXT_GRADIENTS[gradientType].to;
+            } else {
+                fromColor = '#3b82f6';
+                toColor = '#8b5cf6';
+            }
+
+            return {
+                background: `linear-gradient(135deg, ${fromColor}, ${toColor})`,
+                backgroundSize: variant === 'gradient-animated' ? '300% 300%' : '100% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: 600,
+                display: 'inline-block'
+            };
+        }
+        return {};
+    };
+    const getCustomNeonStyle = () => {
+        if (variant === 'neon') {
+            const neonColorValue = TEXT_NEON_COLORS[neonColor]?.color || '#00ffff';
+
+            return {
+                color: neonColorValue,
+                textShadow: `
+                    0 0 5px ${neonColorValue},
+                    0 0 10px ${neonColorValue},
+                    0 0 15px ${neonColorValue},
+                    0 0 20px ${neonColorValue},
+                    0 0 35px ${neonColorValue}
+                `,
+                fontWeight: 600,
+                display: 'inline-block',
+                animation: 'neonPulse 2s ease-in-out infinite alternate'
+            };
+        }
+        return {};
+    };
+    const clearAllTimers = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+        if (loopTimeoutRef.current) {
+            clearTimeout(loopTimeoutRef.current);
+            loopTimeoutRef.current = null;
+        }
+    };
+    const startTypewriter = () => {
+        clearAllTimers();
+
+        setDisplayedText('');
+        setIsTyping(true);
+
+        let localIndex = 0;
+
+        const typeNextCharacter = () => {
+            if (!mountedRef.current) return;
+
+            if (localIndex < textToType.length) {
+                if (htmlContent) {
+                    const partialHTML = buildPartialHTML(textToType, localIndex + 1);
                     setDisplayedText(partialHTML);
                 } else {
-                    setDisplayedText(prev => prev + safeContent[currentIndex]);
+                    setDisplayedText(textToType.substring(0, localIndex + 1));
                 }
-                setCurrentIndex(prev => prev + 1);
-            }, speed);
 
-            return () => clearTimeout(timeoutRef.current);
-        } else if (currentIndex >= safeContent.length && onComplete) {
-            onComplete();
+                localIndex++;
+                intervalRef.current = setTimeout(typeNextCharacter, typewriterSpeed);
+            } else {
+                setIsTyping(false);
 
-            if (loop) {
-                setTimeout(() => {
-                    setDisplayedText('');
-                    setCurrentIndex(0);
-                }, 1000);
+                if (typewriterLoop && mountedRef.current) {
+                    loopTimeoutRef.current = setTimeout(() => {
+                        if (mountedRef.current) {
+                            startTypewriter();
+                        }
+                    }, typewriterPause);
+                }
             }
-        }
-    }, [animated, currentIndex, safeContent, speed, isPaused, onComplete, loop, htmlStyles, buildPartialHTML]);
+        };
 
-    // Reset cuando cambia el contenido
-    useEffect(() => {
-        if (animated) {
-            setDisplayedText('');
-            setCurrentIndex(0);
+        typeNextCharacter();
+    };
+    const buildPartialHTML = (originalHTML, targetLength) => {
+        if (!htmlContent) {
+            return originalHTML.substring(0, targetLength);
         }
-    }, [safeContent, animated]);
 
-    // Handlers para interacción
-    const handleMouseEnter = () => {
-        if (pauseOnHover && animated) setIsPaused(true);
+        // Si no hay contenido, devolver vacío
+        if (!originalHTML || targetLength <= 0) {
+            return '';
+        }
+
+        // Si el target es mayor o igual al contenido, devolver todo
+        if (targetLength >= originalHTML.length) {
+            return originalHTML;
+        }
+
+        try {
+            // Crear un elemento temporal para procesar el HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = originalHTML;
+
+            let currentLength = 0;
+            const result = document.createElement('div');
+
+            const processNode = (node, container) => {
+                if (currentLength >= targetLength) return false;
+
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const textContent = node.textContent || '';
+                    const remainingLength = targetLength - currentLength;
+
+                    if (textContent.length <= remainingLength) {
+                        container.appendChild(document.createTextNode(textContent));
+                        currentLength += textContent.length;
+                    } else {
+                        const partialText = textContent.substring(0, remainingLength);
+                        container.appendChild(document.createTextNode(partialText));
+                        currentLength += partialText.length;
+                        return false;
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    const clonedElement = document.createElement(node.tagName.toLowerCase());
+
+                    // Copiar atributos
+                    for (let i = 0; i < node.attributes.length; i++) {
+                        const attr = node.attributes[i];
+                        clonedElement.setAttribute(attr.name, attr.value);
+                    }
+
+                    container.appendChild(clonedElement);
+
+                    // Procesar hijos
+                    for (let child of node.childNodes) {
+                        if (!processNode(child, clonedElement)) break;
+                    }
+                }
+
+                return currentLength < targetLength;
+            };
+
+            // Procesar todos los nodos hijos
+            for (let child of tempDiv.childNodes) {
+                if (!processNode(child, result)) break;
+            }
+
+            return result.innerHTML;
+        } catch (error) {
+            console.error('Error procesando HTML:', error);
+            // Fallback: devolver texto plano
+            return originalHTML.substring(0, targetLength);
+        }
     };
 
-    const handleMouseLeave = () => {
-        if (pauseOnHover && animated) setIsPaused(false);
+    const customStyle = {
+        ...getCustomGradientStyle(),
+        ...getCustomNeonStyle()
     };
 
-    // Crear el elemento dinámicamente
-    const Component = as;
-
-    // ✅ RENDERIZADO CONDICIONAL
     const renderContent = () => {
-        if (!animated) {
-            // Texto estático normal
-            if (htmlStyles) {
-                return <span dangerouslySetInnerHTML={{ __html: safeContent }} />;
-            }
-            return safeContent;
-        } else {
-            // Texto animado
+        if (variant === 'typewriter') {
             return (
                 <>
-                    {htmlStyles ? (
+                    {htmlContent ? (
                         <span dangerouslySetInnerHTML={{ __html: displayedText }} />
                     ) : (
                         displayedText
                     )}
-                    {showCursor && (
-                        <span className="text-cursor animate-pulse text-current ml-1">
-                            {cursorChar}
-                        </span>
+                    {isTyping && (
+                        <span className="typewriter-cursor">|</span>
                     )}
                 </>
             );
         }
+
+        // Para variantes normales
+        if (htmlContent) {
+            return <span dangerouslySetInnerHTML={{ __html: textToType }} />;
+        }
+
+        return textToType;
     };
+
 
     return (
         <Component
-            className={textClasses}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            className={bemClasses}
+            style={Object.keys(customStyle).length > 0 ? customStyle : undefined}
             data-testid="Text"
-            data-animated={animated}
             {...props}
         >
             {renderContent()}
@@ -178,40 +268,25 @@ const Text = ({
 };
 
 Text.propTypes = {
-    children: PropTypes.node,
-    text: PropTypes.string,
-    animated: PropTypes.bool, // ✅ NUEVA PROP
-    animationType: PropTypes.oneOf(['typewriter', 'fade', 'slide']),
-    speed: PropTypes.number,
-    onComplete: PropTypes.func,
-    className: PropTypes.string,
-    cursorChar: PropTypes.string,
-    showCursor: PropTypes.bool,
-    autoStart: PropTypes.bool,
-    loop: PropTypes.bool,
-    pauseOnHover: PropTypes.bool,
-    variant: PropTypes.oneOf(Object.keys(TEXT_VARIANTS)),
-    size: PropTypes.oneOf(Object.keys(TEXT_SIZES)),
-    textColor: PropTypes.string,
+    children: PropTypes.node.isRequired,
+    variant: PropTypes.oneOf([
+        'default', 'bold', 'bolder', 'tiny', 'light', 'cursiva',
+        'subrayado', 'muted', 'gradient', 'gradient-animated', 'neon', 'typewriter'
+    ]),
+    size: PropTypes.oneOf(['xs', 'small', 'medium', 'large', 'xlarge', '2xl']),
+    color: PropTypes.oneOf([
+        'default', 'primary', 'secondary', 'success', 'warning', 'error', 'info', 'white', 'black'
+    ]),
+    gradientFrom: PropTypes.string,
+    gradientTo: PropTypes.string,
+    gradientType: PropTypes.string,
+    neonColor: PropTypes.oneOf(['cyan', 'pink', 'green', 'orange', 'purple', 'yellow', 'red', 'blue']),
+    typewriterSpeed: PropTypes.number,
+    typewriterLoop: PropTypes.bool,
+    typewriterPause: PropTypes.number,
+    htmlContent: PropTypes.bool,
     as: PropTypes.oneOf(['span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'label']),
-    htmlStyles: PropTypes.bool
-};
-
-Text.defaultProps = {
-    animated: false, // ✅ Por defecto NO animado
-    animationType: 'typewriter',
-    speed: 50,
-    className: '',
-    cursorChar: '|',
-    showCursor: true,
-    autoStart: true,
-    loop: false,
-    pauseOnHover: false,
-    variant: 'default',
-    size: 'medium',
-    textColor: 'black',
-    as: 'span',
-    htmlStyles: false
+    className: PropTypes.string
 };
 
 export default Text;

@@ -1,0 +1,31 @@
+# ===== ARCHIVOS DE DOCUMENTACIÓN (NO PUBLICAR) =====
+indexview/
+src/pages/DesignSystemViewer.jsx
+src/pages/LiveComponentEditor.jsx
+src/templates/index.js
+
+# ===== ARCHIVOS DE DESARROLLO =====
+.idea/
+*.log
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# ===== TESTS Y CONFIGURACIÓN DE DESARROLLO =====
+**/*.test.js
+**/*.test.jsx
+jest.config.js
+setupTests.js
+reportWebVitals.js
+
+# ===== ARCHIVOS DE BUILD =====
+node_modules/
+dist/
+build/
+coverage/
+
+# ===== ARCHIVOS DEL SISTEMA =====
+.DS_Store
+Thumbs.db

@@ -1,282 +1,280 @@
 import Text from './Text.jsx';
-import { TEXT_VARIANTS, TEXT_SIZES } from './Text.constants.js';
 
 export const TextConfig = {
     component: Text,
     name: 'Text',
     category: 'atoms',
-    description: 'Componente de texto versátil que puede mostrar contenido estático o con animaciones opcionales tipo máquina de escribir',
+    description: 'Componente de texto versátil con efectos especiales',
 
-    props: {
-        children: {
-            type: 'ReactNode',
-            required: false,
-            description: 'Contenido de texto como children'
-        },
-        text: {
-            type: 'string',
-            required: false,
-            description: 'Texto a mostrar como prop'
-        },
-        animated: {
-            type: 'boolean',
-            required: false,
-            default: false,
-            description: 'Activa la animación de máquina de escribir'
-        },
-        speed: {
-            type: 'number',
-            required: false,
-            default: 50,
-            description: 'Velocidad de la animación en milisegundos (solo si animated=true)'
-        },
-        variant: {
-            type: 'string',
-            required: false,
-            default: 'default',
-            options: Object.keys(TEXT_VARIANTS),
-            description: 'Variante visual del texto'
-        },
-        size: {
-            type: 'string',
-            required: false,
-            default: 'medium',
-            options: Object.keys(TEXT_SIZES),
-            description: 'Tamaño del texto'
-        },
-        as: {
-            type: 'string',
-            required: false,
-            default: 'span',
-            options: ['span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'label'],
-            description: 'Elemento HTML que se renderizará'
-        },
-        htmlStyles: {
-            type: 'boolean',
-            required: false,
-            default: false,
-            description: 'Permite contenido HTML enriquecido'
-        }
-    },
-
+    // ✅ EJEMPLOS AGRUPADOS POR CATEGORÍAS
     variants: [
+        // ===== GRUPO 1: VARIANTES BÁSICAS =====
         {
-            name: 'Texto básico',
-            description: 'Texto estático simple',
-            code: `<Text>
-  Texto básico sin animación
-</Text>`,
+            name: '📝 Variantes básicas',
+            description: 'Estilos fundamentales de texto',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+  <Text variant="default">Texto por defecto</Text>
+  <Text variant="bold">Texto en negrita</Text>
+  <Text variant="bolder">Texto extra negrita</Text>
+  <Text variant="light">Texto ligero</Text>
+  <Text variant="cursiva">Texto en cursiva</Text>
+  <Text variant="subrayado">Texto subrayado</Text>
+  <Text variant="muted">Texto silenciado</Text>
+  <Text variant="tiny">Texto diminuto</Text>
+</div>`,
             props: {
-                children: 'Texto básico sin animación'
+                variant: 'default',
+                children: 'Texto por defecto'
             }
         },
+
+        // ===== GRUPO 2: TAMAÑOS =====
         {
-            name: 'Texto con prop',
-            description: 'Usando la prop text en lugar de children',
-            code: `<Text text="Texto usando la prop text" />`,
+            name: '📏 Escalas de tamaño',
+            description: 'Diferentes tamaños disponibles',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+  <Text size="xs">Extra pequeño (xs)</Text>
+  <Text size="small">Pequeño (small)</Text>
+  <Text size="medium">Mediano (medium)</Text>
+  <Text size="large">Grande (large)</Text>
+  <Text size="xlarge">Extra grande (xlarge)</Text>
+  <Text size="2xl">2X Grande (2xl)</Text>
+</div>`,
             props: {
-                text: 'Texto usando la prop text'
+                size: 'medium',
+                children: 'Mediano (medium)'
             }
         },
+
+        // ===== GRUPO 3: COLORES =====
         {
-            name: 'Texto animado',
-            description: 'Texto con animación de máquina de escribir',
-            code: `<Text 
-  animated={true}
-  speed={80}
->
-  Este texto se anima como máquina de escribir
-</Text>`,
+            name: '🎨 Sistema de colores',
+            description: 'Paleta de colores disponibles',
+            code: `<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px'}}>
+  <Text color="primary">Primario</Text>
+  <Text color="secondary">Secundario</Text>
+  <Text color="success">Éxito</Text>
+  <Text color="warning">Advertencia</Text>
+  <Text color="error">Error</Text>
+  <Text color="info">Información</Text>
+  <Text color="black">Negro</Text>
+  <Text color="white" style={{background: '#000', padding: '4px', borderRadius: '4px'}}>Blanco</Text>
+</div>`,
             props: {
-                animated: true,
-                speed: 80,
-                children: 'Este texto se anima como máquina de escribir'
+                color: 'primary',
+                children: 'Primario'
             }
         },
+
+        // ===== GRUPO 4: EFECTOS DEGRADADO =====
         {
-            name: 'Título H1',
-            description: 'Texto renderizado como H1',
-            code: `<Text 
-  as="h1" 
-  size="3xl" 
-  variant="bold"
->
-  Título Principal
-</Text>`,
-            props: {
-                as: 'h1',
-                size: '3xl',
-                variant: 'bold',
-                children: 'Título Principal'
-            }
-        },
-        {
-            name: 'Texto destacado',
-            description: 'Texto con fondo destacado',
-            code: `<Text 
-  variant="highlight"
-  size="large"
->
-  Texto destacado importante
-</Text>`,
-            props: {
-                variant: 'highlight',
-                size: 'large',
-                children: 'Texto destacado importante'
-            }
-        },
-        {
-            name: 'Texto degradado',
-            description: 'Texto con efecto degradado',
-            code: `<Text 
-  variant="gradient"
-  size="2xl"
-  as="h2"
->
-  Texto con Degradado
-</Text>`,
+            name: '🌈 Efectos degradado',
+            description: 'Degradados estáticos y animados',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Text variant="gradient" size="2xl">✨ Degradado estático</Text>
+  <Text variant="gradient-animated" size="xlarge">🌈 Degradado animado</Text>
+  <Text variant="gradient" gradientFrom="#ff0000" gradientTo="#0000ff" size="large">
+    🔴 Rojo a Azul personalizado 🔵
+  </Text>
+  <Text variant="gradient-animated" gradientFrom="#00ff00" gradientTo="#ff00ff" size="large">
+    🟢 Verde a Rosa animado 🟣
+  </Text>
+</div>`,
             props: {
                 variant: 'gradient',
                 size: '2xl',
-                as: 'h2',
-                children: 'Texto con Degradado'
+                children: '✨ Degradado estático'
             }
         },
+
+        // ===== GRUPO 5: EFECTOS NEÓN =====
         {
-            name: 'Texto neón animado',
-            description: 'Combinando variante neón con animación',
-            code: `<Text 
-  variant="neon"
-  animated={true}
-  speed={100}
-  size="large"
->
-  TEXTO NEÓN ANIMADO
-</Text>`,
-            props: {
-                variant: 'neon',
-                animated: true,
-                speed: 100,
-                size: 'large',
-                children: 'TEXTO NEÓN ANIMADO'
-            }
-        },
-        {
-            name: 'Texto retro terminal',
-            description: 'Estilo retro con animación',
-            code: `<Text 
-  variant="retro"
-  animated={true}
-  speed={50}
-  cursorChar="█"
->
-  $ echo "Terminal retro animado"
-</Text>`,
-            props: {
-                variant: 'retro',
-                animated: true,
-                speed: 50,
-                cursorChar: '█',
-                children: '$ echo "Terminal retro animado"'
-            }
-        },
-        {
-            name: 'Párrafo con HTML',
-            description: 'Texto con contenido HTML enriquecido',
-            code: `<Text 
-  as="p"
-  htmlStyles={true}
-  text="Este texto tiene <strong>negritas</strong> y <em>cursivas</em>"
-/>`,
-            props: {
-                as: 'p',
-                htmlStyles: true,
-                text: 'Este texto tiene <strong>negritas</strong> y <em>cursivas</em>'
-            }
-        },
-        {
-            name: 'HTML animado',
-            description: 'Contenido HTML con animación',
-            code: `<Text 
-  animated={true}
-  htmlStyles={true}
-  speed={60}
-  text="Texto <span style='color: red;'>rojo</span> y <span style='color: blue;'>azul</span> animado"
-/>`,
-            props: {
-                animated: true,
-                htmlStyles: true,
-                speed: 60,
-                text: "Texto <span style='color: red;'>rojo</span> y <span style='color: blue;'>azul</span> animado"
-            }
-        },
-        {
-            name: 'Texto silenciado pequeño',
-            description: 'Texto secundario con menor prominencia',
-            code: `<Text 
-  variant="muted"
-  size="small"
-  as="span"
->
-  Texto secundario o de ayuda
-</Text>`,
-            props: {
-                variant: 'muted',
-                size: 'small',
-                as: 'span',
-                children: 'Texto secundario o de ayuda'
-            }
-        },
-        {
-            name: 'Label de formulario',
-            description: 'Texto como label de formulario',
-            code: `<Text 
-  as="label"
-  variant="bold"
-  size="small"
->
-  Nombre de usuario:
-</Text>`,
-            props: {
-                as: 'label',
-                variant: 'bold',
-                size: 'small',
-                children: 'Nombre de usuario:'
-            }
-        },
-        {
-            name: 'Colores de texto',
-            description: 'Texto con colores Tailwind personalizados',
-            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-  <Text textColor="blue">Texto azul</Text>
-  <Text textColor="red">Texto rojo</Text>
-  <Text textColor="green">Texto verde</Text>
-  <Text textColor="purple">Texto púrpura</Text>
-  <Text textColor="orange">Texto naranja</Text>
+            name: '⚡ Efectos neón',
+            description: 'Texto brillante con diferentes colores neón',
+            code: `<div style={{background: '#000', padding: '20px', borderRadius: '8px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px'}}>
+  <Text variant="neon" neonColor="cyan" size="large">CIAN</Text>
+  <Text variant="neon" neonColor="pink" size="large">ROSA</Text>
+  <Text variant="neon" neonColor="green" size="large">VERDE</Text>
+  <Text variant="neon" neonColor="orange" size="large">NARANJA</Text>
+  <Text variant="neon" neonColor="purple" size="large">PÚRPURA</Text>
+  <Text variant="neon" neonColor="yellow" size="large">AMARILLO</Text>
+  <Text variant="neon" neonColor="red" size="large">ROJO</Text>
+  <Text variant="neon" neonColor="blue" size="large">AZUL</Text>
 </div>`,
             props: {
-                textColor: 'blue',
-                children: 'Texto azul'
+                variant: 'neon',
+                neonColor: 'cyan',
+                size: 'large',
+                children: 'CIAN'
             }
         },
+
+        // ===== GRUPO 6: TYPEWRITER BÁSICO =====
         {
-            name: 'Título con color personalizado',
-            description: 'Título H2 con color personalizado',
-            code: `<Text 
-  as="h2" 
-  size="2xl" 
-  textColor="indigo"
-  variant="bold"
->
-  Título Índigo
-</Text>`,
+            name: '⌨️ Máquina de escribir',
+            description: 'Efecto typewriter con diferentes configuraciones',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Text variant="typewriter" typewriterSpeed={100}>
+    Texto que se escribe lentamente...
+  </Text>
+  <Text variant="typewriter" typewriterSpeed={50} size="large">
+    ¡Texto más rápido en tamaño grande!
+  </Text>
+  <Text variant="typewriter" typewriterLoop={true} typewriterSpeed={80} typewriterPause={300}>
+    🔄 Este texto se repite automáticamente
+  </Text>
+</div>`,
+            props: {
+                variant: 'typewriter',
+                typewriterSpeed: 100,
+                children: 'Texto que se escribe lentamente...'
+            }
+        },
+
+        // ===== GRUPO 7: TYPEWRITER CON HTML =====
+        {
+            name: '⌨️ Typewriter + HTML',
+            description: 'Máquina de escribir con contenido HTML enriquecido',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Text 
+    variant="typewriter" 
+    htmlContent={true}
+    typewriterSpeed={60}
+  >
+    Este texto tiene &lt;strong&gt;negritas&lt;/strong&gt; y &lt;em&gt;cursivas&lt;/em&gt; con &lt;span style="color: red"&gt;colores&lt;/span&gt;
+  </Text>
+  <Text 
+    variant="typewriter" 
+    htmlContent={true}
+    typewriterSpeed={40}
+    size="large"
+  >
+    Código: &lt;code style="background: #f0f0f0; padding: 2px 4px; borderRadius: 4px"&gt;console.log('Hello World')&lt;/code&gt;
+  </Text>
+</div>`,
+            props: {
+                variant: 'typewriter',
+                htmlContent: true,
+                typewriterSpeed: 60,
+                children: 'Este texto tiene <strong>negritas</strong> y <em>cursivas</em> con <span style="color: red">colores</span>'
+            }
+        },
+
+        // ===== GRUPO 8: ELEMENTOS SEMÁNTICOS =====
+        {
+            name: '🏷️ Elementos semánticos',
+            description: 'Texto como diferentes elementos HTML',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Text as="h1" size="2xl" variant="bold">Título H1 Principal</Text>
+  <Text as="h2" size="xlarge" variant="bold">Subtítulo H2</Text>
+  <Text as="h3" size="large" variant="bold">Sección H3</Text>
+  <Text as="p" size="medium">Este es un párrafo normal con contenido estándar.</Text>
+  <Text as="label" variant="bold" size="small">Label para formulario</Text>
+  <Text as="span" variant="muted" size="xs">Texto pequeño como span</Text>
+</div>`,
+            props: {
+                as: 'h1',
+                size: '2xl',
+                variant: 'bold',
+                children: 'Título H1 Principal'
+            }
+        },
+
+        // ===== GRUPO 9: COMBINACIONES AVANZADAS =====
+        {
+            name: '🚀 Combinaciones avanzadas',
+            description: 'Mezclas creativas de efectos y estilos',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+  <Text variant="gradient-animated" size="2xl" as="h1">
+    🌟 Título con degradado animado
+  </Text>
+  <Text variant="neon" neonColor="pink" size="xlarge" as="h2" style={{background: '#000', padding: '10px', borderRadius: '8px'}}>
+    💖 Subtítulo neón rosa
+  </Text>
+  <Text variant="typewriter" size="large" typewriterSpeed={50}>
+    ⌨️ Texto typewriter grande y fluido
+  </Text>
+  <Text color="success" variant="bold" size="large">
+    ✅ Mensaje de éxito en verde
+  </Text>
+  <Text variant="subrayado" color="primary" size="medium">
+    🔗 Enlace azul subrayado
+  </Text>
+</div>`,
+            props: {
+                variant: 'gradient-animated',
+                size: '2xl',
+                as: 'h1',
+                children: '🌟 Título con degradado animado'
+            }
+        },
+
+        // ===== GRUPO 10: CASOS DE USO REALES =====
+        {
+            name: '💼 Casos de uso reales',
+            description: 'Ejemplos prácticos para aplicaciones',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px', padding: '20px', border: '1px solid #e5e7eb', borderRadius: '8px'}}>
+  <Text as="h2" variant="bold" size="xlarge" color="primary">
+    🏪 Mi Tienda Online
+  </Text>
+  <Text variant="muted" size="small">
+    Última actualización: hace 2 minutos
+  </Text>
+  <Text as="p" size="medium">
+    Bienvenido a nuestra plataforma de comercio electrónico donde encontrarás los mejores productos.
+  </Text>
+  <Text color="success" variant="bold">
+    ✅ Envío gratis en pedidos superiores a 50€
+  </Text>
+  <Text color="warning" variant="bold">
+    ⚠️ Oferta limitada: Solo quedan 3 días
+  </Text>
+  <Text color="error" size="small">
+    ❌ Este producto no está disponible en tu región
+  </Text>
+  <Text variant="typewriter" typewriterSpeed={40}>
+    💬 Chateando con el soporte técnico...
+  </Text>
+</div>`,
             props: {
                 as: 'h2',
-                size: '2xl',
-                textColor: 'indigo',
                 variant: 'bold',
-                children: 'Título Índigo'
+                size: 'xlarge',
+                color: 'primary',
+                children: '🏪 Mi Tienda Online'
             }
         },
+
+        {
+            name: '🤖 Respuesta ChatGPT',
+            description: 'Simula respuesta de ChatGPT con typewriter',
+            code: `<Text 
+  variant="typewriter" 
+  htmlContent={true}
+  typewriterSpeed={30}
+  size="medium"
+>
+  {\`<p>Aquí tienes la solución:</p>
+<pre><code>function saludar(nombre) {
+  console.log("Hola " + nombre);
+}</code></pre>
+<p>Este código hace lo siguiente:</p>
+<ul>
+  <li><strong>Define una función</strong> llamada saludar</li>
+  <li><em>Recibe un parámetro</em> nombre</li>
+  <li>Imprime un saludo en la <code>consola</code></li>
+</ul>\`}
+</Text>`,
+            props: {
+                variant: 'typewriter',
+                htmlContent: true,
+                typewriterSpeed: 30,
+                children: '<p>Aquí tienes la solución:</p><pre><code>function saludar(nombre) { console.log("Hola " + nombre); }</code></pre>'
+            }
+        }
+
+
     ]
 };
+
+export default TextConfig;

@@ -1,80 +1,112 @@
 {
   "name": "@gambito-corp/mbs-library",
   "version": "0.1.1",
-  "description": "Librería de componentes React reutilizables",
+  "description": "Librería de componentes React reutilizables - Sistema de diseño modular y escalable",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/",
+    "src/components/",
+    "src/config/",
+    "src/utils/",
+    "README.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "dev": "npm start",
+    "build": "npm run build:lib",
+    "build:lib": "cross-env NODE_ENV=production rollup -c",
+    "build:dev": "cross-env NODE_ENV=development rollup -c",
+    "build:watch": "cross-env NODE_ENV=development rollup -c -w",
+    "build:docs": "react-scripts build",
+    "build:all": "npm run build:lib && npm run build:docs",
+    "test": "react-scripts test",
+    "test:ci": "react-scripts test --coverage --ci --silent --maxWorkers=2",
+    "eject": "react-scripts eject",
+    "prepare": "npm run build:lib",
+    "prepublishOnly": "npm run test:ci && npm run build:lib",
+    "clean": "rimraf dist build",
+    "prebuild": "npm run clean",
+    "deploy:docs": "npm run build:docs && gh-pages -d build",
+    "generate:atom": "npx generate-react-cli component --path=src/components/atoms",
+    "generate:molecule": "npx generate-react-cli component --path=src/components/molecules",
+    "generate:organism": "npx generate-react-cli component --path=src/components/organisms",
+    "generate:template": "npx generate-react-cli component --path=src/components/templates",
+    "lint": "eslint src --ext .js,.jsx",
+    "lint:fix": "eslint src --ext .js,.jsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,css,md}\"",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "prop-types": "^15.8.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-react": "^7.22.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/typography": "^0.5.16",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "react-live": "^4.1.8",
-    "react-router-dom": "^7.6.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.23.0",
-    "@babel/preset-react": "^7.22.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-babel": "^6.0.0",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-terser": "^0.4.4",
+    "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/typography": "^0.5.16",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
     "eslint-plugin-storybook": "^9.0.0",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.5.4",
-    "prop-types": "^15.8.1",
+    "prettier": "^3.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-live": "^4.1.8",
+    "react-router-dom": "^7.6.1",
+    "react-scripts": "5.0.1",
     "rimraf": "^6.0.1",
     "rollup": "^4.0.0",
     "rollup-plugin-node-externals": "^8.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "web-vitals": "^2.1.4"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env NODE_ENV=production rollup -c",
-    "build:dev": "cross-env NODE_ENV=development rollup -c",
-    "build:watch": "cross-env NODE_ENV=development rollup -c -w",
-    "build:react": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepare": "npm run build",
-    "clean": "rimraf dist",
-    "prebuild": "npm run clean",
-    "generate:atom": "npx generate-react-cli component --path=src/components/atoms",
-    "generate:molecule": "npx generate-react-cli component --path=src/components/molecules",
-    "generate:organism": "npx generate-react-cli component --path=src/components/organisms"
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest",
       "plugin:storybook/recommended"
-    ]
+    ],
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "warn"
+    }
   },
   "browserslist": {
     "production": [
@@ -93,12 +125,28 @@
     "components",
     "ui",
     "library",
-    "mbs"
+    "design-system",
+    "tailwind",
+    "atomic-design",
+    "mbs",
+    "gambito-corp"
   ],
-  "author": "Pedro - Gambito Corp",
+  "author": {
+    "name": "Pedro - Gambito Corp",
+    "email": "pedro@gambito-corp.com",
+    "url": "https://gambito-corp.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gambito-corp/mbs-library"
+    "url": "https://github.com/gambito-corp/mbs-library.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gambito-corp/mbs-library/issues"
+  },
+  "homepage": "https://gambito-corp.github.io/mbs-library",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }

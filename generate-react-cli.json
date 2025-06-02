@@ -7,12 +7,12 @@
   "component": {
     "default": {
       "customTemplates": {
-        "component": "templates/component/TemplateName.jsx",
-        "lazy": "templates/component/TemplateName.lazy.jsx",
-        "story": "templates/component/TemplateName.stories.jsx",
-        "config": "templates/component/TemplateName.config.js",
-        "constants": "templates/component/TemplateName.constants.js",
-        "utils": "templates/component/TemplateName.utils.js"
+        "component": "src/templates/component/TemplateName.jsx",
+        "lazy": "src/templates/component/TemplateName.lazy.jsx",
+        "story": "src/templates/component/TemplateName.stories.jsx",
+        "config": "src/templates/component/TemplateName.config.js",
+        "constants": "src/templates/component/TemplateName.constants.js",
+        "utils": "src/templates/component/TemplateName.utils.js"
       },
       "path": "src/components",
       "withStyle": true,
@@ -25,12 +25,12 @@
     },
     "atom": {
       "customTemplates": {
-        "component": "templates/component/TemplateName.jsx",
-        "lazy": "templates/component/TemplateName.lazy.jsx",
-        "story": "templates/component/TemplateName.stories.jsx",
-        "config": "templates/component/TemplateName.config.js",
-        "constants": "templates/component/TemplateName.constants.js",
-        "utils": "templates/component/TemplateName.utils.js"
+        "component": "src/templates/component/TemplateName.jsx",
+        "lazy": "src/templates/component/TemplateName.lazy.jsx",
+        "story": "src/templates/component/TemplateName.stories.jsx",
+        "config": "src/templates/component/TemplateName.config.js",
+        "constants": "src/templates/component/TemplateName.constants.js",
+        "utils": "src/templates/component/TemplateName.utils.js"
       },
       "path": "src/components/atoms",
       "withStyle": true,
@@ -43,12 +43,12 @@
     },
     "molecule": {
       "customTemplates": {
-        "component": "templates/component/TemplateName.jsx",
-        "lazy": "templates/component/TemplateName.lazy.jsx",
-        "story": "templates/component/TemplateName.stories.jsx",
-        "config": "templates/component/TemplateName.config.js",
-        "constants": "templates/component/TemplateName.constants.js",
-        "utils": "templates/component/TemplateName.utils.js"
+        "component": "src/templates/component/TemplateName.jsx",
+        "lazy": "src/templates/component/TemplateName.lazy.jsx",
+        "story": "src/templates/component/TemplateName.stories.jsx",
+        "config": "src/templates/component/TemplateName.config.js",
+        "constants": "src/templates/component/TemplateName.constants.js",
+        "utils": "src/templates/component/TemplateName.utils.js"
       },
       "path": "src/components/molecules",
       "withStyle": true,
@@ -61,12 +61,12 @@
     },
     "organism": {
       "customTemplates": {
-        "component": "templates/component/TemplateName.jsx",
-        "lazy": "templates/component/TemplateName.lazy.jsx",
-        "story": "templates/component/TemplateName.stories.jsx",
-        "config": "templates/component/TemplateName.config.js",
-        "constants": "templates/component/TemplateName.constants.js",
-        "utils": "templates/component/TemplateName.utils.js"
+        "component": "src/templates/component/TemplateName.jsx",
+        "lazy": "src/templates/component/TemplateName.lazy.jsx",
+        "story": "src/templates/component/TemplateName.stories.jsx",
+        "config": "src/templates/component/TemplateName.config.js",
+        "constants": "src/templates/component/TemplateName.constants.js",
+        "utils": "src/templates/component/TemplateName.utils.js"
       },
       "path": "src/components/organisms",
       "withStyle": true,

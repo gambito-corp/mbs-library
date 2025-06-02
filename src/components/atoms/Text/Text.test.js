@@ -1,303 +1,314 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Text from './Text.jsx';
+import {
+    getTextClasses,
+    isValidVariant,
+    isValidSize,
+    validateTextProps,
+    combineClasses,
+    truncateText,
+    capitalizeWords,
+    countWords
+} from './Text.utils.js';
 
-// Mock para setTimeout en animaciones
-jest.useFakeTimers();
+// ===== TESTS DEL COMPONENTE TEXT =====
 
 describe('Text Component', () => {
-  afterEach(() => {
-    jest.clearAllTimers();
-    jest.clearAllMocks();
-  });
-
-  // ===== TESTS BÁSICOS =====
-  test('renders basic text correctly', () => {
-    render(<Text>Hello World</Text>);
-    expect(screen.getByTestId('Text')).toBeInTheDocument();
-    expect(screen.getByText('Hello World')).toBeInTheDocument();
-  });
-
-  test('renders text using text prop', () => {
-    render(<Text text="Hello from prop" />);
-    expect(screen.getByText('Hello from prop')).toBeInTheDocument();
-  });
-
-  test('prioritizes children over text prop', () => {
-    render(<Text text="Text prop">Children content</Text>);
-    expect(screen.getByText('Children content')).toBeInTheDocument();
-    expect(screen.queryByText('Text prop')).not.toBeInTheDocument();
-  });
-
-  // ===== TESTS DE VARIANTES =====
-  test('applies default variant correctly', () => {
-    render(<Text>Default text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-gray-900');
-  });
-
-  test('applies highlight variant correctly', () => {
-    render(<Text variant="highlight">Highlighted text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('bg-yellow-200');
-  });
-
-  test('applies gradient variant correctly', () => {
-    render(<Text variant="gradient">Gradient text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('bg-gradient-to-r');
-  });
-
-  test('applies neon variant correctly', () => {
-    render(<Text variant="neon">Neon text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-cyan-400');
-  });
-
-  test('applies retro variant correctly', () => {
-    render(<Text variant="retro">Retro text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('font-mono');
-  });
-
-  test('applies muted variant correctly', () => {
-    render(<Text variant="muted">Muted text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-gray-500');
-  });
-
-  test('applies bold variant correctly', () => {
-    render(<Text variant="bold">Bold text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('font-bold');
-  });
-
-  test('applies italic variant correctly', () => {
-    render(<Text variant="italic">Italic text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('italic');
-  });
-
-  // ===== TESTS DE TAMAÑOS =====
-  test('applies different sizes correctly', () => {
-    const { rerender } = render(<Text size="xs">Extra small</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-xs');
-
-    rerender(<Text size="small">Small</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-sm');
-
-    rerender(<Text size="medium">Medium</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-base');
-
-    rerender(<Text size="large">Large</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-lg');
-
-    rerender(<Text size="xlarge">Extra large</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-xl');
-
-    rerender(<Text size="2xl">2X Large</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-2xl');
-
-    rerender(<Text size="3xl">3X Large</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('text-3xl');
-  });
-
-  // ===== TESTS DE ELEMENTOS HTML =====
-  test('renders as different HTML elements', () => {
-    const { rerender } = render(<Text as="h1">Heading 1</Text>);
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-
-    rerender(<Text as="h2">Heading 2</Text>);
-    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
-
-    rerender(<Text as="p">Paragraph</Text>);
-    expect(screen.getByText('Paragraph').tagName).toBe('P');
-
-    rerender(<Text as="label">Label</Text>);
-    expect(screen.getByText('Label').tagName).toBe('LABEL');
-
-    rerender(<Text as="div">Div</Text>);
-    expect(screen.getByText('Div').tagName).toBe('DIV');
-  });
-
-  // ===== TESTS DE ANIMACIÓN =====
-  test('renders static text when animated is false', () => {
-    render(<Text animated={false}>Static text</Text>);
-    expect(screen.getByText('Static text')).toBeInTheDocument();
-    expect(screen.queryByText('|')).not.toBeInTheDocument();
-  });
-
-  test('renders animated text when animated is true', () => {
-    render(<Text animated={true} speed={100}>Animated text</Text>);
-    expect(screen.getByTestId('Text')).toHaveAttribute('data-animated', 'true');
-    expect(screen.getByText('|')).toBeInTheDocument(); // Cursor
-  });
-
-  test('animates text progressively', async () => {
-    render(<Text animated={true} speed={100}>Hi</Text>);
-
-    // Inicialmente debería estar vacío
-    expect(screen.getByTestId('Text')).not.toHaveTextContent('Hi');
-
-    // Avanzar el timer
-    jest.advanceTimersByTime(100);
-    await waitFor(() => {
-      expect(screen.getByTestId('Text')).toHaveTextContent('H');
+    // Tests básicos del componente
+    test('renders without crashing', () => {
+        render(<Text>Hello World</Text>);
+        expect(screen.getByTestId('Text')).toBeInTheDocument();
     });
 
-    jest.advanceTimersByTime(100);
-    await waitFor(() => {
-      expect(screen.getByTestId('Text')).toHaveTextContent('Hi');
-    });
-  });
-
-  test('calls onComplete when animation finishes', async () => {
-    const onComplete = jest.fn();
-    render(<Text animated={true} speed={50} onComplete={onComplete}>Hi</Text>);
-
-    // Avanzar hasta completar la animación
-    jest.advanceTimersByTime(150); // 2 caracteres * 50ms + margen
-
-    await waitFor(() => {
-      expect(onComplete).toHaveBeenCalled();
-    });
-  });
-
-  test('shows custom cursor character', () => {
-    render(<Text animated={true} cursorChar="█">Text</Text>);
-    expect(screen.getByText('█')).toBeInTheDocument();
-  });
-
-  test('hides cursor when showCursor is false', () => {
-    render(<Text animated={true} showCursor={false}>Text</Text>);
-    expect(screen.queryByText('|')).not.toBeInTheDocument();
-  });
-
-  test('pauses animation on hover when pauseOnHover is true', () => {
-    render(<Text animated={true} pauseOnHover={true}>Test text</Text>);
-    const element = screen.getByTestId('Text');
-
-    fireEvent.mouseEnter(element);
-    // Verificar que la animación se pausa (esto requeriría más setup para testear completamente)
-    expect(element).toBeInTheDocument();
-
-    fireEvent.mouseLeave(element);
-    expect(element).toBeInTheDocument();
-  });
-
-  // ===== TESTS DE HTML ENRIQUECIDO =====
-  test('renders HTML content when htmlStyles is true', () => {
-    render(<Text htmlStyles={true} text="<strong>Bold</strong> text" />);
-    expect(screen.getByText('Bold')).toBeInTheDocument();
-    expect(screen.getByText('Bold').tagName).toBe('STRONG');
-  });
-
-  test('renders HTML content as plain text when htmlStyles is false', () => {
-    render(<Text htmlStyles={false} text="<strong>Bold</strong> text" />);
-    expect(screen.getByText('<strong>Bold</strong> text')).toBeInTheDocument();
-  });
-
-  test('animates HTML content correctly', async () => {
-    render(
-        <Text
-            animated={true}
-            htmlStyles={true}
-            speed={100}
-            text="<em>Italic</em> text"
-        />
-    );
-
-    // La animación debería funcionar con contenido HTML
-    jest.advanceTimersByTime(500);
-    await waitFor(() => {
-      expect(screen.getByTestId('Text')).toBeInTheDocument();
-    });
-  });
-
-  // ===== TESTS DE PROPS ADICIONALES =====
-  test('applies custom className', () => {
-    render(<Text className="custom-class">Text</Text>);
-    expect(screen.getByTestId('Text')).toHaveClass('custom-class');
-  });
-
-  test('passes through additional props', () => {
-    render(<Text data-custom="value" id="text-id">Text</Text>);
-    expect(screen.getByTestId('Text')).toHaveAttribute('data-custom', 'value');
-    expect(screen.getByTestId('Text')).toHaveAttribute('id', 'text-id');
-  });
-
-  // ===== TESTS DE EDGE CASES =====
-  test('handles empty text gracefully', () => {
-    render(<Text text="" />);
-    expect(screen.getByTestId('Text')).toBeInTheDocument();
-    expect(screen.getByTestId('Text')).toBeEmptyDOMElement();
-  });
-
-  test('handles null children gracefully', () => {
-    render(<Text>{null}</Text>);
-    expect(screen.getByTestId('Text')).toBeInTheDocument();
-  });
-
-  test('handles undefined text prop gracefully', () => {
-    render(<Text text={undefined} />);
-    expect(screen.getByTestId('Text')).toBeInTheDocument();
-  });
-
-  test('handles numeric content', () => {
-    render(<Text>{123}</Text>);
-    expect(screen.getByText('123')).toBeInTheDocument();
-  });
-
-  test('handles boolean content', () => {
-    render(<Text>{true}</Text>);
-    expect(screen.getByText('true')).toBeInTheDocument();
-  });
-
-  // ===== TESTS DE LOOP =====
-  test('loops animation when loop is true', async () => {
-    const onComplete = jest.fn();
-    render(<Text animated={true} loop={true} speed={50} onComplete={onComplete}>Hi</Text>);
-
-    // Completar primera iteración
-    jest.advanceTimersByTime(150);
-
-    await waitFor(() => {
-      expect(onComplete).toHaveBeenCalled();
+    test('renders children content', () => {
+        render(<Text>Hello World</Text>);
+        expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    // Debería empezar de nuevo después de 1 segundo
-    jest.advanceTimersByTime(1000);
-    expect(screen.getByTestId('Text')).toBeInTheDocument();
-  });
+    test('applies default classes', () => {
+        render(<Text>Test</Text>);
+        const element = screen.getByTestId('Text');
+        expect(element).toHaveClass('text-component', 'text-default', 'text-medium');
+    });
 
-  // ===== TESTS DE ACCESIBILIDAD =====
-  test('has proper data attributes', () => {
-    render(<Text animated={true}>Accessible text</Text>);
-    expect(screen.getByTestId('Text')).toHaveAttribute('data-testid', 'Text');
-    expect(screen.getByTestId('Text')).toHaveAttribute('data-animated', 'true');
-  });
+    test('applies variant classes correctly', () => {
+        const { rerender } = render(<Text variant="bold">Test</Text>);
+        let element = screen.getByTestId('Text');
+        expect(element).toHaveClass('text-bold');
 
-  test('maintains semantic meaning with different elements', () => {
-    render(<Text as="h1">Main heading</Text>);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Main heading');
-  });
+        rerender(<Text variant="muted">Test</Text>);
+        element = screen.getByTestId('Text');
+        expect(element).toHaveClass('text-muted');
+    });
 
-  // ===== TESTS DE COMBINACIONES COMPLEJAS =====
-  test('handles complex combinations of props', () => {
-    render(
-        <Text
-            animated={true}
-            variant="gradient"
-            size="large"
-            as="h2"
-            speed={100}
-            showCursor={true}
-            cursorChar="▶"
-            className="custom-class"
-        >
-          Complex text
-        </Text>
-    );
+    test('applies size classes correctly', () => {
+        const { rerender } = render(<Text size="small">Test</Text>);
+        let element = screen.getByTestId('Text');
+        expect(element).toHaveClass('text-small');
 
-    const element = screen.getByTestId('Text');
-    expect(element).toHaveClass('bg-gradient-to-r'); // gradient variant
-    expect(element).toHaveClass('text-lg'); // large size
-    expect(element).toHaveClass('custom-class'); // custom class
-    expect(element.tagName).toBe('H2'); // as prop
-    expect(element).toHaveAttribute('data-animated', 'true'); // animated
-    expect(screen.getByText('▶')).toBeInTheDocument(); // custom cursor
-  });
+        rerender(<Text size="large">Test</Text>);
+        element = screen.getByTestId('Text');
+        expect(element).toHaveClass('text-large');
+    });
+
+    test('renders as different HTML elements', () => {
+        const { rerender } = render(<Text as="h1">Heading</Text>);
+        expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+
+        rerender(<Text as="p">Paragraph</Text>);
+        expect(screen.getByText('Paragraph').tagName).toBe('P');
+
+        rerender(<Text as="span">Span</Text>);
+        expect(screen.getByText('Span').tagName).toBe('SPAN');
+    });
+
+    test('applies custom className', () => {
+        render(<Text className="custom-class">Test</Text>);
+        const element = screen.getByTestId('Text');
+        expect(element).toHaveClass('custom-class');
+    });
+
+    test('passes through additional props', () => {
+        render(<Text id="test-id" data-custom="value">Test</Text>);
+        const element = screen.getByTestId('Text');
+        expect(element).toHaveAttribute('id', 'test-id');
+        expect(element).toHaveAttribute('data-custom', 'value');
+    });
+
+    test('handles empty children gracefully', () => {
+        render(<Text></Text>);
+        const element = screen.getByTestId('Text');
+        expect(element).toBeInTheDocument();
+        expect(element).toBeEmptyDOMElement();
+    });
+
+    test('handles number children', () => {
+        render(<Text>{42}</Text>);
+        expect(screen.getByText('42')).toBeInTheDocument();
+    });
+
+    test('combines all props correctly', () => {
+        render(
+            <Text
+                variant="bold"
+                size="large"
+                as="h2"
+                className="custom"
+                id="test"
+            >
+                Complex Test
+            </Text>
+        );
+
+        const element = screen.getByTestId('Text');
+        expect(element.tagName).toBe('H2');
+        expect(element).toHaveClass('text-component', 'text-bold', 'text-large', 'custom');
+        expect(element).toHaveAttribute('id', 'test');
+        expect(element).toHaveTextContent('Complex Test');
+    });
+});
+
+// ===== TESTS DE LAS FUNCIONES UTILS =====
+
+describe('Text Utils', () => {
+
+    describe('getTextClasses', () => {
+        test('returns default classes when no params provided', () => {
+            const result = getTextClasses({});
+            expect(result).toBe('text-component text-default text-medium');
+        });
+
+        test('combines variant and size classes correctly', () => {
+            const result = getTextClasses({ variant: 'bold', size: 'large' });
+            expect(result).toBe('text-component text-bold text-large');
+        });
+
+        test('includes custom className', () => {
+            const result = getTextClasses({
+                variant: 'muted',
+                size: 'small',
+                className: 'custom-class'
+            });
+            expect(result).toBe('text-component text-muted text-small custom-class');
+        });
+
+        test('filters out empty values', () => {
+            const result = getTextClasses({
+                variant: 'bold',
+                size: 'medium',
+                className: ''
+            });
+            expect(result).toBe('text-component text-bold text-medium');
+        });
+
+        test('handles undefined values gracefully', () => {
+            const result = getTextClasses({
+                variant: undefined,
+                size: null,
+                className: 'test'
+            });
+            expect(result).toBe('text-component text-default text-medium test');
+        });
+    });
+
+    describe('isValidVariant', () => {
+        test('returns true for valid variants', () => {
+            expect(isValidVariant('default')).toBe(true);
+            expect(isValidVariant('bold')).toBe(true);
+            expect(isValidVariant('muted')).toBe(true);
+        });
+
+        test('returns false for invalid variants', () => {
+            expect(isValidVariant('invalid')).toBe(false);
+            expect(isValidVariant('nonexistent')).toBe(false);
+        });
+
+        test('returns false for non-string values', () => {
+            expect(isValidVariant(null)).toBe(false);
+            expect(isValidVariant(undefined)).toBe(false);
+            expect(isValidVariant(123)).toBe(false);
+            expect(isValidVariant({})).toBe(false);
+        });
+    });
+
+    describe('isValidSize', () => {
+        test('returns true for valid sizes', () => {
+            expect(isValidSize('small')).toBe(true);
+            expect(isValidSize('medium')).toBe(true);
+            expect(isValidSize('large')).toBe(true);
+        });
+
+        test('returns false for invalid sizes', () => {
+            expect(isValidSize('tiny')).toBe(false);
+            expect(isValidSize('huge')).toBe(false);
+        });
+
+        test('returns false for non-string values', () => {
+            expect(isValidSize(null)).toBe(false);
+            expect(isValidSize(undefined)).toBe(false);
+            expect(isValidSize(42)).toBe(false);
+        });
+    });
+
+    describe('validateTextProps', () => {
+        test('returns no errors for valid props', () => {
+            const result = validateTextProps({
+                variant: 'bold',
+                size: 'large',
+                children: 'Valid text',
+                as: 'p'
+            });
+
+            expect(result.isValid).toBe(true);
+            expect(result.errors).toHaveLength(0);
+        });
+
+        test('returns warnings for invalid variant', () => {
+            const result = validateTextProps({ variant: 'invalid' });
+            expect(result.warnings).toContain('Variante "invalid" no es válida. Usando "default".');
+        });
+
+        test('returns warnings for invalid size', () => {
+            const result = validateTextProps({ size: 'huge' });
+            expect(result.warnings).toContain('Tamaño "huge" no es válido. Usando "medium".');
+        });
+
+        test('returns warnings for missing children', () => {
+            const result = validateTextProps({});
+            expect(result.warnings.some(w => w.includes('contenido'))).toBe(true);
+        });
+    });
+
+    describe('combineClasses', () => {
+        test('combines multiple classes', () => {
+            const result = combineClasses('class1', 'class2', 'class3');
+            expect(result).toBe('class1 class2 class3');
+        });
+
+        test('filters out falsy values', () => {
+            const result = combineClasses('class1', null, 'class2', undefined, 'class3');
+            expect(result).toBe('class1 class2 class3');
+        });
+
+        test('handles multiple spaces', () => {
+            const result = combineClasses('class1   class2', 'class3');
+            expect(result).toBe('class1 class2 class3');
+        });
+    });
+
+    describe('truncateText', () => {
+        test('truncates long text', () => {
+            const longText = 'This is a very long text that should be truncated';
+            const result = truncateText(longText, 20);
+            expect(result).toBe('This is a very lo...');
+            expect(result.length).toBeLessThanOrEqual(20);
+        });
+
+        test('returns original text if shorter than maxLength', () => {
+            const shortText = 'Short text';
+            const result = truncateText(shortText, 20);
+            expect(result).toBe('Short text');
+        });
+
+        test('handles custom ellipsis', () => {
+            const text = 'This is a long text';
+            const result = truncateText(text, 10, '***');
+            expect(result).toEndWith('***');
+        });
+
+        test('handles empty or invalid input', () => {
+            expect(truncateText('')).toBe('');
+            expect(truncateText(null)).toBe('');
+            expect(truncateText(undefined)).toBe('');
+        });
+    });
+
+    describe('capitalizeWords', () => {
+        test('capitalizes first letter of each word', () => {
+            const result = capitalizeWords('hello world test');
+            expect(result).toBe('Hello World Test');
+        });
+
+        test('handles single word', () => {
+            const result = capitalizeWords('hello');
+            expect(result).toBe('Hello');
+        });
+
+        test('handles empty string', () => {
+            const result = capitalizeWords('');
+            expect(result).toBe('');
+        });
+
+        test('handles already capitalized text', () => {
+            const result = capitalizeWords('Hello World');
+            expect(result).toBe('Hello World');
+        });
+    });
+
+    describe('countWords', () => {
+        test('counts words correctly', () => {
+            expect(countWords('hello world')).toBe(2);
+            expect(countWords('one two three four')).toBe(4);
+        });
+
+        test('handles single word', () => {
+            expect(countWords('hello')).toBe(1);
+        });
+
+        test('handles empty string', () => {
+            expect(countWords('')).toBe(0);
+            expect(countWords('   ')).toBe(0);
+        });
+
+        test('handles multiple spaces', () => {
+            expect(countWords('hello    world   test')).toBe(3);
+        });
+
+        test('handles invalid input', () => {
+            expect(countWords(null)).toBe(0);
+            expect(countWords(undefined)).toBe(0);
+        });
+    });
 });

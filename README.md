@@ -47,16 +47,16 @@ function App() {
 ## 📚 Documentación
 
 ### Átomos Fundamentales
-- [Text](./docs/atoms/text.md) - Componente de texto versátil con animaciones
-- [Container](./docs/atoms/container.md) - Contenedor para layouts y estructuras
-- [Icon](./docs/atoms/icon.md) - Iconos universales (FontAwesome + SVG + Emojis)
-- [Animated](./docs/atoms/animated.md) - 210+ animaciones de Animista
-- [Button](./docs/atoms/button.md) - Botones interactivos con múltiples variantes
+- [Text](../untitled1/src/docs/atoms/text.md) - Componente de texto versátil con animaciones
+- [Container](../untitled1/src/docs/atoms/container.md) - Contenedor para layouts y estructuras
+- [Icon](../untitled1/src/docs/atoms/icon.md) - Iconos universales (FontAwesome + SVG + Emojis)
+- [Animated](../untitled1/src/docs/atoms/animated.md) - 210+ animaciones de Animista
+- [Button](../untitled1/src/docs/atoms/button.md) - Botones interactivos con múltiples variantes
 
 ### Guías
-- [Getting Started](./docs/getting-started.md) - Guía de inicio completa
-- [Atomic Design](./docs/guides/atomic-design.md) - Metodología y estructura
-- [Integration Examples](./docs/examples/integration-examples.md) - Ejemplos prácticos
+- [Getting Started](../untitled1/src/docs/getting-started.md) - Guía de inicio completa
+- [Atomic Design](../untitled1/src/docs/guides/atomic-design.md) - Metodología y estructura
+- [Integration Examples](../untitled1/src/docs/examples/integration-examples.md) - Ejemplos prácticos
 
 ## 🎨 Design System Studio
 
