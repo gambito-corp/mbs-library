@@ -94,7 +94,7 @@ const Animated = ({
 };
 
 Animated.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     animation: PropTypes.string,
     category: PropTypes.oneOf(Object.keys(ANIMATED_CATEGORIES)),
     duration: PropTypes.number,
@@ -110,21 +110,6 @@ Animated.propTypes = {
     onAnimationIteration: PropTypes.func,
     className: PropTypes.string,
     style: PropTypes.object
-};
-
-Animated.defaultProps = {
-    animation: 'fadeIn',
-    category: 'entrances',
-    duration: 0.6,
-    delay: 0,
-    easing: 'ease',
-    trigger: 'mount',
-    repeat: false,
-    direction: 'normal',
-    fillMode: 'both',
-    playState: 'running',
-    className: '',
-    style: {}
 };
 
 export default Animated;

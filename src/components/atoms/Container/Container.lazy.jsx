@@ -1,100 +1,91 @@
 import React, { lazy, Suspense } from 'react';
-import './ContainerSkeleton.css'; // ✅ CSS separado
+import './AnimatedSkeleton.css';
 
-const LazyContainer = lazy(() => import('./Container.jsx'));
+const LazyAnimated = lazy(() => import('./Animated.jsx'));
 
-const Container = (props) => {
-    // ✅ SKELETON PERSONALIZADO PARA CONTAINER
-    const ContainerSkeleton = () => {
+const Animated = (props) => {
+    // ✅ SKELETON PERSONALIZADO PARA ANIMATED
+    const AnimatedSkeleton = () => {
         const getSkeletonConfig = () => {
             const config = {
-                height: 'container-skeleton--medium',
-                width: 'container-skeleton--full',
-                padding: 'container-skeleton--padding-medium',
-                rounded: 'container-skeleton--rounded-none',
-                variant: ''
+                height: 'animated-skeleton--medium',
+                animation: 'animated-skeleton--pulse',
+                category: ''
             };
 
-            // Configuración basada en el tamaño
-            switch (props.size) {
-                case 'xs':
-                    config.height = 'container-skeleton--xs';
-                    config.width = 'container-skeleton--xs';
+            // Configuración basada en la categoría
+            switch (props.category) {
+                case 'entrances':
+                    config.animation = 'animated-skeleton--fade-in';
                     break;
-                case 'small':
-                    config.height = 'container-skeleton--small';
-                    config.width = 'container-skeleton--small';
+                case 'exits':
+                    config.animation = 'animated-skeleton--fade-out';
                     break;
-                case 'large':
-                    config.height = 'container-skeleton--large';
-                    config.width = 'container-skeleton--large';
+                case 'attention':
+                    config.animation = 'animated-skeleton--bounce';
                     break;
-                case 'xlarge':
-                    config.height = 'container-skeleton--xlarge';
-                    config.width = 'container-skeleton--xlarge';
+                case 'sliding':
+                    config.animation = 'animated-skeleton--slide';
                     break;
+                case 'rotating':
+                    config.animation = 'animated-skeleton--rotate';
+                    break;
+                case 'scaling':
+                    config.animation = 'animated-skeleton--scale';
+                    break;
+                default:
+                    config.animation = 'animated-skeleton--pulse';
             }
 
-            // Configuración basada en maxWidth
-            if (props.maxWidth && props.maxWidth !== 'full') {
-                config.width = `container-skeleton--max-${props.maxWidth}`;
-            }
-
-            // Configuración basada en padding
-            if (props.padding && props.padding !== 'medium') {
-                config.padding = `container-skeleton--padding-${props.padding}`;
-            }
-
-            // Configuración basada en rounded
-            if (props.rounded && props.rounded !== 'none') {
-                config.rounded = `container-skeleton--rounded-${props.rounded}`;
-            }
-
-            // Configuración basada en variante
-            if (props.variant && props.variant !== 'default') {
-                config.variant = `container-skeleton--${props.variant}`;
+            // Configuración basada en la animación específica
+            if (props.animation) {
+                config.category = `animated-skeleton--${props.animation}`;
             }
 
             return config;
         };
 
         const config = getSkeletonConfig();
-        const isBlockElement = ['section', 'article', 'main', 'header', 'footer', 'nav', 'aside'].includes(props.as);
 
         const skeletonClasses = [
-            'container-skeleton',
+            'animated-skeleton',
             config.height,
-            config.width,
-            config.padding,
-            config.rounded,
-            config.variant,
-            props.centered ? 'container-skeleton--centered' : '',
-            props.fluid ? 'container-skeleton--fluid' : '',
-            props.fitContent ? 'container-skeleton--fit-content' : '',
-            isBlockElement ? 'container-skeleton--block' : ''
+            config.animation,
+            config.category,
+            props.repeat ? 'animated-skeleton--infinite' : '',
+            props.className || ''
         ].filter(Boolean).join(' ');
+
+        const skeletonStyles = {
+            animationDuration: `${props.duration || 0.6}s`,
+            animationDelay: `${props.delay || 0}s`,
+            animationTimingFunction: props.easing || 'ease',
+            animationDirection: props.direction || 'normal',
+            animationFillMode: props.fillMode || 'both',
+            animationPlayState: props.playState || 'running',
+            ...props.style
+        };
 
         return (
             <div
                 className={skeletonClasses}
-                data-testid="ContainerSkeleton"
+                style={skeletonStyles}
+                data-testid="AnimatedSkeleton"
             >
-                {/* Contenido interno del skeleton */}
-                <div className="container-skeleton__content">
-                    {/* Simular líneas de contenido */}
-                    <div className="container-skeleton__line container-skeleton__line--title"></div>
-                    <div className="container-skeleton__line container-skeleton__line--text"></div>
-                    <div className="container-skeleton__line container-skeleton__line--text container-skeleton__line--short"></div>
+                <div className="animated-skeleton__content">
+                    <div className="animated-skeleton__line animated-skeleton__line--title"></div>
+                    <div className="animated-skeleton__line animated-skeleton__line--text"></div>
+                    <div className="animated-skeleton__line animated-skeleton__line--text animated-skeleton__line--short"></div>
                 </div>
             </div>
         );
     };
 
     return (
-        <Suspense fallback={<ContainerSkeleton />}>
-            <LazyContainer {...props} />
+        <Suspense fallback={<AnimatedSkeleton />}>
+            <LazyAnimated {...props} />
         </Suspense>
     );
 };
 
-export default Container;
+export default Animated;
