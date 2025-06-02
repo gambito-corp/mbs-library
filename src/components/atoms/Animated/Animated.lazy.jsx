@@ -1,18 +1,44 @@
 import React, { lazy, Suspense } from 'react';
+import './TextSkeleton.css'; // ✅ CSS separado
 
-const LazyAnimated = lazy(() => import('./Animated'));
+const LazyText = lazy(() => import('./Text.jsx'));
 
-const Animated = (props) => (
-    <Suspense fallback={
-        <div className="animate-pulse bg-gray-200 h-12 rounded-lg flex items-center px-4">
-            <div className="w-4 h-4 bg-gray-300 rounded mr-3"></div>
-            <div className="flex-1">
-                <div className="h-3 bg-gray-300 rounded w-3/4"></div>
-            </div>
-        </div>
-    }>
-        <LazyAnimated {...props} />
-    </Suspense>
-);
+const Text = (props) => {
+    const TextSkeleton = () => {
+        const getSkeletonClass = () => {
+            let classes = 'text-skeleton';
 
-export default Animated;
+            // Agregar clase de tamaño
+            if (props.size) {
+                classes += ` text-skeleton--${props.size}`;
+            }
+
+            // Agregar clase de variante
+            if (props.variant && props.variant !== 'default') {
+                classes += ` text-skeleton--${props.variant}`;
+            }
+
+            // Agregar clase de elemento
+            if (props.as) {
+                classes += ` text-skeleton--${props.as}`;
+            }
+
+            return classes;
+        };
+
+        return (
+            <div
+                className={getSkeletonClass()}
+                data-testid="TextSkeleton"
+            />
+        );
+    };
+
+    return (
+        <Suspense fallback={<TextSkeleton />}>
+            <LazyText {...props} />
+        </Suspense>
+    );
+};
+
+export default Text;
