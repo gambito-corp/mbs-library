@@ -1,248 +1,189 @@
 import Container from './Container.jsx';
-import { CONTAINER_VARIANTS, CONTAINER_SIZES } from './Container.constants.js';
+import Text from '../Text/Text.jsx'; // ✅ IMPORTAR Text
 
 export const ContainerConfig = {
     component: Container,
     name: 'Container',
     category: 'atoms',
-    description: 'Componente contenedor versátil para estructurar y organizar otros elementos dentro del layout',
-
-    props: {
-        children: {
-            type: 'ReactNode',
-            required: false,
-            description: 'Contenido que se mostrará dentro del contenedor'
-        },
-        variant: {
-            type: 'string',
-            required: false,
-            default: 'default',
-            options: Object.keys(CONTAINER_VARIANTS),
-            description: 'Variante visual del contenedor',
-            examples: ['default', 'card', 'panel', 'hero', 'sidebar', 'modal']
-        },
-        size: {
-            type: 'string',
-            required: false,
-            default: 'medium',
-            options: Object.keys(CONTAINER_SIZES),
-            description: 'Tamaño del contenedor',
-            examples: ['xs', 'small', 'medium', 'large', 'xlarge', 'full']
-        },
-        maxWidth: {
-            type: 'string',
-            required: false,
-            default: 'full',
-            options: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', 'full', 'none'],
-            description: 'Ancho máximo del contenedor'
-        },
-        padding: {
-            type: 'string',
-            required: false,
-            default: 'medium',
-            options: ['none', 'small', 'medium', 'large', 'xlarge'],
-            description: 'Espaciado interno del contenedor'
-        },
-        margin: {
-            type: 'string',
-            required: false,
-            default: 'none',
-            options: ['none', 'small', 'medium', 'large', 'xlarge', 'auto'],
-            description: 'Espaciado externo del contenedor'
-        },
-        centered: {
-            type: 'boolean',
-            required: false,
-            default: false,
-            description: 'Centra el contenedor horizontalmente'
-        },
-        fluid: {
-            type: 'boolean',
-            required: false,
-            default: false,
-            description: 'Hace que el contenedor ocupe todo el ancho disponible'
-        },
-        shadow: {
-            type: 'string',
-            required: false,
-            default: 'none',
-            options: ['none', 'sm', 'md', 'lg', 'xl', '2xl'],
-            description: 'Sombra del contenedor'
-        },
-        border: {
-            type: 'string',
-            required: false,
-            default: 'none',
-            options: ['none', 'sm', 'md', 'lg', 'dashed', 'dotted'],
-            description: 'Borde del contenedor'
-        },
-        rounded: {
-            type: 'string',
-            required: false,
-            default: 'none',
-            options: ['none', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', 'full'],
-            description: 'Bordes redondeados del contenedor'
-        },
-        background: {
-            type: 'string',
-            required: false,
-            default: 'transparent',
-            options: ['transparent', 'white', 'gray', 'primary', 'secondary', 'accent'],
-            description: 'Color de fondo del contenedor'
-        },
-        as: {
-            type: 'string',
-            required: false,
-            default: 'div',
-            options: ['div', 'section', 'article', 'aside', 'main', 'header', 'footer', 'nav'],
-            description: 'Elemento HTML que se renderizará'
-        }
-    },
+    description: 'Componente contenedor versátil con metodología BEM',
 
     variants: [
         {
-            name: 'Contenedor básico',
-            description: 'Contenedor simple sin estilos especiales',
-            code: `<Container>
-  <p>Contenido básico dentro del contenedor</p>
-</Container>`,
+            name: '📦 Contenedores básicos',
+            description: 'Variantes fundamentales de contenedores',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Container variant="default">
+    <Text>Contenedor por defecto</Text>
+  </Container>
+  <Container variant="card" padding="large">
+    <Text variant="bold" size="large">Contenedor tipo tarjeta</Text>
+    <Text variant="muted" size="small">Con padding grande y estilo card</Text>
+  </Container>
+  <Container variant="panel" padding="medium">
+    <Text>Contenedor tipo panel</Text>
+  </Container>
+</div>`,
             props: {
-                children: 'Contenido básico dentro del contenedor'
+                variant: 'default',
+                children: <Text>Contenedor por defecto</Text>
             }
         },
         {
-            name: 'Tarjeta con sombra',
-            description: 'Contenedor con apariencia de tarjeta',
-            code: `<Container 
-  variant="card" 
-  padding="large" 
-  rounded="lg" 
-  shadow="md"
->
-  <h3>Título de la tarjeta</h3>
-  <p>Contenido de la tarjeta con sombra y bordes redondeados</p>
-</Container>`,
+            name: '📏 Tamaños y anchos',
+            description: 'Diferentes tamaños y anchos máximos',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Container size="small" variant="card" centered={true}>
+    <Text variant="bold">Contenedor pequeño centrado</Text>
+    <Text variant="muted" size="small">Tamaño small con centrado automático</Text>
+  </Container>
+  <Container maxWidth="md" variant="panel" centered={true}>
+    <Text>Ancho máximo mediano</Text>
+  </Container>
+  <Container fluid={true} variant="hero">
+    <Text as="h1" size="2xl" variant="bold">Contenedor fluido completo</Text>
+    <Text size="large">Ocupa todo el ancho disponible</Text>
+  </Container>
+</div>`,
             props: {
+                size: 'small',
                 variant: 'card',
+                centered: true,
+                children: (
+                    <>
+                        <Text variant="bold">Contenedor pequeño centrado</Text>
+                        <Text variant="muted" size="small">Tamaño small con centrado automático</Text>
+                    </>
+                )
+            }
+        },
+        {
+            name: '🎨 Estilos visuales',
+            description: 'Sombras, bordes y fondos',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Container shadow="lg" rounded="xl" padding="large">
+    <Text variant="bold" size="large">Con sombra grande</Text>
+    <Text>Bordes redondeados XL y padding grande</Text>
+  </Container>
+  <Container border="md" rounded="lg" padding="medium">
+    <Text variant="bold">Con borde mediano</Text>
+    <Text variant="muted">Estilo panel con bordes</Text>
+  </Container>
+  <Container background="primary" padding="large" rounded="md">
+    <Text variant="bold" size="xlarge">Fondo azul primario</Text>
+    <Text>Texto que respeta el tema oscuro/claro</Text>
+  </Container>
+</div>`,
+            props: {
+                shadow: 'lg',
+                rounded: 'xl',
                 padding: 'large',
-                rounded: 'lg',
-                shadow: 'md',
-                children: 'Contenido de tarjeta'
+                children: (
+                    <>
+                        <Text variant="bold" size="large">Con sombra grande</Text>
+                        <Text>Bordes redondeados XL y padding grande</Text>
+                    </>
+                )
             }
         },
         {
-            name: 'Panel con borde',
-            description: 'Contenedor tipo panel con borde',
-            code: `<Container 
-  variant="panel" 
-  border="sm" 
-  padding="medium" 
-  rounded="md"
->
-  <p>Contenido del panel con borde</p>
-</Container>`,
+            name: '🏷️ Elementos semánticos',
+            description: 'Contenedores como diferentes elementos HTML',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+  <Container as="header" variant="hero" padding="large">
+    <Text as="h1" size="2xl" variant="bold">Header Principal</Text>
+    <Text size="large">Elemento semántico header</Text>
+  </Container>
+  <Container as="section" variant="card" padding="medium">
+    <Text as="h2" size="xlarge" variant="bold">Sección de Contenido</Text>
+    <Text>Elemento semántico section</Text>
+  </Container>
+  <Container as="aside" variant="sidebar" padding="medium">
+    <Text as="h3" size="large" variant="bold">Sidebar</Text>
+    <Text variant="muted">Navegación lateral</Text>
+  </Container>
+  <Container as="footer" variant="panel" padding="small">
+    <Text variant="muted" size="small">© 2025 Mi Aplicación</Text>
+  </Container>
+</div>`,
             props: {
-                variant: 'panel',
-                border: 'sm',
-                padding: 'medium',
-                rounded: 'md',
-                children: 'Contenido del panel'
-            }
-        },
-        {
-            name: 'Sección héroe',
-            description: 'Contenedor para secciones destacadas',
-            code: `<Container 
-  variant="hero" 
-  padding="xlarge" 
-  centered={true}
-  maxWidth="4xl"
->
-  <h1>Título Principal</h1>
-  <p>Descripción de la sección héroe</p>
-</Container>`,
-            props: {
+                as: 'header',
                 variant: 'hero',
-                padding: 'xlarge',
-                centered: true,
-                maxWidth: '4xl',
-                children: 'Contenido héroe'
-            }
-        },
-        {
-            name: 'Contenedor centrado',
-            description: 'Contenedor centrado con ancho máximo',
-            code: `<Container 
-  maxWidth="lg" 
-  centered={true} 
-  padding="large"
->
-  <p>Contenido centrado con ancho máximo limitado</p>
-</Container>`,
-            props: {
-                maxWidth: 'lg',
-                centered: true,
                 padding: 'large',
-                children: 'Contenido centrado'
+                children: (
+                    <>
+                        <Text as="h1" size="2xl" variant="bold">Header Principal</Text>
+                        <Text size="large">Elemento semántico header</Text>
+                    </>
+                )
             }
         },
         {
-            name: 'Contenedor fluido',
-            description: 'Contenedor que ocupa todo el ancho',
-            code: `<Container 
-  fluid={true} 
-  background="gray-100" 
-  padding="medium"
->
-  <p>Contenedor fluido de ancho completo</p>
-</Container>`,
-            props: {
-                fluid: true,
-                background: 'gray-100',
-                padding: 'medium',
-                children: 'Contenedor fluido'
-            }
-        },
-        {
-            name: 'Modal container',
-            description: 'Contenedor para contenido modal',
-            code: `<Container 
-  variant="modal" 
-  maxWidth="md" 
-  padding="large" 
-  rounded="xl" 
-  shadow="2xl"
->
-  <h2>Modal Title</h2>
-  <p>Contenido del modal</p>
-</Container>`,
+            name: '🚀 Combinaciones avanzadas',
+            description: 'Casos de uso complejos y realistas',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+  <Container variant="modal" maxWidth="lg" centered={true} shadow="2xl" rounded="xl" padding="xlarge">
+    <Text as="h2" size="2xl" variant="bold" color="primary">Modal de Confirmación</Text>
+    <Text size="medium" style={{marginTop: '12px', marginBottom: '16px'}}>
+      ¿Estás seguro de que quieres eliminar este elemento?
+    </Text>
+    <div style={{display: 'flex', gap: '12px', justifyContent: 'flex-end'}}>
+      <Container variant="default" padding="small" border="sm" rounded="md">
+        <Text variant="muted">Cancelar</Text>
+      </Container>
+      <Container variant="default" padding="small" background="primary" rounded="md">
+        <Text variant="bold">Confirmar</Text>
+      </Container>
+    </div>
+  </Container>
+  
+  <Container variant="card" padding="large" shadow="md" rounded="lg">
+    <Text as="h3" size="xlarge" variant="bold">Tarjeta de Producto</Text>
+    <Text variant="muted" size="small" style={{marginBottom: '8px'}}>Categoría: Electrónicos</Text>
+    <Text size="medium" style={{marginBottom: '12px'}}>
+      Descripción del producto con texto que respeta automáticamente el tema oscuro y claro.
+    </Text>
+    <Text variant="bold" size="large" color="success">€99.99</Text>
+  </Container>
+</div>`,
             props: {
                 variant: 'modal',
-                maxWidth: 'md',
-                padding: 'large',
-                rounded: 'xl',
+                maxWidth: 'lg',
+                centered: true,
                 shadow: '2xl',
-                children: 'Contenido modal'
+                rounded: 'xl',
+                padding: 'xlarge',
+                children: (
+                    <>
+                        <Text as="h2" size="2xl" variant="bold" color="primary">Modal de Confirmación</Text>
+                        <Text size="medium">¿Estás seguro de que quieres eliminar este elemento?</Text>
+                    </>
+                )
             }
         },
         {
-            name: 'Sidebar container',
-            description: 'Contenedor para barras laterales',
-            code: `<Container 
-  variant="sidebar" 
-  maxWidth="xs" 
-  padding="medium"
-  as="aside"
->
-  <nav>Enlaces de navegación</nav>
-</Container>`,
+            name: '📐 Ancho ajustado al contenido',
+            description: 'Contenedor que se ajusta al tamaño de su contenido',
+            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start'}}>
+  <Container fitContent={true} variant="card" padding="medium">
+    <Text variant="bold">Contenido corto</Text>
+  </Container>
+  <Container fitContent={true} variant="panel" padding="large">
+    <Text>Este contenedor se ajusta exactamente al ancho de este texto</Text>
+  </Container>
+  <Container fitContent={true} centered={true} variant="card" padding="medium" shadow="md">
+    <Text variant="bold" size="large">Fit content + centrado</Text>
+    <Text variant="muted">Se ajusta al contenido y se centra</Text>
+  </Container>
+</div>`,
             props: {
-                variant: 'sidebar',
-                maxWidth: 'xs',
+                fitContent: true,
+                variant: 'card',
                 padding: 'medium',
-                as: 'aside',
-                children: 'Contenido sidebar'
+                children: <Text variant="bold">Contenido corto</Text>
             }
         }
+
     ]
 };
+
+export default ContainerConfig;

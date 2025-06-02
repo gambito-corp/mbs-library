@@ -1,105 +1,97 @@
-import {
-    CONTAINER_VARIANTS,
-    STYLE_CONFIG,
-    SPACING_CONFIG,
-    SHADOW_CONFIG,
-    BORDER_CONFIG,
-    ROUNDED_CONFIG,
-    BACKGROUND_CONFIG,
-    MAX_WIDTH_CONFIG
-} from './Container.constants.js';
+import { CONTAINER_VARIANTS, CONTAINER_SIZES } from './Container.constants.js';
 
 /**
- * Genera las clases CSS para el componente Container
+ * Genera clases BEM para el componente Container
  */
-export const getContainerClasses = ({
-                                        variant = 'default',
-                                        maxWidth = 'full',
-                                        padding = 'medium',
-                                        margin = 'none',
-                                        centered = false,
-                                        fluid = false,
-                                        shadow = 'none',
-                                        border = 'none',
-                                        rounded = 'none',
-                                        background = 'transparent',
-                                        className = ''
-                                    }) => {
-    const baseClasses = 'container-component transition-all duration-200';
+export const getContainerBEMClasses = ({
+                                           variant = 'default',
+                                           size = 'medium',
+                                           maxWidth = 'full',
+                                           padding = 'medium',
+                                           margin = 'none',
+                                           centered = false,
+                                           fluid = false,
+                                           shadow = 'none',
+                                           fitContent = false,
+                                           border = 'none',
+                                           rounded = 'none',
+                                           background = 'transparent',
+                                           className = ''
+                                       }) => {
+    // BLOCK - Clase base del componente
+    const blockClass = 'container';
 
-    // Variante principal
-    const variantClasses = STYLE_CONFIG.default[variant] || '';
+    // MODIFIERS - Variaciones del bloque
+    const modifiers = [];
 
-    // Ancho máximo
-    const maxWidthClasses = fluid ? 'w-full' : (MAX_WIDTH_CONFIG[maxWidth] || 'max-w-full');
+    // Agregar modificador de variante (si no es default)
+    if (variant && variant !== 'default') {
+        modifiers.push(`${blockClass}--${variant}`);
+    }
 
-    // Espaciado
-    const paddingClasses = SPACING_CONFIG.padding[padding] || '';
-    const marginClasses = SPACING_CONFIG.margin[margin] || '';
+    // Agregar modificador de tamaño (si no es medium)
+    if (size && size !== 'medium') {
+        modifiers.push(`${blockClass}--${size}`);
+    }
 
-    // Centrado
-    const centeredClasses = centered ? 'mx-auto' : '';
+    // Agregar modificador de ancho máximo (si no es full)
+    if (maxWidth && maxWidth !== 'full') {
+        modifiers.push(`${blockClass}--max-${maxWidth}`);
+    }
 
-    // Efectos visuales
-    const shadowClasses = SHADOW_CONFIG[shadow] || '';
-    const borderClasses = BORDER_CONFIG[border] || '';
-    const roundedClasses = ROUNDED_CONFIG[rounded] || '';
-    const backgroundClasses = BACKGROUND_CONFIG[background] || '';
+    // Agregar modificador de padding (si no es medium)
+    if (padding && padding !== 'medium') {
+        modifiers.push(`${blockClass}--padding-${padding}`);
+    }
 
-    return [
-        baseClasses,
-        variantClasses,
-        maxWidthClasses,
-        paddingClasses,
-        marginClasses,
-        centeredClasses,
-        shadowClasses,
-        borderClasses,
-        roundedClasses,
-        backgroundClasses,
-        className
-    ].filter(Boolean).join(' ').trim();
+    // Agregar modificador de margin (si no es none)
+    if (margin && margin !== 'none') {
+        modifiers.push(`${blockClass}--margin-${margin}`);
+    }
+
+    // Agregar modificador de sombra (si no es none)
+    if (shadow && shadow !== 'none') {
+        modifiers.push(`${blockClass}--shadow-${shadow}`);
+    }
+
+    // Agregar modificador de borde (si no es none)
+    if (border && border !== 'none') {
+        modifiers.push(`${blockClass}--border-${border}`);
+    }
+
+    // Agregar modificador de bordes redondeados (si no es none)
+    if (rounded && rounded !== 'none') {
+        modifiers.push(`${blockClass}--rounded-${rounded}`);
+    }
+
+    // Agregar modificador de fondo (si no es transparent)
+    if (background && background !== 'transparent') {
+        modifiers.push(`${blockClass}--bg-${background}`);
+    }
+
+    if (fitContent) {
+        modifiers.push(`${blockClass}--fit-content`);
+    }
+
+    // Agregar modificadores de estado
+    if (centered) {
+        modifiers.push(`${blockClass}--centered`);
+    }
+
+    if (fluid) {
+        modifiers.push(`${blockClass}--fluid`);
+    }
+
+    return [blockClass, ...modifiers, className]
+        .filter(Boolean)
+        .join(' ')
+        .trim();
 };
 
-/**
- * Valida si una variante es válida
- */
 export const isValidVariant = (variant) => {
     return Object.keys(CONTAINER_VARIANTS).includes(variant);
 };
 
-/**
- * Obtiene la configuración de una variante
- */
-export const getVariantConfig = (variant) => {
-    return CONTAINER_VARIANTS[variant] || CONTAINER_VARIANTS.default;
-};
-
-/**
- * Combina clases CSS de forma segura
- */
-export const combineClasses = (...classes) => {
-    return classes
-        .filter(Boolean)
-        .join(' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-};
-
-/**
- * Calcula el ancho responsivo basado en el tamaño
- */
-export const getResponsiveWidth = (size, fluid) => {
-    if (fluid) return 'w-full';
-
-    const responsiveWidths = {
-        xs: 'w-full sm:max-w-xs',
-        small: 'w-full sm:max-w-sm',
-        medium: 'w-full md:max-w-md',
-        large: 'w-full lg:max-w-lg',
-        xlarge: 'w-full xl:max-w-xl',
-        full: 'w-full'
-    };
-
-    return responsiveWidths[size] || responsiveWidths.medium;
+export const isValidSize = (size) => {
+    return Object.keys(CONTAINER_SIZES).includes(size);
 };
