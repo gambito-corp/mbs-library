@@ -1,102 +1,341 @@
-/* ===== ESTILOS BASE PARA EL COMPONENTE BUTTON ===== */
-
-.button-component {
-    /* Estilos base heredados de Tailwind */
+/* ===== BLOCK: button ===== */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: none;
     position: relative;
-    overflow: hidden;
+    gap: 0.5rem;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    line-height: 1.5;
 }
 
-/* ===== CLASES PERSONALIZADAS DE TUS ESTILOS ORIGINALES ===== */
+/* ===== ELEMENTS ===== */
+.button__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
 
-/* Clase personalizada boton-success-m */
-.boton-success-m {
-    position: relative;
+.button__icon--loading {
+    animation: button-spin 1s linear infinite;
+}
+
+.button__text {
+    display: inline;
+    font: inherit;
+    white-space: nowrap;
+}
+
+/* ===== MODIFIERS: Tamaños ===== */
+.button--xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 24px;
+    gap: 0.25rem;
+}
+
+.button--small {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    min-height: 32px;
+    gap: 0.375rem;
+}
+
+.button--medium {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    min-height: 40px;
+    gap: 0.5rem;
+}
+
+.button--large {
+    padding: 1rem 1.5rem;
+    font-size: 1.125rem;
+    min-height: 48px;
+    gap: 0.625rem;
+}
+
+.button--xlarge {
+    padding: 1.25rem 2rem;
+    font-size: 1.25rem;
+    min-height: 56px;
+    gap: 0.75rem;
+}
+
+.button--game {
+    padding: 0.9375rem 1rem;
+    font-size: 1rem;
+    min-height: 50px;
+    gap: 0.5rem;
+}
+
+/* ===== MODIFIERS: Layout ===== */
+.button--full {
+    width: 100%;
+    justify-content: center;
+}
+
+.button--with-icon {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+/* ===== MODIFIERS: Variantes ===== */
+
+/* Primary - Plano y sólido */
+.button--primary {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: 1px solid transparent;
+}
+
+.button--primary:hover {
+    background-color: #1d4ed8;
+}
+
+.button--primary:focus {
+    background-color: #1d4ed8;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.button--primary:active {
+    background-color: #1e40af;
+}
+
+/* Gradient - Con degradado y sombra */
+.button--gradient {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2), 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.button--gradient:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25), 0 3px 6px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.button--gradient:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25), 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+.button--gradient:active {
+    background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+    transform: translateY(0);
+}
+
+/* Secondary */
+.button--secondary {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+}
+
+.button--secondary:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+}
+
+.button--secondary:focus {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.3);
+}
+
+/* Success */
+.button--success {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    box-shadow:
-            0 4px 15px rgba(16, 185, 129, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #ffffff;
+    border: 1px solid transparent;
 }
 
-.boton-success-m:hover {
-    box-shadow:
-            0 6px 20px rgba(16, 185, 129, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px) scale(1.02);
+.button--success:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
 }
 
-.boton-success-m:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow:
-            0 2px 10px rgba(16, 185, 129, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+.button--success:focus {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
 }
 
-/* Overlay para botones de juego */
-.button-overlay {
-    position: relative;
-}
-
-.button-overlay::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
-}
-
-.button-overlay:hover::before {
-    transform: translateX(100%);
-}
-
-/* Botón incorrecto con efecto especial */
-.button-incorrect {
-    position: relative;
+/* Danger */
+.button--danger {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    animation: shake 0.5s ease-in-out;
+    color: #ffffff;
+    border: 1px solid transparent;
 }
 
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-    20%, 40%, 60%, 80% { transform: translateX(2px); }
+.button--danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
 
-.button-incorrect:hover {
-    animation: shake 0.3s ease-in-out infinite;
+.button--danger:focus {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
 }
 
-/* ===== VARIANTES ESPECÍFICAS ===== */
+/* Warning */
+.button--warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+}
 
-/* Botón de juego reveal */
-.button-game-reveal {
+.button--warning:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+.button--warning:focus {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+}
+
+/* Outline */
+.button--outline {
+    background-color: transparent;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.button--outline:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.button--outline:focus {
+    background-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+/* Ghost */
+.button--ghost {
+    background-color: transparent;
+    color: #2563eb;
+    border: 1px solid transparent;
+}
+
+.button--ghost:hover {
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.button--ghost:focus {
+    background-color: rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+/* ===== VARIANTES DE JUEGO ===== */
+
+/* Game Reveal */
+.button--gameReveal {
     background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-    border: 2px solid #195b81;
     color: #195b81;
+    border: 2px solid #195b81;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-shadow:
-            0 4px 15px rgba(25, 91, 129, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 8px rgba(25, 91, 129, 0.15);
+    border-radius: 0.625rem;
 }
 
-.button-game-reveal:hover {
-    background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+.button--gameReveal:hover {
+    background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
     transform: translateY(-1px);
-    box-shadow:
-            0 6px 20px rgba(25, 91, 129, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(25, 91, 129, 0.2);
 }
 
-/* Botón de juego correcto */
-.button-game-correct {
+.button--gameReveal:focus {
+    box-shadow: 0 4px 12px rgba(25, 91, 129, 0.2), 0 0 0 3px rgba(25, 91, 129, 0.3);
+}
+
+/* Game Correct */
+.button--gameCorrect {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 0.625rem;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
     animation: correctPulse 0.6s ease-out;
+}
+
+.button--gameCorrect:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Game Incorrect */
+.button--gameIncorrect {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 0.625rem;
+    animation: incorrectShake 0.6s ease-out;
+}
+
+.button--gameIncorrect:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    animation: shake 0.3s ease-in-out infinite;
+}
+
+/* Game Restart */
+.button--gameRestart {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.button--gameRestart:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Game Exit */
+.button--gameExit {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.button--gameExit:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* ===== MODIFIERS: Estados ===== */
+
+.button--disabled,
+.button[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+}
+
+.button--loading {
+    cursor: wait;
+    pointer-events: none;
+}
+
+/* ===== ANIMACIONES ===== */
+
+@keyframes button-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @keyframes correctPulse {
@@ -105,173 +344,151 @@
     100% { transform: scale(1); }
 }
 
-/* Botón de juego incorrecto */
-.button-game-incorrect {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    animation: incorrectShake 0.6s ease-out;
-}
-
 @keyframes incorrectShake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
 }
 
-/* ===== EFECTOS DE CARGA ===== */
-
-.button-loading {
-    position: relative;
-    pointer-events: none;
-}
-
-.button-loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0 0 -8px;
-    border: 2px solid transparent;
-    border-top: 2px solid currentColor;
-    border-radius: 50%;
-    animation: buttonSpin 1s linear infinite;
-}
-
-@keyframes buttonSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* ===== TAMAÑOS ESPECIALES ===== */
-
-.button-icon-only {
-    aspect-ratio: 1;
-    padding: 0.5rem;
-}
-
-.button-full-width {
-    width: 100%;
-    justify-content: center;
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
 }
 
 /* ===== POSICIONES DE ICONOS ===== */
 
-.button-icon-top {
+.button--icon-top {
     flex-direction: column;
     gap: 0.25rem;
 }
 
-.button-icon-bottom {
+.button--icon-bottom {
     flex-direction: column-reverse;
     gap: 0.25rem;
 }
 
-.button-icon-left {
+.button--icon-left {
     flex-direction: row;
-    gap: 0.5rem;
 }
 
-.button-icon-right {
+.button--icon-right {
     flex-direction: row-reverse;
-    gap: 0.5rem;
 }
 
-/* ===== ESTADOS ESPECIALES ===== */
+/* ===== MODO OSCURO ===== */
 
-.button-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-    transform: none !important;
+[data-theme="dark"] .button--primary {
+    background-color: #1e40af;
+    color: #e5e7eb;
 }
 
-.button-disabled:hover {
-    transform: none !important;
-    box-shadow: none !important;
+[data-theme="dark"] .button--primary:hover {
+    background-color: #1e3a8a;
 }
 
-/* ===== FOCUS STATES ===== */
+[data-theme="dark"] .button--gradient {
+    background: linear-gradient(135deg, #1e40af 0%, #4338ca 100%);
+    color: #e5e7eb;
+}
 
-.button-component:focus-visible {
-    outline: 2px solid transparent;
+[data-theme="dark"] .button--gradient:hover {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+}
+
+[data-theme="dark"] .button--secondary {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    color: #e5e7eb;
+}
+
+[data-theme="dark"] .button--outline {
+    color: #60a5fa;
+    border-color: #60a5fa;
+}
+
+[data-theme="dark"] .button--outline:hover {
+    background-color: #60a5fa;
+    color: #111827;
+}
+
+[data-theme="dark"] .button--ghost {
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .button--ghost:hover {
+    background-color: rgba(96, 165, 250, 0.1);
+}
+
+[data-theme="dark"] .button--gameReveal {
+    background: linear-gradient(145deg, #1f2937 0%, #374151 100%);
+    color: #60a5fa;
+    border-color: #60a5fa;
+}
+
+[data-theme="dark"] .button--gameReveal:hover {
+    background: linear-gradient(145deg, #374151 0%, #4b5563 100%);
+}
+
+/* ===== ACCESIBILIDAD ===== */
+
+.button:focus-visible {
+    outline: 2px solid #2563eb;
     outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button,
+    .button__icon--loading,
+    .button--gameCorrect,
+    .button--gameIncorrect {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .button:hover {
+        transform: none !important;
+    }
 }
 
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 640px) {
-    .button-component {
-        min-height: 44px; /* Mejor accesibilidad en móvil */
+    .button {
+        min-height: 44px;
     }
 
-    .button-large,
-    .button-xlarge {
+    .button--large,
+    .button--xlarge {
         padding: 0.75rem 1.5rem;
         font-size: 1rem;
     }
-}
 
-/* ===== MODO OSCURO ===== */
-
-@media (prefers-color-scheme: dark) {
-    .button-game-reveal {
-        background: linear-gradient(145deg, #1f2937 0%, #374151 100%);
-        color: #60a5fa;
-        border-color: #60a5fa;
-    }
-
-    .button-game-reveal:hover {
-        background: linear-gradient(145deg, #374151 0%, #4b5563 100%);
+    .button--full {
+        width: 100%;
     }
 }
 
-/* ===== ACCESIBILIDAD ===== */
+/* ===== HIGH CONTRAST ===== */
 
-@media (prefers-reduced-motion: reduce) {
-    .button-component,
-    .button-overlay::before,
-    .boton-success-m,
-    .button-game-correct,
-    .button-game-incorrect {
-        animation: none !important;
-        transition: none !important;
+@media (prefers-contrast: high) {
+    .button {
+        border-width: 2px;
     }
 
-    .button-component:hover {
-        transform: none !important;
+    .button:focus-visible {
+        outline-width: 3px;
+        outline-offset: 3px;
     }
 }
 
 /* ===== PRINT STYLES ===== */
 
 @media print {
-    .button-component {
+    .button {
         background: white !important;
         color: black !important;
         border: 1px solid black !important;
         box-shadow: none !important;
         transform: none !important;
-    }
-}
-
-/* ===== HIGH CONTRAST ===== */
-
-@media (prefers-contrast: more) {
-    .button-component {
-        border: 2px solid currentColor;
-    }
-
-    .button-component:focus {
-        outline: 3px solid;
-        outline-offset: 2px;
-    }
-}
-
-
-/* También agregar soporte para menos contraste */
-@media (prefers-contrast: less) {
-    .button-component {
-        border: 1px solid rgba(0, 0, 0, 0.1);
     }
 }

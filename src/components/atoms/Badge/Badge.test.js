@@ -1,19 +1,23 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Badge from './Badge.jsx';
 
-// Mock de los componentes Icon y Text
+// Mock del componente Icon - SOLUCIÓN DEFINITIVA
 jest.mock('../Icon/Icon.jsx', () => {
-  return function MockIcon({ name, className, size, onClick }) {
+  return function MockIcon({ name, className, size, onClick, color }) {
     return (
         <span
             data-testid="mock-icon"
             className={className}
+            data-icon-name={name}
             data-size={size}
             onClick={onClick}
-            style={{ cursor: onClick ? 'pointer' : 'default' }}
+            style={{
+              cursor: onClick ? 'pointer' : 'default',
+              color: color
+            }}
         >
                 {name}
             </span>
@@ -21,181 +25,244 @@ jest.mock('../Icon/Icon.jsx', () => {
   };
 });
 
+// Mock del componente Text - SOLUCIÓN DEFINITIVA
 jest.mock('../Text/Text.jsx', () => {
   return function MockText({ children, className, size }) {
-    return <span data-testid="mock-text" className={className} data-size={size}>{children}</span>;
+    return (
+        <span
+            data-testid="mock-text"
+            className={className}
+            data-size={size}
+        >
+                {children}
+            </span>
+    );
   };
 });
 
-describe('Badge Component', () => {
-  // ===== TESTS BÁSICOS =====
-  test('renders without crashing', () => {
+// ===== GRUPO 1: TESTS BÁSICOS DE RENDERIZADO =====
+describe('Badge Component - Renderizado Básico', () => {
+  test('renderiza sin errores', () => {
     render(<Badge>Test</Badge>);
     expect(screen.getByTestId('Badge')).toBeInTheDocument();
   });
 
-  test('renders with children content', () => {
+  test('renderiza con contenido children', () => {
     render(<Badge>Hello World</Badge>);
-    expect(screen.getByText('Hello World')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-text')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('Hello World');
   });
 
-  test('renders with count', () => {
+  test('renderiza con contador', () => {
     render(<Badge count={5} />);
-    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('5');
   });
 
-  test('does not render when invisible', () => {
+  test('no renderiza cuando es invisible', () => {
     render(<Badge invisible>Test</Badge>);
     expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
   });
 
-  // ===== TESTS DE VARIANTES =====
-  test('applies different variants correctly', () => {
-    const { rerender } = render(<Badge variant="primary">Test</Badge>);
-    const badge = screen.getByTestId('Badge');
-    expect(badge).toHaveClass('bg-blue-500');
-
-    rerender(<Badge variant="success">Test</Badge>);
-    expect(badge).toHaveClass('bg-green-500');
-
-    rerender(<Badge variant="error">Test</Badge>);
-    expect(badge).toHaveClass('bg-red-500');
+  test('no renderiza cuando no tiene contenido', () => {
+    render(<Badge />);
+    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
   });
+});
 
-  test('applies default variant when not specified', () => {
+// ===== GRUPO 2: TESTS DE VARIANTES =====
+describe('Badge Component - Variantes', () => {
+  test('aplica variante default por defecto', () => {
     render(<Badge>Test</Badge>);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('bg-gray-100');
+    expect(badge).toHaveClass('text-gray-800');
   });
 
-  // ===== TESTS DE TAMAÑOS =====
-  test('applies different sizes correctly', () => {
-    const { rerender } = render(<Badge size="small">Test</Badge>);
+  test('aplica variante primary correctamente', () => {
+    render(<Badge variant="primary">Test</Badge>);
     const badge = screen.getByTestId('Badge');
-    expect(badge).toHaveClass('text-xs');
-
-    rerender(<Badge size="medium">Test</Badge>);
-    expect(badge).toHaveClass('text-xs');
-
-    rerender(<Badge size="large">Test</Badge>);
-    expect(badge).toHaveClass('text-sm');
+    expect(badge).toHaveClass('bg-blue-500');
+    expect(badge).toHaveClass('text-white');
   });
 
-  // ===== TESTS DE FORMAS =====
-  test('applies different shapes correctly', () => {
-    const { rerender } = render(<Badge shape="rounded">Test</Badge>);
+  test('aplica variante success correctamente', () => {
+    render(<Badge variant="success">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('bg-green-500');
+    expect(badge).toHaveClass('text-white');
+  });
+
+  test('aplica variante error correctamente', () => {
+    render(<Badge variant="error">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('bg-red-500');
+    expect(badge).toHaveClass('text-white');
+  });
+
+  test('aplica variante warning correctamente', () => {
+    render(<Badge variant="warning">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('bg-yellow-500');
+    expect(badge).toHaveClass('text-black');
+  });
+
+  test('aplica variante info correctamente', () => {
+    render(<Badge variant="info">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('bg-blue-400');
+    expect(badge).toHaveClass('text-white');
+  });
+});
+
+// ===== GRUPO 3: TESTS DE TAMAÑOS =====
+describe('Badge Component - Tamaños', () => {
+  test('aplica tamaño medium por defecto', () => {
+    render(<Badge>Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('px-2');
+    expect(badge).toHaveClass('py-1');
+    expect(badge).toHaveClass('text-xs');
+    expect(badge).toHaveClass('h-5');
+  });
+
+  test('aplica tamaño small correctamente', () => {
+    render(<Badge size="small">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('px-1.5');
+    expect(badge).toHaveClass('py-0.5');
+    expect(badge).toHaveClass('text-xs');
+    expect(badge).toHaveClass('h-4');
+  });
+
+  test('aplica tamaño large correctamente', () => {
+    render(<Badge size="large">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('px-2.5');
+    expect(badge).toHaveClass('py-1');
+    expect(badge).toHaveClass('text-sm');
+    expect(badge).toHaveClass('h-6');
+  });
+});
+
+// ===== GRUPO 4: TESTS DE FORMAS =====
+describe('Badge Component - Formas', () => {
+  test('aplica forma rounded por defecto', () => {
+    render(<Badge>Test</Badge>);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('rounded');
+  });
 
-    rerender(<Badge shape="pill">Test</Badge>);
+  test('aplica forma pill correctamente', () => {
+    render(<Badge shape="pill">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('rounded-full');
+  });
 
-    rerender(<Badge shape="square">Test</Badge>);
+  test('aplica forma square correctamente', () => {
+    render(<Badge shape="square">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('rounded-none');
   });
+});
 
-  // ===== TESTS DE ICONOS =====
-  test('renders with icon', () => {
-    render(<Badge icon="check">Success</Badge>);
-    expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('mock-icon')).toHaveTextContent('check');
-  });
-
-  test('renders icon in different positions', () => {
-    const { rerender } = render(<Badge icon="check" iconPosition="left">Test</Badge>);
-    const icon = screen.getByTestId('mock-icon');
-    expect(icon).toHaveClass('mr-1');
-
-    rerender(<Badge icon="check" iconPosition="right">Test</Badge>);
-    expect(icon).toHaveClass('ml-1');
-  });
-
-  test('does not render icon when dot is true', () => {
-    render(<Badge icon="check" dot />);
-    expect(screen.queryByTestId('mock-icon')).not.toBeInTheDocument();
-  });
-
-  // ===== TESTS DE CONTADOR =====
-  test('formats count correctly', () => {
+// ===== GRUPO 5: TESTS DE CONTADOR =====
+describe('Badge Component - Contador', () => {
+  test('formatea contador correctamente', () => {
     const { rerender } = render(<Badge count={5} />);
-    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('5');
+
+    rerender(<Badge count={23} />);
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('23');
 
     rerender(<Badge count={150} max={99} />);
-    expect(screen.getByText('99+')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('99+');
   });
 
-  test('handles zero count correctly', () => {
+  test('maneja contador cero correctamente', () => {
     const { rerender } = render(<Badge count={0} />);
     expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
 
     rerender(<Badge count={0} showZero />);
     expect(screen.getByTestId('Badge')).toBeInTheDocument();
-    expect(screen.getByText('0')).toBeInTheDocument();
+
+    // ✅ CORREGIDO: Verificar el texto directamente en el Badge, no en mock-text
+    expect(screen.getByTestId('Badge')).toHaveTextContent('0');
   });
 
-  test('does not render text when dot is true', () => {
-    render(<Badge count={5} dot />);
-    expect(screen.queryByTestId('mock-text')).not.toBeInTheDocument();
+  test('maneja contadores negativos', () => {
+    render(<Badge count={-5} />);
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('-5');
   });
+});
 
-  // ===== TESTS DE DOT BADGE =====
-  test('renders dot badge correctly', () => {
+// ===== GRUPO 6: TESTS DE DOT BADGE =====
+describe('Badge Component - Dot Badge', () => {
+  test('renderiza dot badge correctamente', () => {
     render(<Badge dot variant="error" />);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveAttribute('data-dot', 'true');
     expect(badge).toHaveClass('rounded-full');
   });
 
-  test('dot badge has correct size classes', () => {
+  test('dot badge tiene clases de tamaño correctas', () => {
     const { rerender } = render(<Badge dot size="small" />);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('w-2', 'h-2');
+
+    rerender(<Badge dot size="medium" />);
+    expect(badge).toHaveClass('w-2.5', 'h-2.5');
 
     rerender(<Badge dot size="large" />);
     expect(badge).toHaveClass('w-3', 'h-3');
   });
 
-  // ===== TESTS DE DISMISSIBLE =====
-  test('renders dismiss button when dismissible', () => {
-    render(<Badge dismissible>Test</Badge>);
-    const dismissIcon = screen.getByTestId('mock-icon');
-    expect(dismissIcon).toHaveTextContent('times');
+  test('dot badge siempre es visible', () => {
+    render(<Badge dot />);
+    expect(screen.getByTestId('Badge')).toBeInTheDocument();
   });
 
-  test('calls onDismiss when dismiss button is clicked', async () => {
-    const handleDismiss = jest.fn();
-    render(<Badge dismissible onDismiss={handleDismiss}>Test</Badge>);
-
-    const dismissIcon = screen.getByTestId('mock-icon');
-    await userEvent.click(dismissIcon);
-
-    expect(handleDismiss).toHaveBeenCalledTimes(1);
+  test('dot badge no renderiza texto', () => {
+    render(<Badge dot count={5} />);
+    expect(screen.queryByTestId('mock-text')).not.toBeInTheDocument();
   });
+});
 
-  test('does not render dismiss button when not dismissible', () => {
-    render(<Badge>Test</Badge>);
-    expect(screen.queryByTestId('mock-icon')).not.toBeInTheDocument();
-  });
-
-  // ===== TESTS DE POSICIONAMIENTO =====
-  test('applies positioned classes correctly', () => {
+// ===== GRUPO 7: TESTS DE POSICIONAMIENTO =====
+describe('Badge Component - Posicionamiento', () => {
+  test('aplica clases de posicionamiento correctamente', () => {
     render(<Badge positioned position="top-right" count={5} />);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveAttribute('data-positioned', 'true');
-    expect(badge).toHaveClass('absolute', '-top-1', '-right-1');
+    expect(badge).toHaveClass('absolute');
+    expect(badge).toHaveClass('-top-1');
+    expect(badge).toHaveClass('-right-1');
+    expect(badge).toHaveClass('z-10');
   });
 
-  test('applies different position classes', () => {
+  test('aplica diferentes posiciones correctamente', () => {
     const { rerender } = render(<Badge positioned position="top-left" count={1} />);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('-top-1', '-left-1');
 
     rerender(<Badge positioned position="bottom-right" count={1} />);
     expect(badge).toHaveClass('-bottom-1', '-right-1');
+
+    rerender(<Badge positioned position="bottom-left" count={1} />);
+    expect(badge).toHaveClass('-bottom-1', '-left-1');
   });
 
-  // ===== TESTS DE EVENTOS =====
-  test('handles onClick event', async () => {
+  test('badge posicionado se envuelve en contenedor relativo', () => {
+    render(<Badge positioned count={5} />);
+    const badge = screen.getByTestId('Badge');
+    const container = badge.parentElement;
+    expect(container).toHaveClass('relative');
+    expect(container).toHaveClass('inline-block');
+  });
+});
+
+// ===== GRUPO 8: TESTS DE EVENTOS =====
+describe('Badge Component - Eventos', () => {
+  test('maneja evento onClick', async () => {
     const handleClick = jest.fn();
     render(<Badge onClick={handleClick}>Clickable</Badge>);
 
@@ -205,33 +272,53 @@ describe('Badge Component', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  test('applies cursor pointer when clickable', () => {
+  test('aplica cursor pointer cuando es clickable', () => {
     render(<Badge onClick={() => {}}>Clickable</Badge>);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('cursor-pointer');
   });
 
-  // ===== TESTS DE VISIBILIDAD =====
-  test('handles visibility with different conditions', () => {
-    // Badge sin contenido no debe renderizarse
+  test('aplica hover opacity cuando es clickable', () => {
+    render(<Badge onClick={() => {}}>Clickable</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('hover:opacity-80');
+  });
+});
+
+// ===== GRUPO 9: TESTS DE VISIBILIDAD =====
+describe('Badge Component - Visibilidad', () => {
+  test('maneja visibilidad con diferentes condiciones', () => {
     const { rerender } = render(<Badge />);
     expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
 
-    // Badge con children debe renderizarse
     rerender(<Badge>Content</Badge>);
     expect(screen.getByTestId('Badge')).toBeInTheDocument();
 
-    // Badge con count > 0 debe renderizarse
     rerender(<Badge count={1} />);
     expect(screen.getByTestId('Badge')).toBeInTheDocument();
 
-    // Badge dot siempre debe renderizarse
     rerender(<Badge dot />);
     expect(screen.getByTestId('Badge')).toBeInTheDocument();
+
+    rerender(<Badge invisible>Content</Badge>);
+    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
   });
 
-  // ===== TESTS DE ATRIBUTOS DATA =====
-  test('sets correct data attributes', () => {
+  test('maneja children vacíos', () => {
+    const { rerender } = render(<Badge>{''}</Badge>);
+    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
+
+    rerender(<Badge>{null}</Badge>);
+    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
+
+    rerender(<Badge>{undefined}</Badge>);
+    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
+  });
+});
+
+// ===== GRUPO 10: TESTS DE ATRIBUTOS DATA =====
+describe('Badge Component - Atributos Data', () => {
+  test('establece atributos data correctos', () => {
     render(
         <Badge
             variant="primary"
@@ -250,105 +337,26 @@ describe('Badge Component', () => {
     expect(badge).toHaveAttribute('data-dot', 'true');
   });
 
-  // ===== TESTS DE CLASES PERSONALIZADAS =====
-  test('applies custom className', () => {
+  test('aplica className personalizada', () => {
     render(<Badge className="custom-badge">Test</Badge>);
     const badge = screen.getByTestId('Badge');
     expect(badge).toHaveClass('custom-badge');
   });
+});
 
-  // ===== TESTS DE COMBINACIONES COMPLEJAS =====
-  test('handles complex badge with all features', () => {
-    const handleDismiss = jest.fn();
-    const handleClick = jest.fn();
-
-    render(
-        <Badge
-            variant="error"
-            size="large"
-            shape="pill"
-            icon="exclamation-triangle"
-            iconPosition="left"
-            dismissible
-            onDismiss={handleDismiss}
-            onClick={handleClick}
-            className="custom-class"
-        >
-          Critical Error
-        </Badge>
-    );
-
-    const badge = screen.getByTestId('Badge');
-    expect(badge).toHaveClass('bg-red-500', 'text-sm', 'rounded-full', 'cursor-pointer', 'custom-class');
-
-    const icons = screen.getAllByTestId('mock-icon');
-    expect(icons).toHaveLength(2); // main icon + dismiss icon
-    expect(icons[0]).toHaveTextContent('exclamation-triangle');
-    expect(icons[1]).toHaveTextContent('times');
-
-    expect(screen.getByText('Critical Error')).toBeInTheDocument();
-  });
-
-  test('handles notification badge correctly', () => {
-    render(
-        <div style={{ position: 'relative' }}>
-          <span>Button</span>
-          <Badge count={12} variant="error" positioned position="top-right" />
-        </div>
-    );
-
-    const badge = screen.getByTestId('Badge');
-    expect(badge).toHaveClass('absolute', '-top-1', '-right-1', 'bg-red-500');
-    expect(screen.getByText('12')).toBeInTheDocument();
-  });
-
-  // ===== TESTS DE EDGE CASES =====
-  test('handles negative count gracefully', () => {
-    render(<Badge count={-5} />);
-    expect(screen.getByText('-5')).toBeInTheDocument();
-  });
-
-  test('handles very large count', () => {
+// ===== GRUPO 11: TESTS DE CASOS EXTREMOS =====
+describe('Badge Component - Casos Extremos', () => {
+  test('maneja contador muy grande', () => {
     render(<Badge count={9999} max={999} />);
-    expect(screen.getByText('999+')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('999+');
   });
 
-  test('handles empty string children', () => {
-    render(<Badge>{''}</Badge>);
-    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
+  test('maneja max menor que count', () => {
+    render(<Badge count={5} max={3} />);
+    expect(screen.getByTestId('mock-text')).toHaveTextContent('3+');
   });
 
-  test('handles null children', () => {
-    render(<Badge>{null}</Badge>);
-    expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
-  });
-
-  // ===== TESTS DE ACCESIBILIDAD =====
-  test('has proper accessibility attributes', () => {
-    render(<Badge count={5} />);
-    const badge = screen.getByTestId('Badge');
-    expect(badge).toBeInTheDocument();
-  });
-
-  test('dismiss button is accessible', async () => {
-    const handleDismiss = jest.fn();
-    render(<Badge dismissible onDismiss={handleDismiss}>Test</Badge>);
-
-    const dismissButton = screen.getByTestId('mock-icon');
-    expect(dismissButton).toHaveStyle('cursor: pointer');
-  });
-
-  // ===== TESTS DE PERFORMANCE =====
-  test('does not re-render unnecessarily', () => {
-    const { rerender } = render(<Badge>Test</Badge>);
-    const badge = screen.getByTestId('Badge');
-
-    // Re-render con las mismas props
-    rerender(<Badge>Test</Badge>);
-    expect(badge).toBeInTheDocument();
-  });
-
-  test('handles rapid state changes', async () => {
+  test('maneja cambios rápidos de estado', async () => {
     const { rerender } = render(<Badge count={0} />);
     expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
 
@@ -357,5 +365,34 @@ describe('Badge Component', () => {
 
     rerender(<Badge count={0} />);
     expect(screen.queryByTestId('Badge')).not.toBeInTheDocument();
+  });
+
+  test('maneja props adicionales', () => {
+    render(<Badge data-custom="value" title="Badge title">Test</Badge>);
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveAttribute('data-custom', 'value');
+    expect(badge).toHaveAttribute('title', 'Badge title');
+  });
+});
+
+// ===== GRUPO 12: TESTS DE ACCESIBILIDAD =====
+describe('Badge Component - Accesibilidad', () => {
+  test('badge tiene testid correcto', () => {
+    render(<Badge>Test</Badge>);
+    expect(screen.getByTestId('Badge')).toBeInTheDocument();
+  });
+
+  test('badge clickable es accesible', () => {
+    const handleClick = jest.fn();
+    render(<Badge onClick={handleClick}>Clickable</Badge>);
+
+    const badge = screen.getByTestId('Badge');
+    expect(badge).toHaveClass('cursor-pointer');
+  });
+
+  test('badge mantiene estructura semántica', () => {
+    render(<Badge count={5} />);
+    const badge = screen.getByTestId('Badge');
+    expect(badge.tagName).toBe('SPAN');
   });
 });

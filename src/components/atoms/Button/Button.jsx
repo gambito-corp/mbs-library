@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BUTTON_VARIANTS, BUTTON_SIZES } from './Button.constants.js';
-import { getButtonClasses } from './Button.utils.js';
+import { getButtonBEMClasses, getContrastTextColor } from './Button.utils.js';
 import Icon from '../Icon/Icon.jsx';
 import Text from '../Text/Text.jsx';
 import './Button.css';
@@ -16,9 +16,10 @@ const Button = ({
                     color,
                     textColor,
 
+                    // Tamaño
                     size = 'medium',
 
-                    // Iconos (integración con tu componente Icon)
+                    // Iconos
                     icon,
                     iconPosition = 'left',
                     iconSize,
@@ -49,17 +50,21 @@ const Button = ({
                     // Props adicionales
                     ...props
                 }) => {
-    // Generar clases usando utilidades
-    const buttonClasses = getButtonClasses({
+    // Generar clases BEM
+    const buttonClasses = getButtonBEMClasses({
         variant,
         size,
         fullWidth,
         disabled,
         loading,
         hasIcon: !!icon,
+        iconPosition,
         color,
         className
     });
+
+    // Determinar color de texto automático
+    const autoTextColor = textColor || getContrastTextColor(variant, color);
 
     // Determinar el elemento a renderizar
     const Component = as === 'link' ? 'a' : as;
@@ -76,6 +81,7 @@ const Button = ({
         className: buttonClasses,
         'data-testid': 'Button',
         'aria-disabled': disabled || loading,
+        'aria-busy': loading,
         ...props
     };
 
@@ -85,9 +91,10 @@ const Button = ({
             return (
                 <Icon
                     name="spinner"
-                    size={iconSize || (size === 'small' ? 'xs' : size === 'large' ? 'medium' : 'small')}
-                    className="animate-spin"
-                    color={iconColor}
+                    size={iconSize || getIconSizeFromButtonSize(size)}
+                    className="button__icon button__icon--loading"
+                    color={iconColor || autoTextColor}
+                    ariaLabel="Cargando"
                 />
             );
         }
@@ -96,8 +103,9 @@ const Button = ({
             return (
                 <Icon
                     name={icon}
-                    size={iconSize || (size === 'small' ? 'xs' : size === 'large' ? 'medium' : 'small')}
-                    color={iconColor}
+                    size={iconSize || getIconSizeFromButtonSize(size)}
+                    className="button__icon"
+                    color={iconColor || autoTextColor}
                 />
             );
         }
@@ -105,10 +113,24 @@ const Button = ({
         return null;
     };
 
+    // Renderizar texto
+    const renderText = (content) => {
+        return (
+            <Text
+                size={getTextSizeFromButtonSize(size)}
+                className="button__text"
+                textColor={autoTextColor}
+            >
+                {content}
+            </Text>
+        );
+    };
+
     // Renderizar contenido del botón
     const renderContent = () => {
         const iconElement = renderIcon();
-        const hasText = children && !loading;
+        const textContent = loading ? 'Cargando...' : children;
+        const hasText = textContent && typeof textContent !== 'undefined';
 
         // Solo icono (sin texto)
         if (iconElement && !hasText) {
@@ -117,40 +139,48 @@ const Button = ({
 
         // Solo texto (sin icono)
         if (!iconElement && hasText) {
-            return (
-                <Text
-                    size={size === 'small' ? 'small' : size === 'large' ? 'medium' : 'small'}
-                    className="button-text"
-                    textColor={textColor}
-                >
-                    {children}
-                </Text>
-            );
+            return renderText(textContent);
         }
 
         // Icono + texto
         if (iconElement && hasText) {
-            return (
-                <>
-                    {iconPosition === 'left' && iconElement}
-                    {iconPosition === 'top' && iconElement}
+            const textElement = renderText(textContent);
 
-                    <Text
-                        size={size === 'small' ? 'small' : size === 'large' ? 'medium' : 'small'}
-                        className="button-text"
-                        textColor={textColor}
-                    >
-                        {loading ? 'Cargando...' : children}
-                    </Text>
-
-                    {iconPosition === 'right' && iconElement}
-                    {iconPosition === 'bottom' && iconElement}
-                </>
-            );
+            switch (iconPosition) {
+                case 'top':
+                    return (
+                        <>
+                            {iconElement}
+                            {textElement}
+                        </>
+                    );
+                case 'bottom':
+                    return (
+                        <>
+                            {textElement}
+                            {iconElement}
+                        </>
+                    );
+                case 'right':
+                    return (
+                        <>
+                            {textElement}
+                            {iconElement}
+                        </>
+                    );
+                case 'left':
+                default:
+                    return (
+                        <>
+                            {iconElement}
+                            {textElement}
+                        </>
+                    );
+            }
         }
 
         // Fallback
-        return children;
+        return textContent;
     };
 
     return (
@@ -160,41 +190,83 @@ const Button = ({
     );
 };
 
+// Funciones auxiliares
+const getIconSizeFromButtonSize = (size) => {
+    switch (size) {
+        case 'xs':
+            return 'xs';
+        case 'small':
+            return 'small';
+        case 'large':
+            return 'medium';
+        case 'xlarge':
+            return 'large';
+        case 'game':
+            return 'small';
+        case 'medium':
+        default:
+            return 'small';
+    }
+};
+
+const getTextSizeFromButtonSize = (size) => {
+    switch (size) {
+        case 'xs':
+            return 'xs';
+        case 'small':
+            return 'small';
+        case 'large':
+            return 'medium';
+        case 'xlarge':
+            return 'large';
+        case 'game':
+            return 'small';
+        case 'medium':
+        default:
+            return 'small';
+    }
+};
+
 Button.propTypes = {
+    // Contenido
     children: PropTypes.node,
+
+    // Tipo y variante
     type: PropTypes.oneOf(['button', 'submit', 'reset']),
     variant: PropTypes.oneOf(Object.keys(BUTTON_VARIANTS)),
+    color: PropTypes.string, // ✅ QUITAR restricción de valores específicos
+    textColor: PropTypes.string, // ✅ Permitir cualquier string
+
+    // Tamaño
     size: PropTypes.oneOf(Object.keys(BUTTON_SIZES)),
-    textColor: PropTypes.string, // ✅ NUEVA PROP
-    iconColor: PropTypes.string, // ✅ NUEVA PROP
-    color: PropTypes.string,
+
+    // Iconos
     icon: PropTypes.string,
     iconPosition: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
     iconSize: PropTypes.string,
+    iconColor: PropTypes.string,
+
+    // Estados
     loading: PropTypes.bool,
     disabled: PropTypes.bool,
+
+    // Layout
     fullWidth: PropTypes.bool,
+
+    // Elemento HTML
     as: PropTypes.oneOf(['button', 'a', 'link', 'div']),
     href: PropTypes.string,
     target: PropTypes.string,
+
+    // Eventos
     onClick: PropTypes.func,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
-    className: PropTypes.string
-};
 
-Button.defaultProps = {
-    type: 'button',
-    variant: 'primary',
-    size: 'medium',
-    iconPosition: 'left',
-    loading: false,
-    disabled: false,
-    fullWidth: false,
-    as: 'button',
-    className: ''
+    // Estilos
+    className: PropTypes.string
 };
 
 export default Button;

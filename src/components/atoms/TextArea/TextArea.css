@@ -1,1 +1,343 @@
-.TextArea {}
+/* ===== BLOCK: textarea-container ===== */
+.textarea-container {
+    display: block;
+    position: relative;
+}
+
+.textarea-container--full {
+    width: 100%;
+}
+
+/* ===== BLOCK: textarea ===== */
+.textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: #ffffff;
+    color: #111827;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 3rem;
+}
+
+.textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* ===== ELEMENT: textarea__wrapper ===== */
+.textarea__wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== ELEMENT: textarea__label ===== */
+.textarea__label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.textarea__label--required::after {
+    content: ' *';
+    color: #ef4444;
+}
+
+/* ===== ELEMENT: textarea__icon ===== */
+.textarea__icon {
+    position: absolute;
+    color: #6b7280;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.textarea__icon--left {
+    left: 0.75rem;
+    top: 0.75rem;
+}
+
+.textarea__icon--right {
+    right: 0.75rem;
+    top: 0.75rem;
+}
+
+.textarea__icon--clickable {
+    pointer-events: auto;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.textarea__icon--clickable:hover {
+    color: #374151;
+}
+
+/* ===== ELEMENT: textarea__message ===== */
+.textarea__message {
+    display: block;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    color: #6b7280;
+}
+
+.textarea__message--error {
+    color: #ef4444;
+}
+
+.textarea__message--success {
+    color: #10b981;
+}
+
+.textarea__message--warning {
+    color: #f59e0b;
+}
+
+/* ===== ELEMENT: textarea__counter ===== */
+.textarea__counter {
+    display: block;
+    font-size: 0.75rem;
+    text-align: right;
+    margin-top: 0.5rem;
+    color: #6b7280;
+}
+
+.textarea__counter--warning {
+    color: #f59e0b;
+}
+
+.textarea__counter--danger {
+    color: #ef4444;
+}
+
+/* ===== MODIFIERS: Tamaños ===== */
+.textarea--small {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    min-height: 2.5rem;
+}
+
+.textarea--medium {
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-height: 3rem;
+}
+
+.textarea--large {
+    padding: 1rem;
+    font-size: 1.125rem;
+    min-height: 4rem;
+}
+
+/* ===== MODIFIERS: Variantes ===== */
+.textarea--success {
+    border-color: #10b981;
+    background-color: #f0fdf4;
+}
+
+.textarea--success:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.textarea--error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.textarea--error:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.textarea--warning {
+    border-color: #f59e0b;
+    background-color: #fffbeb;
+}
+
+.textarea--warning:focus {
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+/* ===== MODIFIERS: Estados ===== */
+.textarea--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+    color: #6b7280;
+}
+
+.textarea--readonly {
+    background-color: #f9fafb;
+    cursor: default;
+}
+
+.textarea--full {
+    width: 100%;
+}
+
+.textarea--auto-grow {
+    resize: none;
+    overflow: hidden;
+}
+
+/* ===== MODIFIERS: Con iconos ===== */
+.textarea--with-icon-left {
+    padding-left: 2.5rem;
+}
+
+.textarea--with-icon-right {
+    padding-right: 2.5rem;
+}
+
+.textarea--small.textarea--with-icon-left {
+    padding-left: 2rem;
+}
+
+.textarea--small.textarea--with-icon-right {
+    padding-right: 2rem;
+}
+
+.textarea--large.textarea--with-icon-left {
+    padding-left: 3rem;
+}
+
+.textarea--large.textarea--with-icon-right {
+    padding-right: 3rem;
+}
+
+/* ===== MODIFIERS: Resize ===== */
+.textarea--resize-none {
+    resize: none;
+}
+
+.textarea--resize-horizontal {
+    resize: horizontal;
+}
+
+.textarea--resize-vertical {
+    resize: vertical;
+}
+
+.textarea--resize-both {
+    resize: both;
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .textarea {
+    background-color: #1f2937;
+    color: #f9fafb;
+    border-color: #4b5563;
+}
+
+[data-theme="dark"] .textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+[data-theme="dark"] .textarea::placeholder {
+    color: #6b7280;
+}
+
+[data-theme="dark"] .textarea__label {
+    color: #f9fafb;
+}
+
+[data-theme="dark"] .textarea__icon {
+    color: #9ca3af;
+}
+
+[data-theme="dark"] .textarea__icon--clickable:hover {
+    color: #f9fafb;
+}
+
+[data-theme="dark"] .textarea__message {
+    color: #9ca3af;
+}
+
+[data-theme="dark"] .textarea__counter {
+    color: #9ca3af;
+}
+
+[data-theme="dark"] .textarea--disabled {
+    background-color: #374151;
+    color: #6b7280;
+}
+
+[data-theme="dark"] .textarea--readonly {
+    background-color: #374151;
+}
+
+[data-theme="dark"] .textarea--success {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme="dark"] .textarea--error {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+[data-theme="dark"] .textarea--warning {
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+/* ===== ACCESIBILIDAD ===== */
+.textarea:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .textarea,
+    .textarea__icon {
+        transition: none !important;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .textarea {
+        min-height: 3rem;
+    }
+
+    .textarea--small {
+        min-height: 2.5rem;
+    }
+
+    .textarea--large {
+        min-height: 3.5rem;
+    }
+}
+
+/* ===== HIGH CONTRAST ===== */
+@media (prefers-contrast: high) {
+    .textarea {
+        border-width: 2px;
+    }
+
+    .textarea:focus {
+        outline-width: 3px;
+        outline-offset: 3px;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .textarea {
+        background: white !important;
+        color: black !important;
+        border: 1px solid black !important;
+        box-shadow: none !important;
+    }
+}

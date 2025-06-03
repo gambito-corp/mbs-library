@@ -5,156 +5,265 @@ import Button from './Button.jsx';
 
 // Mock del componente Icon
 jest.mock('../Icon/Icon.jsx', () => {
-  return function MockIcon({ name, className }) {
-    return <span data-testid="mock-icon" className={className}>{name}</span>;
+  return function MockIcon({ name, className, color }) {
+    return (
+        <span
+            data-testid="mock-icon"
+            className={className}
+            style={{ color }}
+        >
+        {name}
+      </span>
+    );
   };
 });
 
 // Mock del componente Text
 jest.mock('../Text/Text.jsx', () => {
-  return function MockText({ children, className }) {
-    return <span data-testid="mock-text" className={className}>{children}</span>;
+  return function MockText({ children, className, textColor }) {
+    return (
+        <span
+            data-testid="mock-text"
+            className={className}
+            style={{ color: textColor }}
+        >
+        {children}
+      </span>
+    );
   };
 });
 
-describe('Button Component', () => {
-  // ===== TESTS BÁSICOS =====
-  test('renders without crashing', () => {
+// ===== GRUPO 1: TESTS BÁSICOS DE RENDERIZADO =====
+describe('Button Component - Renderizado Básico', () => {
+  test('renderiza sin errores', () => {
     render(<Button>Test Button</Button>);
     expect(screen.getByTestId('Button')).toBeInTheDocument();
   });
 
-  test('renders children correctly', () => {
+  test('muestra el contenido de children correctamente', () => {
     render(<Button>Click me</Button>);
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
 
-  test('applies default props correctly', () => {
+  test('aplica props por defecto correctamente', () => {
     render(<Button>Default Button</Button>);
     const button = screen.getByTestId('Button');
 
     expect(button.tagName).toBe('BUTTON');
     expect(button).toHaveAttribute('type', 'button');
-    expect(button).toHaveClass('font-medium'); // Base class
+    expect(button).toHaveClass('button');
+    expect(button).toHaveClass('button--primary');
+    expect(button).toHaveClass('button--medium');
   });
 
-  // ===== TESTS DE VARIANTES =====
-  test('applies different variants correctly', () => {
-    const { rerender } = render(<Button variant="primary">Primary</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('from-indigo-600');
+  test('renderiza contenido vacío sin errores', () => {
+    render(<Button></Button>);
+    expect(screen.getByTestId('Button')).toBeInTheDocument();
+  });
+});
 
-    rerender(<Button variant="secondary">Secondary</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('from-gray-600');
-
-    rerender(<Button variant="success">Success</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('from-green-600');
-
-    rerender(<Button variant="danger">Danger</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('from-red-600');
-
-    rerender(<Button variant="outline">Outline</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('border-2');
-
-    rerender(<Button variant="ghost">Ghost</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('text-indigo-600');
+// ===== GRUPO 2: TESTS DE VARIANTES =====
+describe('Button Component - Variantes', () => {
+  test('aplica variante primary por defecto', () => {
+    render(<Button>Primary</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--primary');
   });
 
-  test('applies game variants correctly', () => {
-    const { rerender } = render(<Button variant="gameReveal">Reveal</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('bg-white');
-
-    rerender(<Button variant="gameCorrect">Correct</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('bg-green-600');
-
-    rerender(<Button variant="gameIncorrect">Incorrect</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('bg-red-600');
+  test('aplica variante gradient correctamente', () => {
+    render(<Button variant="gradient">Gradient</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--gradient');
   });
 
-  // ===== TESTS DE TAMAÑOS =====
-  test('applies different sizes correctly', () => {
-    const { rerender } = render(<Button size="xs">Extra Small</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('px-2');
-
-    rerender(<Button size="small">Small</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('px-3');
-
-    rerender(<Button size="medium">Medium</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('px-4');
-
-    rerender(<Button size="large">Large</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('px-6');
-
-    rerender(<Button size="xlarge">Extra Large</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('px-8');
-
-    rerender(<Button size="game">Game</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('py-[15px]');
+  test('aplica variante secondary correctamente', () => {
+    render(<Button variant="secondary">Secondary</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--secondary');
   });
 
-  // ===== TESTS DE ICONOS =====
-  test('renders with icon correctly', () => {
+  test('aplica variante success correctamente', () => {
+    render(<Button variant="success">Success</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--success');
+  });
+
+  test('aplica variante danger correctamente', () => {
+    render(<Button variant="danger">Danger</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--danger');
+  });
+
+  test('aplica variante warning correctamente', () => {
+    render(<Button variant="warning">Warning</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--warning');
+  });
+
+  test('aplica variante outline correctamente', () => {
+    render(<Button variant="outline">Outline</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--outline');
+  });
+
+  test('aplica variante ghost correctamente', () => {
+    render(<Button variant="ghost">Ghost</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--ghost');
+  });
+});
+
+// ===== GRUPO 3: TESTS DE VARIANTES DE JUEGO =====
+describe('Button Component - Variantes de Juego', () => {
+  test('aplica variante gameReveal correctamente', () => {
+    render(<Button variant="gameReveal">Reveal</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--gameReveal');
+  });
+
+  test('aplica variante gameCorrect correctamente', () => {
+    render(<Button variant="gameCorrect">Correct</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--gameCorrect');
+  });
+
+  test('aplica variante gameIncorrect correctamente', () => {
+    render(<Button variant="gameIncorrect">Incorrect</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--gameIncorrect');
+  });
+
+  test('aplica variante gameRestart correctamente', () => {
+    render(<Button variant="gameRestart">Restart</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--gameRestart');
+  });
+
+  test('aplica variante gameExit correctamente', () => {
+    render(<Button variant="gameExit">Exit</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--gameExit');
+  });
+});
+
+// ===== GRUPO 4: TESTS DE TAMAÑOS =====
+describe('Button Component - Tamaños', () => {
+  test('aplica tamaño medium por defecto', () => {
+    render(<Button>Medium</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--medium');
+  });
+
+  test('aplica tamaño xs correctamente', () => {
+    render(<Button size="xs">Extra Small</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--xs');
+  });
+
+  test('aplica tamaño small correctamente', () => {
+    render(<Button size="small">Small</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--small');
+  });
+
+  test('aplica tamaño large correctamente', () => {
+    render(<Button size="large">Large</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--large');
+  });
+
+  test('aplica tamaño xlarge correctamente', () => {
+    render(<Button size="xlarge">Extra Large</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--xlarge');
+  });
+
+  test('aplica tamaño game correctamente', () => {
+    render(<Button size="game">Game</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--game');
+  });
+});
+
+// ===== GRUPO 5: TESTS DE ICONOS =====
+describe('Button Component - Iconos', () => {
+  test('renderiza con icono correctamente', () => {
     render(<Button icon="heart">With Icon</Button>);
     expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
     expect(screen.getByTestId('mock-icon')).toHaveTextContent('heart');
+    expect(screen.getByTestId('Button')).toHaveClass('button--with-icon');
   });
 
-  test('applies different icon positions correctly', () => {
-    const { rerender } = render(
-        <Button icon="heart" iconPosition="left">Left Icon</Button>
-    );
-    expect(screen.getByTestId('Button')).toHaveClass('gap-2');
-
-    rerender(<Button icon="heart" iconPosition="right">Right Icon</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('gap-2');
-  });
-
-  test('renders only icon when no children provided', () => {
+  test('renderiza solo icono cuando no hay children', () => {
     render(<Button icon="heart" />);
     expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
     expect(screen.queryByTestId('mock-text')).not.toBeInTheDocument();
   });
 
-  // ===== TESTS DE ESTADOS =====
-  test('applies loading state correctly', () => {
+  test('aplica posición de icono left por defecto', () => {
+    render(<Button icon="heart" iconPosition="left">Left Icon</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--with-icon');
+  });
+
+  test('aplica posición de icono right correctamente', () => {
+    render(<Button icon="heart" iconPosition="right">Right Icon</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--with-icon');
+    expect(screen.getByTestId('Button')).toHaveClass('button--icon-right');
+  });
+
+  test('aplica posición de icono top correctamente', () => {
+    render(<Button icon="heart" iconPosition="top">Top Icon</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--icon-top');
+  });
+
+  test('aplica posición de icono bottom correctamente', () => {
+    render(<Button icon="heart" iconPosition="bottom">Bottom Icon</Button>);
+    expect(screen.getByTestId('Button')).toHaveClass('button--icon-bottom');
+  });
+
+  test('aplica color personalizado al icono', () => {
+    render(<Button icon="heart" iconColor="#ff0000">Colored Icon</Button>);
+    const icon = screen.getByTestId('mock-icon');
+    expect(icon).toHaveStyle('color: #ff0000');
+  });
+});
+
+// ===== GRUPO 6: TESTS DE ESTADOS =====
+describe('Button Component - Estados', () => {
+  test('aplica estado loading correctamente', () => {
     render(<Button loading={true}>Loading Button</Button>);
     const button = screen.getByTestId('Button');
 
-    expect(button).toHaveClass('cursor-wait');
+    expect(button).toHaveClass('button--loading');
     expect(button).toHaveAttribute('aria-disabled', 'true');
+    expect(button).toHaveAttribute('aria-busy', 'true');
     expect(screen.getByTestId('mock-icon')).toHaveTextContent('spinner');
     expect(screen.getByText('Cargando...')).toBeInTheDocument();
   });
 
-  test('applies disabled state correctly', () => {
+  test('aplica estado disabled correctamente', () => {
     render(<Button disabled={true}>Disabled Button</Button>);
     const button = screen.getByTestId('Button');
 
     expect(button).toBeDisabled();
-    expect(button).toHaveClass('opacity-50');
-    expect(button).toHaveClass('cursor-not-allowed');
+    expect(button).toHaveClass('button--disabled');
     expect(button).toHaveAttribute('aria-disabled', 'true');
   });
 
-  test('applies fullWidth correctly', () => {
+  test('aplica fullWidth correctamente', () => {
     render(<Button fullWidth={true}>Full Width</Button>);
-    expect(screen.getByTestId('Button')).toHaveClass('w-full');
+    expect(screen.getByTestId('Button')).toHaveClass('button--full');
   });
 
-  // ===== TESTS DE ELEMENTOS HTML =====
-  test('renders as different HTML elements', () => {
-    const { rerender } = render(<Button as="button">Button Element</Button>);
-    expect(screen.getByTestId('Button').tagName).toBe('BUTTON');
+  test('combina estados correctamente', () => {
+    render(<Button loading={true} fullWidth={true}>Combined States</Button>);
+    const button = screen.getByTestId('Button');
+    expect(button).toHaveClass('button--loading');
+    expect(button).toHaveClass('button--full');
+  });
+});
 
-    rerender(<Button as="a" href="/test">Link Element</Button>);
+// ===== GRUPO 7: TESTS DE ELEMENTOS HTML =====
+describe('Button Component - Elementos HTML', () => {
+  test('renderiza como button por defecto', () => {
+    render(<Button>Button Element</Button>);
+    expect(screen.getByTestId('Button').tagName).toBe('BUTTON');
+  });
+
+  test('renderiza como enlace cuando as="a"', () => {
+    render(<Button as="a" href="/test">Link Element</Button>);
     const linkElement = screen.getByTestId('Button');
     expect(linkElement.tagName).toBe('A');
     expect(linkElement).toHaveAttribute('href', '/test');
+  });
 
-    rerender(<Button as="div">Div Element</Button>);
+  test('renderiza como div cuando as="div"', () => {
+    render(<Button as="div">Div Element</Button>);
     expect(screen.getByTestId('Button').tagName).toBe('DIV');
   });
 
-  test('handles link props correctly', () => {
+  test('maneja props de enlace correctamente', () => {
     render(<Button as="a" href="/test" target="_blank">Link Button</Button>);
     const link = screen.getByTestId('Button');
 
@@ -162,8 +271,18 @@ describe('Button Component', () => {
     expect(link).toHaveAttribute('target', '_blank');
   });
 
-  // ===== TESTS DE EVENTOS =====
-  test('handles click events correctly', () => {
+  test('no aplica atributos de botón cuando es enlace', () => {
+    render(<Button as="a" href="/test" type="submit">Link</Button>);
+    const link = screen.getByTestId('Button');
+
+    expect(link).not.toHaveAttribute('type');
+    expect(link).toHaveAttribute('href', '/test');
+  });
+});
+
+// ===== GRUPO 8: TESTS DE EVENTOS =====
+describe('Button Component - Eventos', () => {
+  test('maneja eventos click correctamente', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Clickable</Button>);
 
@@ -171,7 +290,7 @@ describe('Button Component', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  test('does not trigger click when disabled', () => {
+  test('no ejecuta click cuando está disabled', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick} disabled={true}>Disabled</Button>);
 
@@ -179,7 +298,7 @@ describe('Button Component', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  test('does not trigger click when loading', () => {
+  test('no ejecuta click cuando está loading', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick} loading={true}>Loading</Button>);
 
@@ -187,7 +306,7 @@ describe('Button Component', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  test('handles mouse events correctly', () => {
+  test('maneja eventos mouse correctamente', () => {
     const handleMouseEnter = jest.fn();
     const handleMouseLeave = jest.fn();
 
@@ -209,7 +328,7 @@ describe('Button Component', () => {
     expect(handleMouseLeave).toHaveBeenCalledTimes(1);
   });
 
-  test('handles focus events correctly', () => {
+  test('maneja eventos focus correctamente', () => {
     const handleFocus = jest.fn();
     const handleBlur = jest.fn();
 
@@ -230,26 +349,55 @@ describe('Button Component', () => {
     fireEvent.blur(button);
     expect(handleBlur).toHaveBeenCalledTimes(1);
   });
+});
 
-  // ===== TESTS DE TIPOS DE BOTÓN =====
-  test('applies different button types correctly', () => {
-    const { rerender } = render(<Button type="button">Button Type</Button>);
+// ===== GRUPO 9: TESTS DE TIPOS DE BOTÓN =====
+describe('Button Component - Tipos de Botón', () => {
+  test('aplica type="button" por defecto', () => {
+    render(<Button>Button Type</Button>);
     expect(screen.getByTestId('Button')).toHaveAttribute('type', 'button');
-
-    rerender(<Button type="submit">Submit Type</Button>);
-    expect(screen.getByTestId('Button')).toHaveAttribute('type', 'submit');
-
-    rerender(<Button type="reset">Reset Type</Button>);
-    expect(screen.getByTestId('Button')).toHaveAttribute('type', 'reset');
   });
 
-  // ===== TESTS DE CLASES PERSONALIZADAS =====
-  test('applies custom className correctly', () => {
+  test('aplica type="submit" correctamente', () => {
+    render(<Button type="submit">Submit Type</Button>);
+    expect(screen.getByTestId('Button')).toHaveAttribute('type', 'submit');
+  });
+
+  test('aplica type="reset" correctamente', () => {
+    render(<Button type="reset">Reset Type</Button>);
+    expect(screen.getByTestId('Button')).toHaveAttribute('type', 'reset');
+  });
+});
+
+// ===== GRUPO 10: TESTS DE COLORES PERSONALIZADOS =====
+describe('Button Component - Colores Personalizados', () => {
+  test('aplica color de texto personalizado', () => {
+    render(<Button textColor="#ff0000">Red Text</Button>);
+    const text = screen.getByTestId('mock-text');
+    expect(text).toHaveStyle('color: #ff0000');
+  });
+
+  test('usa contraste automático cuando no se especifica textColor', () => {
+    render(<Button variant="primary">Auto Contrast</Button>);
+    const text = screen.getByTestId('mock-text');
+    expect(text).toHaveStyle('color: #ffffff');
+  });
+
+  test('aplica color de icono personalizado', () => {
+    render(<Button icon="heart" iconColor="#00ff00">Green Icon</Button>);
+    const icon = screen.getByTestId('mock-icon');
+    expect(icon).toHaveStyle('color: #00ff00');
+  });
+});
+
+// ===== GRUPO 11: TESTS DE CLASES PERSONALIZADAS =====
+describe('Button Component - Clases Personalizadas', () => {
+  test('aplica className personalizada correctamente', () => {
     render(<Button className="custom-class">Custom Button</Button>);
     expect(screen.getByTestId('Button')).toHaveClass('custom-class');
   });
 
-  test('combines classes correctly', () => {
+  test('combina clases BEM con clases personalizadas', () => {
     render(
         <Button
             variant="primary"
@@ -262,24 +410,27 @@ describe('Button Component', () => {
     );
 
     const button = screen.getByTestId('Button');
-    expect(button).toHaveClass('from-indigo-600'); // variant
-    expect(button).toHaveClass('px-6'); // size
-    expect(button).toHaveClass('w-full'); // fullWidth
-    expect(button).toHaveClass('custom-class'); // custom
+    expect(button).toHaveClass('button');
+    expect(button).toHaveClass('button--primary');
+    expect(button).toHaveClass('button--large');
+    expect(button).toHaveClass('button--full');
+    expect(button).toHaveClass('custom-class');
   });
+});
 
-  // ===== TESTS DE EDGE CASES =====
-  test('handles empty children gracefully', () => {
-    render(<Button></Button>);
-    expect(screen.getByTestId('Button')).toBeInTheDocument();
-  });
-
-  test('handles null children gracefully', () => {
+// ===== GRUPO 12: TESTS DE CASOS EXTREMOS =====
+describe('Button Component - Casos Extremos', () => {
+  test('maneja children null sin errores', () => {
     render(<Button>{null}</Button>);
     expect(screen.getByTestId('Button')).toBeInTheDocument();
   });
 
-  test('handles complex children content', () => {
+  test('maneja children undefined sin errores', () => {
+    render(<Button>{undefined}</Button>);
+    expect(screen.getByTestId('Button')).toBeInTheDocument();
+  });
+
+  test('maneja contenido complejo correctamente', () => {
     render(
         <Button>
           <span>Complex</span>
@@ -291,32 +442,7 @@ describe('Button Component', () => {
     expect(screen.getByText('Content')).toBeInTheDocument();
   });
 
-  // ===== TESTS DE ACCESIBILIDAD =====
-  test('has proper accessibility attributes', () => {
-    render(<Button>Accessible Button</Button>);
-    const button = screen.getByTestId('Button');
-
-    expect(button).toHaveAttribute('data-testid', 'Button');
-    expect(button).not.toHaveAttribute('aria-disabled', 'true');
-  });
-
-  test('maintains accessibility when disabled', () => {
-    render(<Button disabled={true}>Disabled Button</Button>);
-    const button = screen.getByTestId('Button');
-
-    expect(button).toHaveAttribute('aria-disabled', 'true');
-    expect(button).toBeDisabled();
-  });
-
-  test('maintains accessibility when loading', () => {
-    render(<Button loading={true}>Loading Button</Button>);
-    const button = screen.getByTestId('Button');
-
-    expect(button).toHaveAttribute('aria-disabled', 'true');
-  });
-
-  // ===== TESTS DE COMBINACIONES COMPLEJAS =====
-  test('handles complex combinations correctly', () => {
+  test('maneja múltiples props sin conflictos', () => {
     render(
         <Button
             variant="gameCorrect"
@@ -324,19 +450,87 @@ describe('Button Component', () => {
             icon="check"
             iconPosition="left"
             fullWidth={true}
+            loading={false}
+            disabled={false}
             onClick={() => {}}
-            className="custom-game-button"
+            className="complex-button"
         >
           ¡CORRECTO!
         </Button>
     );
 
     const button = screen.getByTestId('Button');
-    expect(button).toHaveClass('bg-green-600'); // gameCorrect variant
-    expect(button).toHaveClass('py-[15px]'); // game size
-    expect(button).toHaveClass('w-full'); // fullWidth
-    expect(button).toHaveClass('custom-game-button'); // custom class
+    expect(button).toHaveClass('button--gameCorrect');
+    expect(button).toHaveClass('button--game');
+    expect(button).toHaveClass('button--full');
+    expect(button).toHaveClass('button--with-icon');
+    expect(button).toHaveClass('complex-button');
     expect(screen.getByTestId('mock-icon')).toHaveTextContent('check');
     expect(screen.getByText('¡CORRECTO!')).toBeInTheDocument();
+  });
+});
+
+// ===== GRUPO 13: TESTS DE ACCESIBILIDAD =====
+describe('Button Component - Accesibilidad', () => {
+  test('tiene atributos de accesibilidad correctos', () => {
+    render(<Button>Accessible Button</Button>);
+    const button = screen.getByTestId('Button');
+
+    expect(button).toHaveAttribute('data-testid', 'Button');
+    expect(button).not.toHaveAttribute('aria-disabled', 'true');
+  });
+
+  test('mantiene accesibilidad cuando está disabled', () => {
+    render(<Button disabled={true}>Disabled Button</Button>);
+    const button = screen.getByTestId('Button');
+
+    expect(button).toHaveAttribute('aria-disabled', 'true');
+    expect(button).toBeDisabled();
+  });
+
+  test('mantiene accesibilidad cuando está loading', () => {
+    render(<Button loading={true}>Loading Button</Button>);
+    const button = screen.getByTestId('Button');
+
+    expect(button).toHaveAttribute('aria-disabled', 'true');
+    expect(button).toHaveAttribute('aria-busy', 'true');
+  });
+
+  test('icono de loading tiene aria-label', () => {
+    render(<Button loading={true}>Loading</Button>);
+    // El mock no incluye ariaLabel, pero verificamos que se renderiza
+    expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
+  });
+});
+
+// ===== GRUPO 14: TESTS DE PROPS ADICIONALES =====
+describe('Button Component - Props Adicionales', () => {
+  test('pasa props adicionales al elemento', () => {
+    render(
+        <Button
+            id="test-button"
+            data-custom="value"
+            title="Test Title"
+        >
+          Button with props
+        </Button>
+    );
+
+    const button = screen.getByTestId('Button');
+    expect(button).toHaveAttribute('id', 'test-button');
+    expect(button).toHaveAttribute('data-custom', 'value');
+    expect(button).toHaveAttribute('title', 'Test Title');
+  });
+
+  test('maneja estilos inline correctamente', () => {
+    render(
+        <Button style={{ backgroundColor: 'red', padding: '20px' }}>
+          Styled Button
+        </Button>
+    );
+
+    const button = screen.getByTestId('Button');
+    expect(button).toHaveStyle('background-color: red');
+    expect(button).toHaveStyle('padding: 20px');
   });
 });

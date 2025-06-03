@@ -22,19 +22,19 @@ const Input = ({
                    success,
                    helperText,
 
-                   // Iconos con callbacks - MEJORADO
+                   // Iconos con callbacks
                    icon,
                    iconLeft,
                    iconRight,
                    iconPosition = 'left',
 
-                   // ✅ NUEVOS - Callbacks para iconos
-                   onIconClick,        // Callback para icono único
-                   onIconLeftClick,    // Callback para icono izquierdo
-                   onIconRightClick,   // Callback para icono derecho
+                   // Callbacks para iconos
+                   onIconClick,
+                   onIconLeftClick,
+                   onIconRightClick,
 
-                   // ✅ NUEVOS - Props para password toggle
-                   showPasswordToggle = false,  // Activar toggle automático de contraseña
+                   // Password toggle
+                   showPasswordToggle = false,
 
                    // Label
                    label,
@@ -61,11 +61,11 @@ const Input = ({
 
                    ...props
                }) => {
-    // ✅ Estado interno para toggle de contraseña
+    // Estado interno para toggle de contraseña
     const [showPassword, setShowPassword] = useState(false);
     const [currentType, setCurrentType] = useState(type);
 
-    // ✅ Efecto para manejar cambios de tipo
+    // Efecto para manejar cambios de tipo
     React.useEffect(() => {
         if (showPasswordToggle && type === 'password') {
             setCurrentType(showPassword ? 'text' : 'password');
@@ -92,7 +92,7 @@ const Input = ({
     // Determinar variante basada en props
     const currentVariant = error ? 'error' : success ? 'success' : variant;
 
-    // ✅ LÓGICA MEJORADA PARA ICONOS CON CALLBACKS
+    // Lógica para iconos con callbacks
     const getIconConfig = () => {
         let leftIconConfig = null;
         let rightIconConfig = null;
@@ -127,7 +127,7 @@ const Input = ({
             };
         }
 
-        // ✅ Auto-configurar toggle de contraseña
+        // Auto-configurar toggle de contraseña
         if (showPasswordToggle && type === 'password') {
             const passwordToggleConfig = {
                 name: showPassword ? 'eye-slash' : 'eye',
@@ -173,25 +173,7 @@ const Input = ({
         return basePadding;
     };
 
-    // Renderizar label
-    const renderLabel = () => {
-        if (!label) return null;
-
-        return (
-            <Text
-                as="label"
-                htmlFor={id}
-                size="small"
-                variant="bold"
-                className="block mb-1"
-            >
-                {label}
-                {required && <span className="text-red-500 ml-1">*</span>}
-            </Text>
-        );
-    };
-
-    // ✅ RENDERIZAR ICONO CON CALLBACK
+    // Renderizar icono con callback
     const renderIconWithCallback = (iconConfig, position) => {
         if (!iconConfig) return null;
 
@@ -231,13 +213,24 @@ const Input = ({
 
     return (
         <div className={`input-container ${fullWidth ? 'w-full' : 'inline-block'}`}>
-            {renderLabel()}
+            {/* ✅ LABEL CORREGIDO */}
+            {label && (
+                <Text
+                    as="label"
+                    htmlFor={id}
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                    {label}
+                    {required && <span className="text-red-500 ml-1">*</span>}
+                </Text>
+            )}
 
+            {/* ✅ INPUT WRAPPER */}
             <div className="relative">
                 <input
                     id={id}
                     name={name}
-                    type={currentType} // ✅ Usar currentType para toggle
+                    type={currentType}
                     value={value}
                     defaultValue={defaultValue}
                     placeholder={placeholder}
@@ -267,14 +260,16 @@ const Input = ({
                         error ? `${id}-error` :
                             helperText ? `${id}-helper` : undefined
                     }
+                    data-testid={id || 'input-field'}
                     {...props}
                 />
 
-                {/* ✅ RENDERIZAR ICONOS CON CALLBACKS */}
+                {/* ✅ ICONOS */}
                 {renderIconWithCallback(leftIconConfig, 'left')}
                 {renderIconWithCallback(rightIconConfig, 'right')}
             </div>
 
+            {/* ✅ MENSAJE */}
             {renderMessage()}
         </div>
     );
@@ -305,11 +300,11 @@ Input.propTypes = {
     iconRight: PropTypes.string,
     iconPosition: PropTypes.oneOf(['left', 'right']),
 
-    // ✅ NUEVOS - Callbacks
+    // Callbacks
     onIconClick: PropTypes.func,
     onIconLeftClick: PropTypes.func,
     onIconRightClick: PropTypes.func,
-    showPasswordToggle: PropTypes.bool, // ✅ NUEVO
+    showPasswordToggle: PropTypes.bool,
 
     // Label
     label: PropTypes.string,
