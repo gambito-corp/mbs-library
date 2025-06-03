@@ -13,6 +13,7 @@ import Button from '../../../../mbs-library/src/components/atoms/Button/Button.j
 import Input from '../../../../mbs-library/src/components/atoms/Input/Input.jsx';
 import TextArea from '../../../../mbs-library/src/components/atoms/TextArea/TextArea.jsx';
 import Badge from "../../../../mbs-library/src/components/atoms/Badge/Badge.jsx";
+import Image from "../../../../mbs-library/src/components/atoms/Image/Image.jsx";
 import { AlertConfig } from '../../../../mbs-library/src/components/molecules/Alert/Alert.config';
 import { TextConfig } from '../../../../mbs-library/src/components/atoms/Text/Text.config.js';
 import { ContainerConfig } from '../../../../mbs-library/src/components/atoms/Container/Container.config.js';
@@ -22,6 +23,7 @@ import { ButtonConfig } from "../../../../mbs-library/src/components/atoms/Butto
 import { InputConfig } from "../../../../mbs-library/src/components/atoms/Input/Input.config.js";
 import { TextAreaConfig } from '../../../../mbs-library/src/components/atoms/TextArea/TextArea.config.js';
 import { BadgeConfig } from "../../../../mbs-library/src/components/atoms/Badge/Badge.config.js";
+import { ImageConfig } from "../../../../mbs-library/src/components/atoms/Image/Image.config.js";
 
 const DesignSystemViewer = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -47,6 +49,7 @@ const DesignSystemViewer = () => {
                 Input: InputConfig,
                 TextArea: TextAreaConfig,
                 Badge: BadgeConfig,
+                Image: ImageConfig,
             }
         },
         molecules: {
@@ -79,6 +82,7 @@ const DesignSystemViewer = () => {
         Input,
         TextArea,
         Badge,
+        Image,
         Alert,
 
         PropTypes: require('prop-types')
