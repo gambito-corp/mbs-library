@@ -15,6 +15,12 @@ export const getImageBEMClasses = ({
     const base = 'image';
     const mods = [];
 
+    // ✅ CORREGIDO: Avatar siempre es circular
+    let finalShape = shape;
+    if (variant === 'avatar') {
+        finalShape = 'circle';
+    }
+
     // Variante
     if (variant !== 'thumbnail') {
         mods.push(`${base}--${variant}`);
@@ -25,9 +31,9 @@ export const getImageBEMClasses = ({
         mods.push(`${base}--${size}`);
     }
 
-    // Forma
-    if (shape !== 'rounded') {
-        mods.push(`${base}--${shape}`);
+    // Forma (avatar siempre será circle)
+    if (finalShape !== 'rounded') {
+        mods.push(`${base}--${finalShape}`);
     }
 
     // Estados
@@ -37,6 +43,7 @@ export const getImageBEMClasses = ({
 
     return [base, ...mods, className].filter(Boolean).join(' ');
 };
+
 
 /**
  * Genera clases BEM para el contenedor

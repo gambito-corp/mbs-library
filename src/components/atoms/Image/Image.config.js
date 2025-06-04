@@ -1,487 +1,688 @@
-import React from 'react'; // ✅ AGREGAR ESTA LÍNEA
 import Image from './Image.jsx';
-import Badge from '../Badge/Badge.jsx';
-import { IMAGE_VARIANTS, IMAGE_SIZES, IMAGE_SHAPES, AVATAR_STATUS } from './Image.constants.js';
 
 export const ImageConfig = {
     component: Image,
     name: 'Image',
     category: 'atoms',
-    description: 'Componente de imagen versátil con soporte para avatares, galerías, lazy loading, fallbacks y estados de carga. Incluye variaciones específicas para diferentes casos de uso.',
+    description: 'Componente de imagen completo con dimensiones, bordes, sombras, filtros, efectos y optimizaciones.',
 
     props: {
-        src: {
-            type: 'string',
-            required: false,
-            description: 'URL de la imagen'
-        },
-        alt: {
-            type: 'string',
-            required: false,
-            description: 'Texto alternativo para accesibilidad'
-        },
-        variant: {
-            type: 'string',
-            required: false,
-            default: 'thumbnail',
-            options: Object.keys(IMAGE_VARIANTS),
-            description: 'Variante del componente imagen'
-        },
-        size: {
-            type: 'string',
-            required: false,
-            default: 'medium',
-            options: Object.keys(IMAGE_SIZES),
-            description: 'Tamaño de la imagen'
-        },
-        shape: {
-            type: 'string',
-            required: false,
-            default: 'rounded',
-            options: Object.keys(IMAGE_SHAPES),
-            description: 'Forma de la imagen'
-        },
-        status: {
-            type: 'string',
-            required: false,
-            options: Object.keys(AVATAR_STATUS),
-            description: 'Estado del avatar (solo para variant="avatar")'
-        },
-        name: {
-            type: 'string',
-            required: false,
-            description: 'Nombre para generar iniciales en fallback'
-        },
-        badge: {
-            type: 'ReactNode',
-            required: false,
-            description: 'Badge component para overlay'
-        },
-        fallback: {
-            type: 'string',
-            required: false,
-            default: 'placeholder',
-            options: ['initials', 'icon', 'placeholder', 'skeleton'],
-            description: 'Tipo de fallback cuando la imagen falla'
-        },
-        fallbackIcon: {
-            type: 'string',
-            required: false,
-            default: 'user',
-            description: 'Icono a mostrar en fallback tipo "icon"'
-        },
-        loading: {
-            type: 'boolean',
-            required: false,
-            default: false,
-            description: 'Estado de carga manual'
-        },
-        lazy: {
-            type: 'boolean',
-            required: false,
-            default: true,
-            description: 'Activar lazy loading'
-        },
-        hover: {
-            type: 'boolean',
-            required: false,
-            default: false,
-            description: 'Efectos hover'
-        },
-        onClick: {
-            type: 'function',
-            required: false,
-            description: 'Función ejecutada al hacer click'
-        }
+        src: { type: 'string', required: true, description: 'URL de la imagen' },
+        alt: { type: 'string', required: false, description: 'Texto alternativo' },
+        w: { type: 'number', required: false, description: 'Ancho' },
+        h: { type: 'number', required: false, description: 'Alto' },
+        wType: { type: 'string', required: false, default: 'px', options: ['px', 'em', 'rem', '%', 'vw', 'vh'], description: 'Unidad del ancho' },
+        hType: { type: 'string', required: false, default: 'px', options: ['px', 'em', 'rem', '%', 'vw', 'vh'], description: 'Unidad del alto' },
+        borderRadius: { type: 'number', required: false, description: 'Radio del borde' },
+        borderWidth: { type: 'number', required: false, description: 'Grosor del borde' },
+        borderStyle: { type: 'string', required: false, default: 'solid', options: ['solid', 'dashed', 'dotted', 'double'], description: 'Estilo del borde' },
+        borderColor: { type: 'string', required: false, default: '#000000', description: 'Color del borde' },
+        shadowOffsetX: { type: 'number', required: false, default: 0, description: 'Desplazamiento X de la sombra' },
+        shadowOffsetY: { type: 'number', required: false, default: 0, description: 'Desplazamiento Y de la sombra' },
+        shadowBlur: { type: 'number', required: false, default: 0, description: 'Desenfoque de la sombra' },
+        shadowColor: { type: 'string', required: false, default: '#000000', description: 'Color de la sombra' },
+        shadowOpacity: { type: 'number', required: false, default: 0.3, description: 'Opacidad de la sombra' },
+        objectFit: { type: 'string', required: false, default: 'cover', options: ['fill', 'contain', 'cover', 'none'], description: 'Ajuste de la imagen' },
+        hoverEffect: { type: 'string', required: false, default: 'none', options: ['none', 'zoom', 'brightness', 'scale'], description: 'Efecto al hacer hover' },
+        grayscale: { type: 'boolean', required: false, default: false, description: 'Escala de grises' },
+        sepia: { type: 'boolean', required: false, default: false, description: 'Efecto sepia' },
+        brightness: { type: 'number', required: false, default: 1, description: 'Brillo (0-2)' }
     },
 
     variants: [
         {
             name: '🖼️ Imagen básica',
-            description: 'Imagen simple con diferentes tamaños',
-            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
-  <Image 
-    src="https://picsum.photos/200/200?random=1" 
-    alt="Imagen ejemplo"
-    size="small"
-  />
-  <Image 
-    src="https://picsum.photos/200/200?random=2" 
-    alt="Imagen ejemplo"
-    size="medium"
-  />
-  <Image 
-    src="https://picsum.photos/200/200?random=3" 
-    alt="Imagen ejemplo"
-    size="large"
-  />
-</div>`,
+            description: 'Imagen simple sin modificaciones',
+            code: `<Image 
+  src="https://picsum.photos/300/200?random=1" 
+  alt="Imagen básica" 
+/>`,
             props: {
-                src: 'https://picsum.photos/200/200?random=1',
-                alt: 'Imagen ejemplo',
-                size: 'medium'
+                src: 'https://picsum.photos/300/200?random=1',
+                alt: 'Imagen básica'
             }
         },
+
         {
-            name: '👤 Avatares básicos',
-            description: 'Avatares con diferentes tamaños',
+            name: '📏 Dimensiones en píxeles',
+            description: 'Control exacto de dimensiones usando píxeles',
             code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
   <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=10" 
-    alt="Pedro García"
-    size="small"
+    src="https://picsum.photos/400/300?random=2" 
+    alt="100x75 px"
+    w={100}
+    h={75}
   />
   <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=11" 
-    alt="Ana López"
-    size="medium"
+    src="https://picsum.photos/400/300?random=3" 
+    alt="150x100 px"
+    w={150}
+    h={100}
   />
   <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=12" 
-    alt="Carlos Ruiz"
-    size="large"
-  />
-  <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=13" 
-    alt="María González"
-    size="xl"
+    src="https://picsum.photos/400/300?random=4" 
+    alt="200x150 px"
+    w={200}
+    h={150}
   />
 </div>`,
             props: {
-                variant: 'avatar',
+                src: 'https://picsum.photos/400/300?random=2',
+                alt: '100x75 px',
+                w: 100,
+                h: 75
+            }
+        },
+
+        {
+            name: '📐 Unidades relativas',
+            description: 'Dimensiones usando em, rem y porcentajes',
+            code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/400/300?random=5" 
+      alt="10em ancho"
+      w={10}
+      wType="em"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>10em ancho</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/400/300?random=6" 
+      alt="12rem ancho"
+      w={12}
+      wType="rem"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>12rem ancho</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/400/300?random=7" 
+      alt="30% ancho"
+      w={30}
+      wType="%"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>30% ancho</p>
+  </div>
+</div>`,
+            props: {
+                src: 'https://picsum.photos/400/300?random=5',
+                alt: '10em ancho',
+                w: 10,
+                wType: 'em'
+            }
+        },
+
+        {
+            name: '📱 Unidades viewport',
+            description: 'Dimensiones responsive usando vw y vh',
+            code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/800/600?random=8" 
+      alt="20vw ancho"
+      w={20}
+      wType="vw"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>20vw ancho</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/800/600?random=9" 
+      alt="15vh alto"
+      h={15}
+      hType="vh"
+      w={200}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>200px × 15vh</p>
+  </div>
+</div>`,
+            props: {
+                src: 'https://picsum.photos/800/600?random=8',
+                alt: '20vw ancho',
+                w: 20,
+                wType: 'vw'
+            }
+        },
+
+        {
+            name: '🔘 Border radius',
+            description: 'Diferentes valores de border-radius',
+            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=10" 
+      alt="Sin border-radius"
+      w={100}
+      h={100}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Sin radius</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=11" 
+      alt="8px border-radius"
+      w={100}
+      h={100}
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>8px radius</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=12" 
+      alt="20px border-radius"
+      w={100}
+      h={100}
+      borderRadius={20}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>20px radius</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=13" 
+      alt="Círculo"
+      w={100}
+      h={100}
+      borderRadius={50}
+      borderRadiusType="%"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>50% (círculo)</p>
+  </div>
+</div>`,
+            props: {
                 src: 'https://picsum.photos/200/200?random=10',
-                alt: 'Pedro García',
-                size: 'medium'
+                alt: 'Border radius ejemplo',
+                w: 100,
+                h: 100,
+                borderRadius: 8
             }
         },
+
         {
-            name: '🟢 Avatares con estado',
-            description: 'Avatares mostrando estado de conexión',
+            name: '🔲 Bordes',
+            description: 'Diferentes estilos y colores de borde',
+            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=14" 
+      alt="Borde sólido azul"
+      w={100}
+      h={100}
+      borderWidth={3}
+      borderStyle="solid"
+      borderColor="#3b82f6"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Sólido azul</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=15" 
+      alt="Borde discontinuo rojo"
+      w={100}
+      h={100}
+      borderWidth={2}
+      borderStyle="dashed"
+      borderColor="#ef4444"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Discontinuo rojo</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=16" 
+      alt="Borde punteado verde"
+      w={100}
+      h={100}
+      borderWidth={4}
+      borderStyle="dotted"
+      borderColor="#10b981"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Punteado verde</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=17" 
+      alt="Borde doble morado"
+      w={100}
+      h={100}
+      borderWidth={6}
+      borderStyle="double"
+      borderColor="#8b5cf6"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Doble morado</p>
+  </div>
+</div>`,
+            props: {
+                src: 'https://picsum.photos/200/200?random=14',
+                alt: 'Borde sólido azul',
+                w: 100,
+                h: 100,
+                borderWidth: 3,
+                borderStyle: 'solid',
+                borderColor: '#3b82f6'
+            }
+        },
+
+        {
+            name: '🌫️ Sombras',
+            description: 'Diferentes tipos de sombras',
+            code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=18" 
+      alt="Sombra suave"
+      w={100}
+      h={100}
+      shadowOffsetX={3}
+      shadowOffsetY={3}
+      shadowBlur={8}
+      shadowOpacity={0.2}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Sombra suave</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=19" 
+      alt="Sombra intensa"
+      w={100}
+      h={100}
+      shadowOffsetX={6}
+      shadowOffsetY={6}
+      shadowBlur={12}
+      shadowColor="#3b82f6"
+      shadowOpacity={0.4}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Sombra azul intensa</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=20" 
+      alt="Sombra elegante"
+      w={100}
+      h={100}
+      shadowOffsetY={8}
+      shadowBlur={20}
+      shadowOpacity={0.15}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Sombra elegante</p>
+  </div>
+</div>`,
+            props: {
+                src: 'https://picsum.photos/200/200?random=18',
+                alt: 'Sombra suave',
+                w: 100,
+                h: 100,
+                shadowOffsetX: 3,
+                shadowOffsetY: 3,
+                shadowBlur: 8,
+                shadowOpacity: 0.2
+            }
+        },
+
+        {
+            name: '🎯 Object fit',
+            description: 'Diferentes modos de ajuste de imagen',
+            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/400/300?random=21" 
+      alt="object-fit: cover"
+      w={120}
+      h={80}
+      objectFit="cover"
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>cover</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/400/300?random=22" 
+      alt="object-fit: contain"
+      w={120}
+      h={80}
+      objectFit="contain"
+      borderRadius={8}
+      borderWidth={1}
+      borderColor="#e5e7eb"
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>contain</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/400/300?random=23" 
+      alt="object-fit: fill"
+      w={120}
+      h={80}
+      objectFit="fill"
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>fill</p>
+  </div>
+</div>`,
+            props: {
+                src: 'https://picsum.photos/400/300?random=21',
+                alt: 'object-fit: cover',
+                w: 120,
+                h: 80,
+                objectFit: 'cover',
+                borderRadius: 8
+            }
+        },
+
+        {
+            name: '🎨 Filtros CSS',
+            description: 'Efectos visuales con filtros',
+            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=24" 
+      alt="Original"
+      w={100}
+      h={100}
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Original</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=24" 
+      alt="Escala de grises"
+      w={100}
+      h={100}
+      grayscale={true}
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Escala de grises</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=24" 
+      alt="Efecto sepia"
+      w={100}
+      h={100}
+      sepia={true}
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Efecto sepia</p>
+  </div>
+  <div style={{textAlign: 'center'}}>
+    <Image 
+      src="https://picsum.photos/200/200?random=24" 
+      alt="Más brillo"
+      w={100}
+      h={100}
+      brightness={1.4}
+      borderRadius={8}
+    />
+    <p style={{fontSize: '12px', color: '#6b7280'}}>Más brillo</p>
+  </div>
+</div>`,
+            props: {
+                src: 'https://picsum.photos/200/200?random=24',
+                alt: 'Filtros CSS',
+                w: 100,
+                h: 100,
+                grayscale: true,
+                borderRadius: 8
+            }
+        },
+
+        {
+            name: '👤 Avatar circular',
+            description: 'Imagen de perfil circular con borde y sombra',
             code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
   <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=20" 
-    alt="Usuario online"
-    status="online"
-    size="large"
+    src="https://picsum.photos/200/200?random=28" 
+    alt="Avatar pequeño"
+    w={60}
+    h={60}
+    borderRadius={50}
+    borderRadiusType="%"
+    borderWidth={2}
+    borderColor="#10b981"
+    shadowOffsetY={2}
+    shadowBlur={8}
+    shadowColor="#10b981"
+    shadowOpacity={0.3}
+    objectFit="cover"
   />
   <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=21" 
-    alt="Usuario ausente"
-    status="away"
-    size="large"
+    src="https://picsum.photos/200/200?random=29" 
+    alt="Avatar mediano"
+    w={80}
+    h={80}
+    borderRadius={50}
+    borderRadiusType="%"
+    borderWidth={3}
+    borderColor="#3b82f6"
+    shadowOffsetY={4}
+    shadowBlur={12}
+    shadowColor="#3b82f6"
+    shadowOpacity={0.3}
+    hoverEffect="scale"
+    objectFit="cover"
   />
   <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=22" 
-    alt="Usuario ocupado"
-    status="busy"
-    size="large"
-  />
-  <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=23" 
-    alt="Usuario offline"
-    status="offline"
-    size="large"
-  />
-</div>`,
-            props: {
-                variant: 'avatar',
-                src: 'https://picsum.photos/200/200?random=20',
-                alt: 'Usuario online',
-                status: 'online',
-                size: 'large'
-            }
-        },
-        {
-            name: '🏷️ Avatares con badges',
-            description: 'Avatares con badges de notificación',
-            code: `<div style={{display: 'flex', gap: '25px', alignItems: 'center'}}>
-  <Image 
-    variant="avatar"
     src="https://picsum.photos/200/200?random=30" 
-    alt="Usuario con notificaciones"
-    status="online"
-    badge={<Badge count={3} variant="error" positioned />}
-    size="large"
-  />
-  <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=31" 
-    alt="Usuario verificado"
-    status="online"
-    badge={<Badge dot variant="success" positioned />}
-    size="large"
-  />
-  <Image 
-    variant="avatar"
-    src="https://picsum.photos/200/200?random=32" 
-    alt="Usuario premium"
-    badge={<Badge variant="warning" positioned>VIP</Badge>}
-    size="large"
+    alt="Avatar grande"
+    w={100}
+    h={100}
+    borderRadius={50}
+    borderRadiusType="%"
+    borderWidth={4}
+    borderColor="#f59e0b"
+    shadowOffsetY={6}
+    shadowBlur={16}
+    shadowColor="#f59e0b"
+    shadowOpacity={0.3}
+    hoverEffect="zoom"
+    objectFit="cover"
   />
 </div>`,
             props: {
-                variant: 'avatar',
-                src: 'https://picsum.photos/200/200?random=30',
-                alt: 'Usuario con notificaciones',
-                status: 'online',
-                badge: React.createElement(Badge, { count: 3, variant: 'error', positioned: true }),
-                size: 'large'
+                src: 'https://picsum.photos/200/200?random=28',
+                alt: 'Avatar circular',
+                w: 80,
+                h: 80,
+                borderRadius: 50,
+                borderRadiusType: '%',
+                borderWidth: 3,
+                borderColor: '#3b82f6',
+                shadowOffsetY: 4,
+                shadowBlur: 12,
+                shadowColor: '#3b82f6',
+                shadowOpacity: 0.3,
+                hoverEffect: 'scale',
+                objectFit: 'cover'
             }
         },
+
         {
-            name: '🔤 Fallback con iniciales',
-            description: 'Avatares usando iniciales cuando no hay imagen',
-            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+            name: '🎴 Card moderna',
+            description: 'Imagen estilo card con sombra elegante',
+            code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
   <Image 
-    variant="avatar"
-    name="Pedro García"
-    fallback="initials"
-    status="online"
-    size="small"
+    src="https://picsum.photos/300/200?random=31" 
+    alt="Card pequeña"
+    w={150}
+    h={100}
+    borderRadius={12}
+    borderWidth={1}
+    borderColor="#e5e7eb"
+    shadowOffsetY={4}
+    shadowBlur={12}
+    shadowOpacity={0.1}
+    hoverEffect="zoom"
+    objectFit="cover"
   />
   <Image 
-    variant="avatar"
-    name="Ana López"
-    fallback="initials"
-    status="away"
-    size="medium"
-  />
-  <Image 
-    variant="avatar"
-    name="Carlos Ruiz"
-    fallback="initials"
-    status="busy"
-    size="large"
-  />
-  <Image 
-    variant="avatar"
-    name="María González"
-    fallback="initials"
-    status="offline"
-    size="xl"
+    src="https://picsum.photos/300/200?random=32" 
+    alt="Card elegante"
+    w={200}
+    h={130}
+    borderRadius={16}
+    shadowOffsetY={8}
+    shadowBlur={24}
+    shadowOpacity={0.15}
+    hoverEffect="brightness"
+    objectFit="cover"
   />
 </div>`,
             props: {
-                variant: 'avatar',
-                name: 'Pedro García',
-                fallback: 'initials',
-                status: 'online',
-                size: 'medium'
+                src: 'https://picsum.photos/300/200?random=31',
+                alt: 'Card moderna',
+                w: 150,
+                h: 100,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: '#e5e7eb',
+                shadowOffsetY: 4,
+                shadowBlur: 12,
+                shadowOpacity: 0.1,
+                hoverEffect: 'zoom',
+                objectFit: 'cover'
             }
         },
+
         {
-            name: '🔧 Diferentes fallbacks',
-            description: 'Tipos de fallback cuando la imagen no carga',
-            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+            name: '🌟 Efecto neón',
+            description: 'Imagen con sombra colorida brillante',
+            code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
   <Image 
-    src="imagen-rota.jpg"
-    fallback="placeholder"
-    size="medium"
-    alt="Placeholder"
+    src="https://picsum.photos/200/200?random=33" 
+    alt="Neón azul"
+    w={120}
+    h={120}
+    borderRadius={16}
+    shadowOffsetX={0}
+    shadowOffsetY={0}
+    shadowBlur={20}
+    shadowColor="#3b82f6"
+    shadowOpacity={0.6}
+    hoverEffect="brightness"
+    objectFit="cover"
   />
   <Image 
-    src="imagen-rota.jpg"
-    fallback="icon"
-    fallbackIcon="camera"
-    size="medium"
-    alt="Icono"
+    src="https://picsum.photos/200/200?random=34" 
+    alt="Neón morado"
+    w={120}
+    h={120}
+    borderRadius={16}
+    shadowOffsetX={0}
+    shadowOffsetY={0}
+    shadowBlur={25}
+    shadowColor="#8b5cf6"
+    shadowOpacity={0.7}
+    hoverEffect="scale"
+    objectFit="cover"
   />
   <Image 
-    variant="avatar"
-    name="Usuario"
-    fallback="initials"
-    size="medium"
-    alt="Iniciales"
-  />
-  <Image 
-    src="imagen-rota.jpg"
-    fallback="skeleton"
-    size="medium"
-    alt="Skeleton"
+    src="https://picsum.photos/200/200?random=35" 
+    alt="Neón verde"
+    w={120}
+    h={120}
+    borderRadius={16}
+    shadowOffsetX={0}
+    shadowOffsetY={0}
+    shadowBlur={20}
+    shadowColor="#10b981"
+    shadowOpacity={0.6}
+    hoverEffect="zoom"
+    objectFit="cover"
   />
 </div>`,
             props: {
-                src: 'imagen-rota.jpg',
-                fallback: 'placeholder',
-                size: 'medium',
-                alt: 'Placeholder'
+                src: 'https://picsum.photos/200/200?random=33',
+                alt: 'Efecto neón',
+                w: 120,
+                h: 120,
+                borderRadius: 16,
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 20,
+                shadowColor: '#8b5cf6',
+                shadowOpacity: 0.6,
+                hoverEffect: 'brightness',
+                objectFit: 'cover'
             }
         },
+
         {
-            name: '🖼️ Diferentes formas',
-            description: 'Imágenes con diferentes formas geométricas',
-            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+            name: '📸 Estilo polaroid',
+            description: 'Imagen con borde blanco y sombra vintage',
+            code: `<div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
   <Image 
-    src="https://picsum.photos/200/200?random=40" 
-    shape="square"
-    size="medium"
-    alt="Cuadrada"
+    src="https://picsum.photos/200/200?random=36" 
+    alt="Polaroid normal"
+    w={120}
+    h={120}
+    borderWidth={8}
+    borderColor="#ffffff"
+    shadowOffsetX={2}
+    shadowOffsetY={8}
+    shadowBlur={16}
+    shadowOpacity={0.15}
+    hoverEffect="scale"
   />
   <Image 
-    src="https://picsum.photos/200/200?random=41" 
-    shape="rounded"
-    size="medium"
-    alt="Redondeada"
-  />
-  <Image 
-    src="https://picsum.photos/200/200?random=42" 
-    shape="circle"
-    size="medium"
-    alt="Circular"
+    src="https://picsum.photos/200/200?random=37" 
+    alt="Polaroid sepia"
+    w={120}
+    h={120}
+    borderWidth={10}
+    borderColor="#ffffff"
+    shadowOffsetX={3}
+    shadowOffsetY={10}
+    shadowBlur={20}
+    shadowOpacity={0.2}
+    sepia={true}
+    hoverEffect="zoom"
   />
 </div>`,
             props: {
-                src: 'https://picsum.photos/200/200?random=40',
-                shape: 'square',
-                size: 'medium',
-                alt: 'Cuadrada'
+                src: 'https://picsum.photos/200/200?random=36',
+                alt: 'Estilo polaroid',
+                w: 120,
+                h: 120,
+                borderWidth: 8,
+                borderColor: '#ffffff',
+                shadowOffsetX: 2,
+                shadowOffsetY: 8,
+                shadowBlur: 16,
+                shadowOpacity: 0.15,
+                hoverEffect: 'scale'
             }
         },
+
         {
-            name: '🎨 Variantes de imagen',
-            description: 'Diferentes tipos de imagen según su uso',
-            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-  <div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
-    <Image 
-      variant="thumbnail"
-      src="https://picsum.photos/200/200?random=50" 
-      size="small"
-      alt="Thumbnail"
-    />
-    <Image 
-      variant="product"
-      src="https://picsum.photos/200/200?random=51" 
-      size="medium"
-      hover={true}
-      alt="Producto"
-    />
-    <Image 
-      variant="gallery"
-      src="https://picsum.photos/200/200?random=52" 
-      size="large"
-      alt="Galería"
-    />
-  </div>
-  <Image 
-    variant="hero"
-    src="https://picsum.photos/800/200?random=53" 
-    alt="Hero image"
-    style={{width: '100%', maxWidth: '400px'}}
-  />
-</div>`,
+            name: '🖼️ Banner responsive',
+            description: 'Imagen banner que se adapta al contenedor',
+            code: `<Image 
+  src="https://picsum.photos/1200/400?random=38" 
+  alt="Banner responsive"
+  w={100}
+  wType="%"
+  h={200}
+  borderRadius={16}
+  shadowOffsetY={12}
+  shadowBlur={24}
+  shadowOpacity={0.15}
+  hoverEffect="brightness"
+  objectFit="cover"
+/>`,
             props: {
-                variant: 'thumbnail',
-                src: 'https://picsum.photos/200/200?random=50',
-                size: 'small',
-                alt: 'Thumbnail'
-            }
-        },
-        {
-            name: '⚡ Estados de carga',
-            description: 'Diferentes estados de carga y error',
-            code: `<div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
-  <Image 
-    src="https://picsum.photos/200/200?random=60" 
-    loading={true}
-    size="medium"
-    alt="Cargando"
-  />
-  <Image 
-    src="imagen-que-no-existe.jpg"
-    size="medium"
-    alt="Error"
-  />
-  <Image 
-    src="https://picsum.photos/200/200?random=61" 
-    lazy={false}
-    size="medium"
-    alt="Sin lazy loading"
-  />
-</div>`,
-            props: {
-                src: 'https://picsum.photos/200/200?random=60',
-                loading: true,
-                size: 'medium',
-                alt: 'Cargando'
-            }
-        },
-        {
-            name: '👥 Sistema de usuarios completo',
-            description: 'Sistema completo de avatares para una aplicación',
-            code: `<div style={{display: 'flex', flexDirection: 'column', gap: '25px', padding: '20px'}}>
-  <div style={{display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap'}}>
-    <Image 
-      variant="avatar"
-      src="https://picsum.photos/200/200?random=70" 
-      alt="Admin"
-      status="online"
-      badge={<Badge variant="dark" positioned>Admin</Badge>}
-      size="large"
-    />
-    <Image 
-      variant="avatar"
-      src="https://picsum.photos/200/200?random=71" 
-      alt="Moderador"
-      status="away"
-      badge={<Badge variant="warning" positioned>Mod</Badge>}
-      size="large"
-    />
-    <Image 
-      variant="avatar"
-      name="Usuario Premium"
-      fallback="initials"
-      status="online"
-      badge={<Badge variant="success" positioned>VIP</Badge>}
-      size="large"
-    />
-    <Image 
-      variant="avatar"
-      src="https://picsum.photos/200/200?random=72" 
-      alt="Usuario regular"
-      status="busy"
-      size="large"
-    />
-  </div>
-  <div style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
-    <Image 
-      variant="avatar"
-      name="Pedro García"
-      fallback="initials"
-      status="online"
-      size="small"
-    />
-    <Image 
-      variant="avatar"
-      name="Ana López"
-      fallback="initials"
-      status="away"
-      size="small"
-    />
-    <Image 
-      variant="avatar"
-      name="Carlos Ruiz"
-      fallback="initials"
-      status="offline"
-      size="small"
-    />
-    <span style={{color: '#6b7280', fontSize: '14px'}}>+5 más</span>
-  </div>
-</div>`,
-            props: {
-                variant: 'avatar',
-                src: 'https://picsum.photos/200/200?random=70',
-                alt: 'Admin',
-                status: 'online',
-                badge: React.createElement(Badge, { count: 3, variant: 'error', positioned: true }),
-                size: 'large'
+                src: 'https://picsum.photos/1200/400?random=38',
+                alt: 'Banner responsive',
+                w: 100,
+                wType: '%',
+                h: 200,
+                borderRadius: 16,
+                shadowOffsetY: 12,
+                shadowBlur: 24,
+                shadowOpacity: 0.15,
+                hoverEffect: 'brightness',
+                objectFit: 'cover'
             }
         }
     ]

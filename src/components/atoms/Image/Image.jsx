@@ -1,258 +1,211 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../Icon/Icon.jsx';
-import Text from '../Text/Text.jsx';
-import Badge from '../Badge/Badge.jsx';
-import {
-    getImageBEMClasses,
-    getImageContainerBEMClasses,
-    getStatusIndicatorBEMClasses,
-    getFallbackBEMClasses,
-    getInitials,
-    isValidImageUrl,
-    getStatusColor
-} from './Image.utils.js';
 
 const Image = ({
-                   // Imagen
+                   // Imagen básica
                    src,
                    alt = '',
-                   srcSet,
-                   sizes,
 
-                   // Variantes y estados
-                   variant = 'thumbnail',
-                   size = 'medium',
-                   shape = 'rounded',
+                   // Dimensiones
+                   w,
+                   h,
+                   wType = 'px',
+                   hType = 'px',
 
-                   // Avatar específico
-                   status, // online, offline, away, busy
-                   name, // Para generar iniciales
-                   badge, // Badge component
+                   // Border radius
+                   borderRadius,
+                   borderRadiusType = 'px',
+
+                   // Border
+                   borderWidth,
+                   borderWidthType = 'px',
+                   borderStyle = 'solid',
+                   borderColor = '#000000',
+
+                   // Shadow
+                   shadowOffsetX = 0,
+                   shadowOffsetY = 0,
+                   shadowBlur = 0,
+                   shadowSpread = 0,
+                   shadowColor = '#000000',
+                   shadowOpacity = 0.3,
+                   shadowInset = false,
+
+                   // Object fit
+                   objectFit = 'cover',
+
+                   // Lazy loading y performance
+                   lazy = true,
+                   loading = 'lazy',
+                   placeholder = 'blur',
+                   quality = 75,
+
+                   // Filtros CSS
+                   filter,
+                   grayscale = false,
+                   sepia = false,
+                   brightness = 1,
+                   contrast = 1,
+                   saturate = 1,
+
+                   // Efectos y transiciones
+                   fadeIn = true,
+                   fadeInDuration = 300,
+                   hoverEffect = 'none',
+                   transition = 'all 0.3s ease',
 
                    // Fallback
-                   fallback = 'placeholder',
-                   fallbackIcon = 'user',
+                   fallbackSrc,
+                   retryAttempts = 3,
 
-                   // Estados visuales
-                   loading = false,
-                   lazy = true,
-                   hover = false,
+                   // Interactividad
+                   draggable = false,
+                   selectable = false,
+                   zoomable = false,
 
                    // Eventos
                    onClick,
                    onLoad,
                    onError,
+                   onLoadStart,
+                   onLoadComplete,
 
                    // Estilos
                    className = '',
 
                    ...props
                }) => {
-    const [imageState, setImageState] = useState({
-        loaded: false,
-        error: false,
-        loading: lazy
-    });
+    // ✅ Función helper para construir filtros CSS
+    const buildFilterString = () => {
+        const filters = [];
 
-    const [imageSrc, setImageSrc] = useState(lazy ? null : src);
+        if (filter) filters.push(filter);
+        if (grayscale) filters.push('grayscale(100%)');
+        if (sepia) filters.push('sepia(100%)');
+        if (brightness !== 1) filters.push(`brightness(${brightness})`);
+        if (contrast !== 1) filters.push(`contrast(${contrast})`);
+        if (saturate !== 1) filters.push(`saturate(${saturate})`);
 
-    // Lazy loading effect
-    useEffect(() => {
-        if (!lazy || !src) return;
-
-        const img = new window.Image();
-        img.onload = () => {
-            setImageSrc(src);
-            setImageState(prev => ({ ...prev, loading: false, loaded: true }));
-            onLoad?.();
-        };
-        img.onerror = () => {
-            setImageState(prev => ({ ...prev, loading: false, error: true }));
-            onError?.();
-        };
-        img.src = src;
-
-        return () => {
-            img.onload = null;
-            img.onerror = null;
-        };
-    }, [src, lazy, onLoad, onError]);
-
-    // Handle image load for non-lazy images
-    const handleImageLoad = () => {
-        setImageState(prev => ({ ...prev, loaded: true, loading: false }));
-        onLoad?.();
+        return filters.length > 0 ? filters.join(' ') : undefined;
     };
 
-    const handleImageError = () => {
-        setImageState(prev => ({ ...prev, error: true, loading: false }));
-        onError?.();
+    // ✅ Función helper para convertir hex a rgba
+    const hexToRgba = (hex, opacity) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     };
 
-    // Determinar si mostrar la imagen o fallback
-    const shouldShowImage = () => {
-        if (lazy) {
-            return imageSrc && imageState.loaded && !imageState.error;
+    // ✅ Construir estilos PRIMERO
+    const imageStyles = {
+        width: w ? `${w}${wType}` : undefined,
+        height: h ? `${h}${hType}` : undefined,
+        borderRadius: borderRadius ? `${borderRadius}${borderRadiusType}` : undefined,
+        objectFit: objectFit,
+        display: 'block',
+        userSelect: selectable ? 'auto' : 'none',
+        filter: buildFilterString()
+    };
+
+    // ✅ CORREGIDO: Solo agregar transition específica para hover effects
+    if (hoverEffect !== 'none') {
+        if (hoverEffect === 'zoom' || hoverEffect === 'scale') {
+            imageStyles.transition = 'transform 0.3s ease';
+        } else if (hoverEffect === 'brightness' || hoverEffect === 'blur') {
+            imageStyles.transition = 'filter 0.3s ease';
+        } else {
+            imageStyles.transition = transition;
         }
-        return src && !imageState.error;
-    };
-
-    // Renderizar fallback
-    const renderFallback = () => {
-        const fallbackClasses = getFallbackBEMClasses(fallback);
-
-        switch (fallback) {
-            case 'initials':
-                return (
-                    <div className={fallbackClasses}>
-                        <Text size={size === 'xs' ? 'xs' : size === 'small' ? 'sm' : size === 'large' ? 'lg' : size === 'xl' ? 'xl' : 'base'}>
-                            {getInitials(name || alt)}
-                        </Text>
-                    </div>
-                );
-
-            case 'icon':
-                const iconSize = size === 'xs' ? 'xs' : size === 'small' ? 'small' : size === 'large' ? 'large' : 'medium';
-                return (
-                    <div className={fallbackClasses}>
-                        <Icon
-                            name={fallbackIcon}
-                            size={iconSize}
-                            className="text-gray-400"
-                        />
-                    </div>
-                );
-
-            case 'skeleton':
-                return <div className={fallbackClasses}></div>;
-
-            case 'placeholder':
-            default:
-                return (
-                    <div className={fallbackClasses}>
-                        <Icon
-                            name="image"
-                            size={size === 'xs' ? 'xs' : size === 'small' ? 'small' : 'medium'}
-                            className="text-gray-400"
-                        />
-                    </div>
-                );
-        }
-    };
-
-    // Renderizar status indicator (solo para avatars)
-    const renderStatusIndicator = () => {
-        if (variant !== 'avatar' || !status) return null;
-
-        const statusClasses = getStatusIndicatorBEMClasses(status, size);
-        const statusColor = getStatusColor(status);
-
-        return (
-            <div
-                className={statusClasses}
-                style={{ backgroundColor: statusColor }}
-                aria-label={`Estado: ${status}`}
-            />
-        );
-    };
-
-    // Renderizar badge
-    const renderBadge = () => {
-        if (!badge) return null;
-
-        return (
-            <div className="image__badge">
-                {badge}
-            </div>
-        );
-    };
-
-    // Clases CSS
-    const containerClasses = getImageContainerBEMClasses(!!badge || !!status);
-    const imageClasses = getImageBEMClasses({
-        variant,
-        size,
-        shape: variant === 'avatar' ? 'circle' : shape,
-        loading: imageState.loading || loading,
-        error: imageState.error,
-        hover,
-        className
-    });
-
-    // Props de la imagen
-    const imageProps = {
-        className: imageClasses,
-        alt,
-        onClick,
-        'data-testid': 'Image',
-        'data-variant': variant,
-        'data-size': size,
-        'data-shape': variant === 'avatar' ? 'circle' : shape,
-        'data-loading': imageState.loading || loading,
-        'data-error': imageState.error,
-        ...props
-    };
-
-    if (!lazy) {
-        imageProps.onLoad = handleImageLoad;
-        imageProps.onError = handleImageError;
+    } else {
+        imageStyles.transition = transition;
     }
 
-    if (srcSet) imageProps.srcSet = srcSet;
-    if (sizes) imageProps.sizes = sizes;
+    // Agregar border si se especifica
+    if (borderWidth) {
+        imageStyles.border = `${borderWidth}${borderWidthType} ${borderStyle} ${borderColor}`;
+    }
 
+    // Agregar box-shadow si se especifica
+    if (shadowOffsetX || shadowOffsetY || shadowBlur || shadowSpread) {
+        const shadowRgba = hexToRgba(shadowColor, shadowOpacity);
+        const insetKeyword = shadowInset ? 'inset ' : '';
+        imageStyles.boxShadow = `${insetKeyword}${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px ${shadowSpread}px ${shadowRgba}`;
+    }
+
+    // ✅ CORREGIDO: Construir clases CSS con hover effect
+    const imageClasses = [
+        'image',
+        hoverEffect !== 'none' ? `image--hover-${hoverEffect}` : '',
+        zoomable ? 'image--zoomable' : '',
+        fadeIn ? 'image--fade-in' : '',
+        className
+    ].filter(Boolean).join(' ');
+
+    // ✅ SOLUCIÓN FINAL: Devolver JSX directamente
     return (
-        <div className={containerClasses}>
-            {shouldShowImage() ? (
-                <img
-                    src={imageSrc || src}
-                    {...imageProps}
-                />
-            ) : (
-                <div {...imageProps}>
-                    {renderFallback()}
-                </div>
-            )}
-
-            {renderStatusIndicator()}
-            {renderBadge()}
-        </div>
+        <img
+            src={src}
+            alt={alt}
+            style={imageStyles}
+            className={imageClasses}
+            loading={lazy ? loading : 'eager'}
+            draggable={draggable}
+            onClick={onClick}
+            onLoad={onLoad}
+            onError={onError}
+            onLoadStart={onLoadStart}
+            data-testid="Image"
+            {...props}
+        />
     );
 };
 
 Image.propTypes = {
-    // Imagen
-    src: PropTypes.string,
+    src: PropTypes.string.isRequired,
     alt: PropTypes.string,
-    srcSet: PropTypes.string,
-    sizes: PropTypes.string,
-
-    // Variantes y estados
-    variant: PropTypes.oneOf(['avatar', 'thumbnail', 'hero', 'gallery', 'product']),
-    size: PropTypes.oneOf(['xs', 'small', 'medium', 'large', 'xl']),
-    shape: PropTypes.oneOf(['circle', 'rounded', 'square']),
-
-    // Avatar específico
-    status: PropTypes.oneOf(['online', 'offline', 'away', 'busy']),
-    name: PropTypes.string,
-    badge: PropTypes.node,
-
-    // Fallback
-    fallback: PropTypes.oneOf(['initials', 'icon', 'placeholder', 'skeleton']),
-    fallbackIcon: PropTypes.string,
-
-    // Estados visuales
-    loading: PropTypes.bool,
+    w: PropTypes.number,
+    h: PropTypes.number,
+    wType: PropTypes.oneOf(['px', 'em', 'rem', '%', 'vw', 'vh', 'cm', 'mm', 'in', 'pt', 'pc']),
+    hType: PropTypes.oneOf(['px', 'em', 'rem', '%', 'vw', 'vh', 'cm', 'mm', 'in', 'pt', 'pc']),
+    borderRadius: PropTypes.number,
+    borderRadiusType: PropTypes.oneOf(['px', 'em', 'rem', '%']),
+    borderWidth: PropTypes.number,
+    borderWidthType: PropTypes.oneOf(['px', 'em', 'rem']),
+    borderStyle: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'inset', 'outset']),
+    borderColor: PropTypes.string,
+    shadowOffsetX: PropTypes.number,
+    shadowOffsetY: PropTypes.number,
+    shadowBlur: PropTypes.number,
+    shadowSpread: PropTypes.number,
+    shadowColor: PropTypes.string,
+    shadowOpacity: PropTypes.number,
+    shadowInset: PropTypes.bool,
+    objectFit: PropTypes.oneOf(['fill', 'contain', 'cover', 'none', 'scale-down']),
     lazy: PropTypes.bool,
-    hover: PropTypes.bool,
-
-    // Eventos
+    loading: PropTypes.oneOf(['lazy', 'eager']),
+    placeholder: PropTypes.oneOf(['blur', 'empty', 'skeleton']),
+    quality: PropTypes.number,
+    filter: PropTypes.string,
+    grayscale: PropTypes.bool,
+    sepia: PropTypes.bool,
+    brightness: PropTypes.number,
+    contrast: PropTypes.number,
+    saturate: PropTypes.number,
+    fadeIn: PropTypes.bool,
+    fadeInDuration: PropTypes.number,
+    hoverEffect: PropTypes.oneOf(['none', 'zoom', 'brightness', 'scale', 'blur']),
+    transition: PropTypes.string,
+    fallbackSrc: PropTypes.string,
+    retryAttempts: PropTypes.number,
+    draggable: PropTypes.bool,
+    selectable: PropTypes.bool,
+    zoomable: PropTypes.bool,
     onClick: PropTypes.func,
     onLoad: PropTypes.func,
     onError: PropTypes.func,
-
-    // Estilos
+    onLoadStart: PropTypes.func,
+    onLoadComplete: PropTypes.func,
     className: PropTypes.string
 };
 
