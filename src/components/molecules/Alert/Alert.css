@@ -1,56 +1,56 @@
-/* Estilos base para el componente Alert */
-.Alert {
-    /* Los estilos principales están en Tailwind, aquí solo refinamientos */
+.alert--info {
+  background-color: #e6f0fa !important;
+  border: 1px solid #90caf9 !important;
+  color: #1565c0 !important;
 }
 
-/* Estilos adicionales para elementos internos */
-.alert-message {
-    line-height: 1.5;
+.alert--success {
+  background-color: #e8f5e9 !important;
+  border: 1px solid #66bb6a !important;
+  color: #2e7d32 !important;
 }
 
-.alert-message strong {
-    font-weight: 700;
+.alert--warning {
+  background-color: #fff8e1 !important;
+  border: 1px solid #ffb300 !important;
+  color: #b26a00 !important;
 }
 
-.alert-message a {
-    text-decoration: underline;
-    font-weight: 600;
+.alert--error {
+  background-color: #ffebee !important;
+  border: 1px solid #e57373 !important;
+  color: #c62828 !important;
 }
 
-.alert-message a:hover {
-    opacity: 0.8;
+/* En Alert.css - estilos para enlaces dentro de alerts */
+.alert--info a {
+  color: #1565c0 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
 }
 
-/* Animaciones personalizadas */
-@keyframes alertSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.alert--success a {
+  color: #2e7d32 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
 }
 
-.Alert {
-    animation: alertSlideIn 0.3s ease-out;
+.alert--warning a {
+  color: #b26a00 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
 }
 
-/* Estados de focus mejorados */
-.Alert button:focus {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
+.alert--error a {
+  color: #c62828 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-    .Alert {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .Alert .flex-shrink-0 {
-        align-self: flex-start;
-    }
+.alert--info a:hover,
+.alert--success a:hover,
+.alert--warning a:hover,
+.alert--error a:hover {
+  opacity: 0.8 !important;
+  text-decoration: none !important;
 }

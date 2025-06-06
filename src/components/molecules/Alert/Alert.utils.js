@@ -1,55 +1,116 @@
-import { ALERT_TYPES, ALERT_SIZES, STYLE_CONFIG } from './Alert.constants.js';
+import { ALERT_TYPES } from './Alert.constants.js';
 
 /**
- * Genera las clases CSS para el componente Alert (extraído de tu código original)
- * @param {Object} params - Parámetros de configuración
- * @param {string} params.type - Tipo de alerta
- * @param {string} params.variant - Variante visual
- * @param {string} params.size - Tamaño del componente
- * @param {string} params.className - Clases adicionales
- * @returns {string} Clases CSS combinadas
+ * Obtiene el icono automático según el tipo de alert
  */
-export const getAlertClasses = ({ type, variant, size, className }) => {
-    const baseClasses = 'rounded-lg font-semibold flex items-start gap-3 relative transition-all duration-200';
-    const typeClasses = STYLE_CONFIG[type]?.[variant] || STYLE_CONFIG.info.filled;
-    const sizeClasses = `${ALERT_SIZES[size].padding} ${ALERT_SIZES[size].fontSize}`;
-
-    return `${baseClasses} ${typeClasses} ${sizeClasses} ${className}`.trim();
+export const getIconForType = (alertType) => {
+    const iconMap = {
+        info: 'info-circle',
+        success: 'check-circle',
+        warning: 'exclamation-triangle',
+        error: 'times-circle'
+    };
+    return iconMap[alertType] || 'info-circle';
 };
 
 /**
- * Obtiene el icono para un tipo específico de alerta (extraído de tu typeConfig)
- * @param {string} type - Tipo de alerta
- * @returns {string} Nombre del icono
+ * Obtiene el color del tipo de alert
  */
-export const getAlertIcon = (type) => {
-    return ALERT_TYPES[type]?.icon || ALERT_TYPES.info.icon;
+export const getColorForType = (alertType) => {
+    return ALERT_TYPES[alertType]?.color || ALERT_TYPES.info.color;
 };
 
 /**
- * Valida si un tipo de alerta es válido
- * @param {string} type - Tipo a validar
- * @returns {boolean} True si es válido
+ * Valida si una URL es válida
  */
-export const isValidAlertType = (type) => {
-    return Object.keys(ALERT_TYPES).includes(type);
+export const isValidUrl = (url) => {
+    if (!url || typeof url !== 'string') return false;
+
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        // Si no es URL absoluta, verificar si es relativa válida
+        return url.startsWith('/') || url.startsWith('./') || url.startsWith('../');
+    }
 };
 
 /**
- * Obtiene la configuración completa de un tipo de alerta
- * @param {string} type - Tipo de alerta
- * @returns {Object} Configuración del tipo
+ * Valida las props del Alert
  */
-export const getAlertTypeConfig = (type) => {
-    return ALERT_TYPES[type] || ALERT_TYPES.info;
+export const validateAlertProps = (props) => {
+    const warnings = [];
+    const errors = [];
+
+    // Validar tipo
+    if (props.type && !Object.keys(ALERT_TYPES).includes(props.type)) {
+        warnings.push(`Tipo "${props.type}" no es válido`);
+    }
+
+    // Validar enlace
+    if (props.linkText && !props.linkUrl) {
+        warnings.push('linkText proporcionado sin linkUrl');
+    }
+
+    if (props.linkUrl && !props.linkText) {
+        warnings.push('linkUrl proporcionado sin linkText');
+    }
+
+    if (props.linkUrl && !isValidUrl(props.linkUrl)) {
+        errors.push(`URL "${props.linkUrl}" no es válida`);
+    }
+
+    // Validar contenido
+    if (!props.title && !props.message) {
+        warnings.push('Alert sin título ni mensaje');
+    }
+
+    return { warnings, errors, isValid: errors.length === 0 };
 };
 
 /**
- * Obtiene las clases de tamaño para un tamaño específico
- * @param {string} size - Tamaño del componente
- * @returns {string} Clases CSS de tamaño
+ * Genera el texto accesible para el alert
  */
-export const getSizeClasses = (size) => {
-    const sizeConfig = ALERT_SIZES[size] || ALERT_SIZES.medium;
-    return `${sizeConfig.padding} ${sizeConfig.fontSize}`;
+export const getAlertAccessibleText = ({ type, title, message }) => {
+    const typeLabel = ALERT_TYPES[type]?.label || 'Información';
+    const content = [title, message].filter(Boolean).join(': ');
+    return `${typeLabel}. ${content}`;
+};
+
+/**
+ * Determina si el enlace debe abrirse en nueva ventana
+ */
+export const shouldOpenInNewWindow = (url, target) => {
+    if (target === '_blank') return true;
+    if (target && target !== '_self') return true;
+
+    // URLs externas por defecto en nueva ventana
+    try {
+        const urlObj = new URL(url);
+        return urlObj.origin !== window.location.origin;
+    } catch {
+        return false; // URLs relativas en misma ventana
+    }
+};
+
+/**
+ * Formatea el mensaje para mostrar
+ */
+export const formatMessage = (message, maxLength = 200) => {
+    if (!message || typeof message !== 'string') return '';
+
+    if (message.length <= maxLength) return message;
+
+    return message.substring(0, maxLength - 3) + '...';
+};
+
+/**
+ * Genera clases CSS para el alert
+ */
+export const getAlertClasses = ({ type, className = '' }) => {
+    return [
+        'alert',
+        type ? `alert--${type}` : '',
+        className
+    ].filter(Boolean).join(' ');
 };

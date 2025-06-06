@@ -1,86 +1,82 @@
 export const ALERT_TYPES = {
-    error: {
-        icon: 'exclamation-triangle',
-        label: 'Error',
-        description: 'Indica un error o problema que requiere atención inmediata',
-        severity: 'high'
+    info: {
+        label: 'Información',
+        description: 'Alert para mostrar información general',
+        icon: 'info-circle',
+        color: '#1565c0'
     },
     success: {
-        icon: 'check',
         label: 'Éxito',
-        description: 'Confirma que una acción se completó exitosamente',
-        severity: 'low'
+        description: 'Alert para mostrar operaciones exitosas',
+        icon: 'check-circle',
+        color: '#2e7d32'
     },
     warning: {
-        icon: 'exclamation-triangle',
         label: 'Advertencia',
-        description: 'Alerta sobre algo que requiere precaución',
-        severity: 'medium'
+        description: 'Alert para mostrar advertencias',
+        icon: 'exclamation-triangle',
+        color: '#b26a00'
     },
-    info: {
-        icon: 'info-circle',
-        label: 'Información',
-        description: 'Proporciona información útil al usuario',
-        severity: 'low'
-    }
-};
-
-export const ALERT_VARIANTS = {
-    filled: {
-        label: 'Relleno',
-        description: 'Fondo de color con bordes y texto contrastante'
-    },
-    outlined: {
-        label: 'Contorno',
-        description: 'Solo bordes con fondo transparente'
-    },
-    solid: {
-        label: 'Sólido',
-        description: 'Fondo sólido con texto blanco'
+    error: {
+        label: 'Error',
+        description: 'Alert para mostrar errores',
+        icon: 'times-circle',
+        color: '#c62828'
     }
 };
 
 export const ALERT_SIZES = {
     small: {
         label: 'Pequeño',
-        description: 'Compacto para espacios reducidos',
-        padding: 'px-3 py-2',
-        fontSize: 'text-sm'
+        description: 'Alert compacto',
+        padding: 'small'
     },
     medium: {
         label: 'Mediano',
-        description: 'Tamaño estándar para uso general',
-        padding: 'px-4 py-3',
-        fontSize: 'text-base'
+        description: 'Alert estándar',
+        padding: 'medium'
     },
     large: {
         label: 'Grande',
-        description: 'Prominente para mensajes importantes',
-        padding: 'px-6 py-4',
-        fontSize: 'text-lg'
+        description: 'Alert prominente',
+        padding: 'large'
     }
 };
 
-// Configuración de estilos por tipo y variante (extraída de tu código original)
-export const STYLE_CONFIG = {
-    error: {
-        filled: 'bg-red-100 border border-red-400 text-red-700',
-        outlined: 'border-2 border-red-400 text-red-700 bg-transparent',
-        solid: 'bg-red-500 text-white border border-red-500'
+export const ALERT_SHADOWS = {
+    none: {
+        label: 'Sin sombra',
+        description: 'Alert sin sombra'
     },
-    success: {
-        filled: 'bg-green-100 border border-green-400 text-green-700',
-        outlined: 'border-2 border-green-400 text-green-700 bg-transparent',
-        solid: 'bg-green-500 text-white border border-green-500'
+    sm: {
+        label: 'Sombra pequeña',
+        description: 'Sombra sutil'
     },
-    warning: {
-        filled: 'bg-yellow-100 border border-yellow-400 text-yellow-700',
-        outlined: 'border-2 border-yellow-400 text-yellow-700 bg-transparent',
-        solid: 'bg-yellow-500 text-white border border-yellow-500'
+    md: {
+        label: 'Sombra mediana',
+        description: 'Sombra estándar'
     },
-    info: {
-        filled: 'bg-blue-100 border border-blue-400 text-blue-700',
-        outlined: 'border-2 border-blue-400 text-blue-700 bg-transparent',
-        solid: 'bg-blue-500 text-white border border-blue-500'
+    lg: {
+        label: 'Sombra grande',
+        description: 'Sombra prominente'
+    }
+};
+
+export const LINK_TARGETS = {
+    '_blank': {
+        label: 'Nueva ventana',
+        description: 'Abre en nueva ventana/pestaña'
+    },
+    '_self': {
+        label: 'Misma ventana',
+        description: 'Abre en la misma ventana'
+    },
+    '_parent': {
+        label: 'Ventana padre',
+        description: 'Abre en la ventana padre'
+    },
+    '_top': {
+        label: 'Ventana superior',
+        description: 'Abre en la ventana superior'
     }
 };
