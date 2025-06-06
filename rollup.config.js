@@ -46,14 +46,9 @@ const rollupConfig = {
             include: 'node_modules/**'
         }),
         postcss({
-            extract: 'styles.css',
-            minimize: isProduction,
-            sourceMap: !isProduction,
-            plugins: [
-                // ✅ Eliminar Tailwind temporalmente para evitar conflictos
-                // tailwindcss(),
-                autoprefixer()
-            ]
+            extract: true, // Extraer CSS a archivo separado
+            minimize: true, // Minificar CSS
+            sourceMap: true
         }),
         isProduction && terser({
             compress: {
