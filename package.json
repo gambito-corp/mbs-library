@@ -1,6 +1,6 @@
 {
   "name": "@gambito-corp/mbs-library",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Librería de componentes React reutilizables - Sistema de diseño modular y escalable",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
